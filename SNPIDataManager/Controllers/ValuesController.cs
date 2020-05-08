@@ -8,6 +8,7 @@ using System.Web.Http;
 namespace SNPIDataManager.Controllers
 {
     [Authorize]
+    //[Authorize]
     public class ValuesController : ApiController
     {
         // GET api/values
