@@ -211,6 +211,8 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -218,6 +220,8 @@
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\UserLoginModel.cs" />
+    <Compile Include="Models\UserRegistrationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -253,11 +257,13 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <None Include="Scripts\jquery-3.5.0.intellisense.js" />
-    <Content Include="Scripts\jquery-3.5.0.js" />
-    <Content Include="Scripts\jquery-3.5.0.min.js" />
-    <Content Include="Scripts\jquery-3.5.0.slim.js" />
-    <Content Include="Scripts\jquery-3.5.0.slim.min.js" />
+    <None Include="Scripts\jquery-3.5.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.5.1.js" />
+    <Content Include="Scripts\jquery-3.5.1.min.js" />
+    <Content Include="Scripts\jquery-3.5.1.slim.js" />
+    <Content Include="Scripts\jquery-3.5.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.5.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.5.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -308,8 +314,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.5.0.slim.min.map" />
-    <Content Include="Scripts\jquery-3.5.0.min.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
