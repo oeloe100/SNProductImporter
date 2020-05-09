@@ -3,3 +3,7 @@
 ul.nav.navbar-nav.align-nav-right {
     float: right !important;
 }
+
+div.navbar-header a {
+    font-size: 25px !important;
+}

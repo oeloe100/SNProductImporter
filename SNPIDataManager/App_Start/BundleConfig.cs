@@ -22,7 +22,8 @@ namespace SNPIDataManager
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
-                      "~/Content/Custom.css"));
+                      "~/Content/Custom.css",
+                      "~/Content/Login.css"));
         }
     }
 }
