@@ -290,8 +290,8 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Register\Index.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
-    <Content Include="Views\Shared\_LoginView.cshtml" />
     <Content Include="Views\Shared\_HeaderNavigationView.cshtml" />
+    <Content Include="Views\Shared\_RegisterView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

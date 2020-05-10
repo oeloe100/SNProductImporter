@@ -1,0 +1,88 @@
+﻿@{ string url = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString(); }
+
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card register-card">
+            <div class="card-header">
+                @{ if (url == "Register" && url != "Home")
+                    {
+                        <h3>Sign Up</h3>
+                    }
+                    else { 
+                        <h3>Sign In</h3>
+                    } }
+                <div class="d-flex justify-content-end social_icon">
+                    <span><i class="fab fa-facebook-square"></i></span>
+                    <span><i class="fab fa-google-plus-square"></i></span>
+                    <span><i class="fab fa-twitter-square"></i></span>
+                </div>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="input-group-special">
+                        <!-- Input for Register & Login Section -->
+                        @{ if (url == "Register" && url != "Home")
+                            {
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="email" class="form-control" placeholder="Email-Adress">
+                            </div>
+                            } }
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Username">
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            <input type="password" class="form-control" placeholder="Password">
+                        </div>
+                        @{ if (url == "Register" && url != "Home")
+                            {
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                </div>
+                                <input type="password" class="form-control" placeholder="Confirm Password">
+                            </div>
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                </div>
+                                <input type="number" class="form-control" placeholder="+31609394993">
+                            </div>
+                            } }
+                        </div>
+                    <div class="row align-items-center remember">
+                        <input type="checkbox">Remember Me
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Login" class="btn float-right login_btn">
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                @{ if (url == "Register" && url != "Home")
+                    {
+                    <div class="d-flex justify-content-center links">
+                        Already have an Account? <a href="@Url.Action("Index", "Login")">Login</a>
+                    </div>
+                    } }
+                @{ if (url == "Login" || url == "Home")
+                    {
+                <div class="d-flex justify-content-center links">
+                    Don't have an account?<a href="@Url.Action("Index", "Register")">Register</a>
+                </div>
+                    } }
+                <div class="d-flex justify-content-center">
+                    <a href="#">Forgot your password?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

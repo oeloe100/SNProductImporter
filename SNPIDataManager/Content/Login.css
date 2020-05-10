@@ -22,6 +22,10 @@ html, body {
     background-color: #101010;
 }
 
+div.card.register-card {
+    height: 500px !important;
+}
+
 .social_icon span {
     font-size: 60px;
     margin-left: 10px;
