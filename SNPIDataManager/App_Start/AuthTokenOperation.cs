@@ -5,6 +5,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Http.Description;
 
+/// <summary>
+/// https://github.com/domaindrivendev/Swashbuckle/issues/234
+/// </summary>
+
 namespace SNPIDataManager.App_Start
 {
     /// <summary>

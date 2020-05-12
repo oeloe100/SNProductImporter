@@ -5,6 +5,7 @@ using System.Web.Http;
 using System.Web.Routing;
 using Microsoft.Owin;
 using Owin;
+using Swashbuckle.Application;
 
 [assembly: OwinStartup(typeof(SNPIDataManager.Startup))]
 
