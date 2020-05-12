@@ -44,9 +44,12 @@ namespace SNPIDataManager.Providers
             ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,
                 CookieAuthenticationDefaults.AuthenticationType);
 
-            AuthenticationProperties properties = CreateProperties(user.UserName);
+            //user.id property. see Method for information
+            AuthenticationProperties properties = CreateProperties(user.UserName, user.Id);
             AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
+
             context.Validated(ticket);
+
             context.Request.Context.Authentication.SignIn(cookiesIdentity);
         }
 
@@ -86,11 +89,13 @@ namespace SNPIDataManager.Providers
             return Task.FromResult<object>(null);
         }
 
-        public static AuthenticationProperties CreateProperties(string userName)
+        // CREATE RETURN TYPE Prop for Response BODY. Added ID
+        public static AuthenticationProperties CreateProperties(string userName, string id)
         {
             IDictionary<string, string> data = new Dictionary<string, string>
             {
-                { "userName", userName }
+                { "userName", userName },
+                { "id", id }
             };
             return new AuthenticationProperties(data);
         }

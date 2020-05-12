@@ -2,6 +2,7 @@ using System.Web.Http;
 using WebActivatorEx;
 using SNPIDataManager;
 using Swashbuckle.Application;
+using SNPIDataManager.App_Start;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
@@ -16,6 +17,8 @@ namespace SNPIDataManager
             GlobalConfiguration.Configuration
                 .EnableSwagger(c =>
                     {
+                        c.DocumentFilter<AuthTokenOperation>();
+
                         // By default, the service root url is inferred from the request used to access the docs.
                         // However, there may be situations (e.g. proxy and load-balanced environments) where this does not
                         // resolve correctly. You can workaround this by providing your own code to determine the root URL.
@@ -182,7 +185,7 @@ namespace SNPIDataManager
                         // Use the "DocumentTitle" option to change the Document title.
                         // Very helpful when you have multiple Swagger pages open, to tell them apart.
                         //
-                        //c.DocumentTitle("My Swagger UI");
+                        c.DocumentTitle("SNPI API");
 
                         // Use the "InjectStylesheet" option to enrich the UI with one or more additional CSS stylesheets.
                         // The file must be included in your project as an "Embedded Resource", and then the resource's
