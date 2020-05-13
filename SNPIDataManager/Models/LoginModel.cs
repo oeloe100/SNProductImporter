@@ -14,7 +14,7 @@ namespace SNPIDataManager.Models
         [RegularExpression(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*")]
         [DisplayName("Email Adress")]
         [Required(ErrorMessage = "An Email Address is Required!")]
-        [StringLength(180, MinimumLength = 5, ErrorMessage = "Password Must be between 5 and 180 Characters")]
+        [StringLength(180)]
         public string Username { get; set; }
 
         [PasswordPropertyText]

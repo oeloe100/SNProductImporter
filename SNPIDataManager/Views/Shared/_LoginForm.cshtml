@@ -1,4 +1,4 @@
-﻿@model SNPIDataManager.Models.LoginModel
+﻿@model SNPIDataManager.Models.PreLoginModel
 
 <div class="container">
     <div class="d-flex justify-content-center h-100">
@@ -9,25 +9,29 @@
             <div class="card-body center-block">
                 @using (Html.BeginForm("Login", "Home", FormMethod.Post))
                 {
-                <div class="input-group form-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        @Html.EditorFor(Model => Model._LoginModel.Username)
                     </div>
-                    @Html.EditorFor(model => model.Username)
-                </div>
-                <div class="input-group form-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-key"></i></span>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        @Html.PasswordFor(Model => Model._LoginModel.Password)
                     </div>
-                    @Html.PasswordFor(model => model.Password)
-                </div>
-                <!--<div class="row align-items-center remember">
-                    <input type="checkbox">Remember Me
-                </div>-->
-                <div class="form-group">
-                    <input type="submit" value="Login" class="btn float-right login_btn">
-                </div>
+                    <!--<div class="row align-items-center remember">
+                        <input type="checkbox">Remember Me
+                    </div>-->
+                    <div class="form-group">
+                        <input type="submit" value="Login" class="btn float-right login_btn">
+                    </div>
                 }
+            </div>
+            <div class="errContainer">
+                @Html.ValidationMessage("LoginErrMessage") <br /> 
+                @Html.ValidationMessage("LoginErrDescription")
             </div>
         </div>
     </div>

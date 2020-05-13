@@ -128,3 +128,11 @@ div.input-group-special {
 footer p {
     color: #101010;
 }
+
+.errContainer {
+    text-align: center;
+    width: 100%;
+    display: inherit;
+    color: orangered;
+    font-weight: bold;
+}

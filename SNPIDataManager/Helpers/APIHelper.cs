@@ -1,4 +1,5 @@
-﻿using SNPIDataManager.Models;
+﻿using Microsoft.Ajax.Utilities;
+using SNPIDataManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -30,7 +31,7 @@ namespace SNPIDataManager.Helpers
             apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<AuthenticatedUser> Authenticate(string username, string password)
+        public async Task<PreLoginModel> Authenticate(string username, string password)
         {
             var data = new FormUrlEncodedContent(new[]
             {
@@ -44,7 +45,13 @@ namespace SNPIDataManager.Helpers
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsAsync<AuthenticatedUser>();
-                    return result;
+                    
+                    var loginObject = new PreLoginModel()
+                    {
+                        _AuthenticatedUser = result,
+                    };
+
+                    return loginObject;
                 }
                 else
                 {

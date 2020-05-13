@@ -1,12 +1,10 @@
-﻿@model SNPIDataManager.Models.AuthenticatedUser
+﻿@model SNPIDataManager.Models.PreLoginModel
 
 @{
     ViewBag.Title = "Logged In";
 }
 
-<h2>Logged In</h2>
-
-<div container>
-    <div>@Html.DisplayTextFor(model => model.Access_Token)</div>
-    <div>@Html.DisplayTextFor(model => model.Username)</div>
+<div container style="margin-top: 50px;">
+    <div>@Html.DisplayTextFor(Model => Model._AuthenticatedUser.Access_Token)</div><br />
+    <div>@Html.DisplayTextFor(Model => Model._AuthenticatedUser.Username)</div>
 </div>

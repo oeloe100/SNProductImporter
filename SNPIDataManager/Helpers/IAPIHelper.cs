@@ -5,6 +5,6 @@ namespace SNPIDataManager.Helpers
 {
     public interface IAPIHelper
     {
-        Task<AuthenticatedUser> Authenticate(string username, string password);
+        Task<PreLoginModel> Authenticate(string username, string password);
     }
 }
