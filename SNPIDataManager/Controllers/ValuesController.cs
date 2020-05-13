@@ -9,15 +9,15 @@ using System.Web.Http;
 namespace SNPIDataManager.Controllers
 {
     [Authorize]
-    //[Authorize]
     public class ValuesController : ApiController
     {
         // GET api/values
         public IEnumerable<string> Get()
         {
             string userId = RequestContext.Principal.Identity.GetUserId();
+            string isVerifiedUser = User.Identity.IsAuthenticated.ToString();
 
-            return new string[] { "value1", "value2", userId };
+            return new string[] { "value1", "value2", userId, isVerifiedUser };
         }
 
         // GET api/values/5
