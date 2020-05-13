@@ -1,4 +1,4 @@
-﻿@model SNPIDataManager.Models.AuthenticatedUser
+﻿@model SNPIDataManager.Models.LoginModel
 
 <div class="container">
     <div class="d-flex justify-content-center h-100">
@@ -19,7 +19,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-key"></i></span>
                     </div>
-                    @Html.TextBoxFor(model => model.Access_Token)
+                    @Html.TextBoxFor(model => model.Password)
                 </div>
                 <div class="row align-items-center remember">
                     <input type="checkbox">Remember Me

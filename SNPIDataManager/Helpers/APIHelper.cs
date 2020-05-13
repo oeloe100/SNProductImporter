@@ -11,9 +11,9 @@ using System.Web.Mvc;
 
 namespace SNPIDataManager.Helpers
 {
-    public class APIHelper : IAPIHelper
+    public class APIHelper
     {
-        private HttpClient apiClient;
+        public HttpClient apiClient;
 
         public APIHelper()
         {

@@ -1,7 +1,12 @@
-﻿@model IEnumerable<SNPIDataManager.Models.AuthenticatedUser>
+﻿@model SNPIDataManager.Models.AuthenticatedUser
 
 @{
     ViewBag.Title = "Logged In";
 }
 
 <h2>Logged In</h2>
+
+<div container>
+    <div>@Html.DisplayTextFor(model => model.Access_Token)</div>
+    <div>@Html.DisplayTextFor(model => model.Username)</div>
+</div>
