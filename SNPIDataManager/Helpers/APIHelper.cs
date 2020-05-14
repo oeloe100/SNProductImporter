@@ -45,6 +45,7 @@ namespace SNPIDataManager.Helpers
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsAsync<AuthenticatedUser>();
+                    result.IsLoggedIn = true;
                     
                     var loginObject = new PreLoginModel()
                     {

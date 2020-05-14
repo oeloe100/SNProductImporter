@@ -9,5 +9,6 @@ namespace SNPIDataManager.Models
     {
         public string Access_Token { get; set; }
         public string Username { get; set; }
+        public bool IsLoggedIn { get; set; }
     }
 }

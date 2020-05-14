@@ -1,7 +1,11 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity
+@using Project = SNPIDataManager.Helpers.CookieAuthorizationCheck;
+
+@{
     ViewBag.Title = "SNPI Login";
 }
 
-@{
+@if (Project.CookieAuthCheck() == false)
+{
     Html.RenderPartial("_LoginForm");
 }

@@ -1,4 +1,7 @@
-﻿<div class="navbar navbar-inverse navbar-fixed-top">
+﻿@using Microsoft.AspNet.Identity
+@using Project = SNPIDataManager.Helpers.CookieAuthorizationCheck;
+
+<div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -12,10 +15,16 @@
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
             </ul>
-            <ul class="nav navbar-nav align-nav-right">
-                <li>@Html.ActionLink("Register", "Index", "Register", new { area = "" }, null)</li>
-                <li>@Html.ActionLink("Login", "Index", "Login", new { area = "" }, null)</li>
-            </ul>
+            @if (Project.CookieAuthCheck() == false)
+            {
+                <ul class="nav navbar-nav align-nav-right">
+                    <li>@Html.ActionLink("Register", "Index", "Register", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Login", "Index", "Login", new { area = "" }, null)</li>
+                </ul>
+            }else
+            {
+                Html.RenderPartial("_LogoutForm");
+            }
         </div>
     </div>
 </div>

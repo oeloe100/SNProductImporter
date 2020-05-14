@@ -8,3 +8,7 @@
     <div>@Html.DisplayTextFor(Model => Model._AuthenticatedUser.Access_Token)</div><br />
     <div>@Html.DisplayTextFor(Model => Model._AuthenticatedUser.Username)</div>
 </div>
+
+@{
+    Html.RenderPartial("_LogoutForm");
+}

@@ -136,3 +136,9 @@ footer p {
     color: orangered;
     font-weight: bold;
 }
+
+.navbar-collapse.collapse > form {
+    float: right;
+    margin-top: 9px;
+}
+

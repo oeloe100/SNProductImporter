@@ -226,6 +226,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\APIHelper.cs" />
+    <Compile Include="Helpers\CookieAuthorizationCheck.cs" />
     <Compile Include="Helpers\IAPIHelper.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -302,6 +303,7 @@
     <Content Include="Views\Shared\_HeaderNavigationView.cshtml" />
     <Content Include="Views\Shared\_LoginForm.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Shared\_LogoutForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -332,6 +334,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SNPIHelperLibrary\SNPIHelperLibrary.csproj">
+      <Project>{af0fe4fe-ab91-4b93-b156-6d7d3cd507bb}</Project>
+      <Name>SNPIHelperLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
