@@ -142,3 +142,12 @@ footer p {
     margin-top: 9px;
 }
 
+#fa-custom {
+    color: white;
+    background: none !important;
+}
+
+    #fa-custom > i {
+        font-style: normal;
+    }
+
