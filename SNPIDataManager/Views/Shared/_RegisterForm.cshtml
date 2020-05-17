@@ -33,6 +33,9 @@
                 }
             </div>
             <div class="errContainer">
+                @Html.ValidationMessageFor(Model => Model._RegisterModel.Email)
+                @Html.ValidationMessageFor(Model => Model._RegisterModel.Password)
+
                 @Html.ValidationMessage("LoginErrMessage") <br />
                 @Html.ValidationMessage("LoginErrDescription")
             </div>

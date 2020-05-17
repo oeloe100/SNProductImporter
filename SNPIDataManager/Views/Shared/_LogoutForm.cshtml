@@ -1,4 +1,4 @@
-﻿@using (Html.BeginForm("Logout", "Home", FormMethod.Post))
+﻿@using (Html.BeginForm("Logout", "Home", new { area = "" }, FormMethod.Post))
 {
     <input type="submit" value="Logout" class="btn float-right login_btn">
 }
