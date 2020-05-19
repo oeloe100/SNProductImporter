@@ -14,6 +14,10 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
+                @if (Project.CookieAuthCheck())
+                {
+                    <li>@Html.ActionLink("Connect", "Index", "Authorization", new { area = "NopAPIAuthorizer" }, null)</li>
+                }
             </ul>
             @if (Project.CookieAuthCheck() == false)
             {
@@ -21,7 +25,8 @@
                     <li>@Html.ActionLink("Register", "Index", "Register", new { area = "" }, null)</li>
                     <!--<li>@Html.ActionLink("Login", "Index", "Login", new { area = "" }, null)</li>-->
                 </ul>
-            }else
+            }
+            else
             {
                 Html.RenderPartial("_LogoutForm");
             }

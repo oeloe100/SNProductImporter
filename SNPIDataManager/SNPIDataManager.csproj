@@ -146,7 +146,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -218,6 +218,14 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Areas\NopAPIAuthorizer\Controllers\AuthorizationController.cs" />
+    <Compile Include="Areas\NopAPIAuthorizer\Managers\AuthorizationManager.cs" />
+    <Compile Include="Areas\NopAPIAuthorizer\Managers\DbManager.cs" />
+    <Compile Include="Areas\NopAPIAuthorizer\Models\AccessModel.cs" />
+    <Compile Include="Areas\NopAPIAuthorizer\Models\AuthorizationModel.cs" />
+    <Compile Include="Areas\NopAPIAuthorizer\Models\UserAccessModel.cs" />
+    <Compile Include="Areas\NopAPIAuthorizer\NopAPIAuthorizerAreaRegistration.cs" />
+    <Compile Include="Areas\NopAPIAuthorizer\Parameters\AuthParameters.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
@@ -236,6 +244,7 @@
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\PreLoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="PopulateModels\PopulateModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -243,6 +252,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Areas\NopAPIAuthorizer\Content\AuthorizerStyle.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -273,6 +283,10 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="Areas\NopAPIAuthorizer\Views\web.config" />
+    <Content Include="Areas\NopAPIAuthorizer\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\NopAPIAuthorizer\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\NopAPIAuthorizer\Views\Authorization\Index.cshtml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />
@@ -342,6 +356,10 @@
     <ProjectReference Include="..\SNPIHelperLibrary\SNPIHelperLibrary.csproj">
       <Project>{af0fe4fe-ab91-4b93-b156-6d7d3cd507bb}</Project>
       <Name>SNPIHelperLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SNPINopAuthorizationLibrary\SNPINopAuthorizationLibrary.csproj">
+      <Project>{84485613-5b5f-496c-9e35-7db78c70df15}</Project>
+      <Name>SNPINopAuthorizationLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

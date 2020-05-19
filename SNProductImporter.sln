@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNPIDataManager", "SNPIData
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNPIHelperLibrary", "SNPIHelperLibrary\SNPIHelperLibrary.csproj", "{AF0FE4FE-AB91-4B93-B156-6D7D3CD507BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNPINopAuthorizationLibrary", "SNPINopAuthorizationLibrary\SNPINopAuthorizationLibrary.csproj", "{84485613-5B5F-496C-9E35-7DB78C70DF15}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SNPIdb", "SNPIdb\SNPIdb.sqlproj", "{05500B3B-5A66-4ABE-B4F1-C377664A8078}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNPIDataLibrary", "SNPIDataLibrary\SNPIDataLibrary.csproj", "{1314CFE9-27AB-4B05-9ABB-6733D729C382}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +27,20 @@ Global
 		{AF0FE4FE-AB91-4B93-B156-6D7D3CD507BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF0FE4FE-AB91-4B93-B156-6D7D3CD507BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF0FE4FE-AB91-4B93-B156-6D7D3CD507BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84485613-5B5F-496C-9E35-7DB78C70DF15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84485613-5B5F-496C-9E35-7DB78C70DF15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84485613-5B5F-496C-9E35-7DB78C70DF15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84485613-5B5F-496C-9E35-7DB78C70DF15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05500B3B-5A66-4ABE-B4F1-C377664A8078}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05500B3B-5A66-4ABE-B4F1-C377664A8078}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05500B3B-5A66-4ABE-B4F1-C377664A8078}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{05500B3B-5A66-4ABE-B4F1-C377664A8078}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05500B3B-5A66-4ABE-B4F1-C377664A8078}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05500B3B-5A66-4ABE-B4F1-C377664A8078}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{1314CFE9-27AB-4B05-9ABB-6733D729C382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1314CFE9-27AB-4B05-9ABB-6733D729C382}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1314CFE9-27AB-4B05-9ABB-6733D729C382}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1314CFE9-27AB-4B05-9ABB-6733D729C382}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
