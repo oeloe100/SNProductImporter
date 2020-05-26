@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SNPIDataLibrary.Models
 {
-    class UserModel
+    public class UserModel
     {
         public string ClientId { get; set; }
 

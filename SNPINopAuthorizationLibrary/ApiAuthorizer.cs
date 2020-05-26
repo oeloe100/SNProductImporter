@@ -50,10 +50,7 @@ namespace SNPINopAuthorizationLibrary
         public string AuthorizeClient(string code, string grantType, string redirectUrl)
         {
             string requestUriString = string.Format("{0}/api/token", _serverUrl);           
-            string queryParameters = string.Format(
-                "client_id={0}&client_secret={1}&code={2}&grantType={3}&redirect_uri={4}"
-                , _clientId, _clientSecret, code, grantType, redirectUrl
-            );
+            string queryParameters = string.Format("client_id={0}&client_secret={1}&code={2}&grantType={3}&redirect_uri={4}", _clientId, _clientSecret, code, grantType, redirectUrl);
 
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(requestUriString);
             httpWebRequest.Method = "POST";

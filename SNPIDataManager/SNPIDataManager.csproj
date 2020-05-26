@@ -353,6 +353,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SNPIDataLibrary\SNPIDataLibrary.csproj">
+      <Project>{1314cfe9-27ab-4b05-9abb-6733d729c382}</Project>
+      <Name>SNPIDataLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SNPIHelperLibrary\SNPIHelperLibrary.csproj">
       <Project>{af0fe4fe-ab91-4b93-b156-6d7d3cd507bb}</Project>
       <Name>SNPIHelperLibrary</Name>

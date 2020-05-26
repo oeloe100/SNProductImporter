@@ -14,11 +14,7 @@ namespace SNPIDataManager.Areas.NopAPIAuthorizer
 
         public override void RegisterArea(AreaRegistrationContext context) 
         {
-            context.MapRoute(
-                "NopAPIAuthorizer_default",
-                "NopAPIAuthorizer/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
-            );
+
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SNPIDataLibrary.BusinessLogic
 {
-    class CredProcessor
+    public static class CredProcessor
     {
         public static int InsertCredentials(string clientID, string clientSecret, string serverURL, string redirectURL)
         {

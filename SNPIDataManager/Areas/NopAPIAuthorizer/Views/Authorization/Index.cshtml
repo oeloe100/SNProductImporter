@@ -2,25 +2,30 @@
 
 <div class="tokenform_style">
     <div class="center">
-        <div class="form-group">
-            <label class="text-center">Server URL</label>
-            <input name="serverUrl" class="form-control" id="serverUrl" placeholder="https://localhost:44330/">
-        </div>
-        <div class="form-group">
-            <label class="text-center">Client ID</label>
-            <input name="clientId" class="form-control" id="clientId" placeholder="3425KO3-34KJ5345-L3J535OLJ">
-        </div>
-        <div class="form-group">
-            <label class="text-center">Client SECRET</label>
-            <input name="clientSecret" class="form-control" id="clientSecret" placeholder="3425KO3-34KJ5345-L3J535OLJ">
-        </div>
-        <div class="form-group">
-            <label class="text-center">Redirect URL</label>
-            <input name="redirectUrl" class="form-control" id="redirectUrl" value="" readonly="readonly">
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-outline-primary tf-submit">SUBMIT</button>
-        </div>
+        @using (Html.BeginRouteForm("Submit", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label class="text-center">Server URL</label>
+                <input name="serverUrl" class="form-control" id="serverUrl" placeholder="https://localhost:44330/">
+            </div>
+            <div class="form-group">
+                <label class="text-center">Client ID</label>
+                <input name="clientId" class="form-control" id="clientId" placeholder="3425KO3-34KJ5345-L3J535OLJ">
+            </div>
+            <div class="form-group">
+                <label class="text-center">Client SECRET</label>
+                <input name="clientSecret" class="form-control" id="clientSecret" placeholder="3425KO3-34KJ5345-L3J535OLJ">
+            </div>
+            <div class="form-group">
+                <label class="text-center">Redirect URL</label>
+                <input name="redirectUrl" class="form-control" id="redirectUrl" value="@Url.RouteUrl("GetAccessToken", null, Request.Url.Scheme)" readonly="readonly">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-outline-primary tf-submit">SUBMIT</button>
+            </div>
+        }
     </div>
 </div>
 
