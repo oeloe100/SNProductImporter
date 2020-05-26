@@ -14,6 +14,11 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
+
+                @if (Project.CookieAuthCheck() == true)
+                {
+                    <li>@Html.ActionLink("Dashboard", "Index", "NopAuthorization", new { area = "" }, null)</li>
+                }
             </ul>
             @if (Project.CookieAuthCheck() == false)
             {
