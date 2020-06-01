@@ -1,4 +1,5 @@
-﻿using SNPIDataManager.Managers;
+﻿using Microsoft.Ajax.Utilities;
+using SNPIDataManager.Managers;
 using SNPIDataManager.Models.NopAuthorizationModels;
 using System;
 using System.Collections.Generic;
@@ -62,8 +63,29 @@ namespace SNPIDataManager.Controllers
         [AllowAnonymous]
         public ActionResult ReceiveAccessToken(string code, string state)
         {
+            var authorizationResponseModel = new AuthorizationResponseModel();
+
+            if (state == Session["state"].ToString())
+            {
+                authorizationResponseModel._code = code;
+                authorizationResponseModel._state = state;
+
+                try
+                {
+
+
+                    Console.WriteLine();
+                    throw new NotImplementedException();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine();
+                    BadRequest(ex.Message);
+                }
+            }
+
             Console.WriteLine();
-            throw new NotImplementedException();
+            return BadRequest();
         }
 
         private ActionResult BadRequest(string message = "Bad Request")

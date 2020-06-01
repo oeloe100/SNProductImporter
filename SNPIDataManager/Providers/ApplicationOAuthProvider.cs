@@ -99,5 +99,7 @@ namespace SNPIDataManager.Providers
             };
             return new AuthenticationProperties(data);
         }
+
+        //------------------------------------------------------------------------------------------//
     }
 }
