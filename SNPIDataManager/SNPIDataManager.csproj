@@ -237,10 +237,14 @@
     <Compile Include="Models\ErrorHandlerModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\NopAuthorizationModels\AccessModel.cs" />
     <Compile Include="Models\NopAuthorizationModels\AuthorizationResponseModel.cs" />
+    <Compile Include="Models\NopAuthorizationModels\TokenAuthorizationModel.cs" />
     <Compile Include="Models\NopAuthorizationModels\UserAccessModel.cs" />
+    <Compile Include="Models\NopAuthorizationParametersModel\AuthorizationParametersModel.cs" />
     <Compile Include="Models\PreLoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="PopulateModels\PopulateModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Providers\NopOAuthProvider.cs" />
@@ -313,6 +317,7 @@
     <Content Include="Views\Shared\_LogoutForm.cshtml" />
     <Content Include="Views\Shared\_RegisterForm.cshtml" />
     <Content Include="Views\NopAuthorization\Index.cshtml" />
+    <Content Include="Views\NopAuthorization\ReceiveAccessToken.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -346,6 +351,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SNPIDataLibrary\SNPIDataLibrary.csproj">
+      <Project>{f3d9f76a-f417-4ea7-9976-1d4332cd4035}</Project>
+      <Name>SNPIDataLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SNPIHelperLibrary\SNPIHelperLibrary.csproj">
       <Project>{af0fe4fe-ab91-4b93-b156-6d7d3cd507bb}</Project>
       <Name>SNPIHelperLibrary</Name>

@@ -1,4 +1,6 @@
 ﻿using Microsoft.Ajax.Utilities;
+using SNPIDataManager.Helpers.NopAPIHelper;
+using SNPIDataManager.Models.NopAuthorizationParametersModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +16,15 @@ namespace SNPIDataManager.Managers
         private string _clientSecret;
         private string _serverUrl;
 
+        private readonly NopAPIHelper _nopAPIHelper;
+
         public NopAuthorizationManager(string clientId, string clientSecret, string serverUrl)
         {
             _clientId = clientId;
             _clientSecret = clientSecret;
             _serverUrl = serverUrl;
+
+            _nopAPIHelper = new NopAPIHelper(clientId, clientSecret, serverUrl);
         }
 
         public string GetAuthorizationUrl(string redirectUrl, string[] scope, string state = null)
@@ -43,6 +49,29 @@ namespace SNPIDataManager.Managers
             }
 
             return stringBuilder.ToString();
+        }
+
+        public string GetAuthorizationData(AuthorizationParametersModel authorizationParemeters)
+        {
+            // make sure we have the necessary parameters
+            ValidateParameter("code", authorizationParemeters.Code);
+            ValidateParameter("storeUrl", authorizationParemeters.ServerUrl);
+            ValidateParameter("clientId", authorizationParemeters.ClientId);
+            ValidateParameter("clientSecret", authorizationParemeters.ClientSecret);
+            ValidateParameter("redirectUrl", authorizationParemeters.RedirectUrl);
+            ValidateParameter("grantType", authorizationParemeters.GrantType);
+
+            string accessToken = _nopAPIHelper.AuthorizeClient(authorizationParemeters.Code, authorizationParemeters.GrantType, authorizationParemeters.RedirectUrl);
+
+            return accessToken;
+        }
+
+        private void ValidateParameter(string parameterName, string parameterValue)
+        {
+            if (string.IsNullOrWhiteSpace(parameterValue))
+            {
+                throw new Exception(string.Format("{0} parameter is missing", parameterName));
+            }
         }
     }
 }

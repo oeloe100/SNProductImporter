@@ -1,17 +1,28 @@
 ﻿using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
+using SNPIDataLibrary.BusinessLogic;
+using SNPIDataLibrary.Models;
 using SNPIDataManager.Managers;
 using SNPIDataManager.Models.NopAuthorizationModels;
+using SNPIDataManager.Models.NopAuthorizationParametersModel;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Web;
 using System.Web.Http.Results;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using System.Security.Claims;
+using System.Threading;
+using System.Web.Routing;
 
 namespace SNPIDataManager.Controllers
 {
+    [Authorize]
     public class NopAuthorizationController : Controller
     {
         // GET: NopAuthorization
@@ -36,13 +47,22 @@ namespace SNPIDataManager.Controllers
                         return BadRequest();
                     }
 
-                    // *** CURRENT SESSION INSTANCE ***//
-                    Session["clientId"] = model.ClientId;
-                    Session["clientSecret"] = model.ClientSecret;
-                    Session["serverUrl"] = model.ServerUrl;
-                    Session["redirectUrl"] = callbackUrl;
+                    var compareDBData = new CompareDBData();
+                    int recordsCreated;
 
-                    //*** DONT SAVE ANYWHERE ***//
+                    if (!compareDBData.DataIsExisting(model.ClientId, model.ClientSecret, model.ServerUrl, model.RedirectUrl))
+                    {
+                        // *** SAVE CREDENTIALS TO DATABASE ***//
+                        recordsCreated = CredentialsProcessor.InsertCredentials
+                        (
+                            model.ClientId,
+                            model.ClientSecret,
+                            model.ServerUrl,
+                            model.RedirectUrl
+                        );
+                    }
+
+                    //*** DONT SAVE ANYWHERE > USE SESSION ***//
                     var state = Guid.NewGuid();
                     Session["state"] = state;
 
@@ -60,31 +80,67 @@ namespace SNPIDataManager.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public ActionResult ReceiveAccessToken(string code, string state)
         {
+            string clientId = "", clientSecret = "", serverUrl = "", redirectUrl = "";
+
             var authorizationResponseModel = new AuthorizationResponseModel();
 
-            if (state == Session["state"].ToString())
+            if (ModelState.IsValid &&
+                state == Session["state"].ToString())
             {
-                authorizationResponseModel._code = code;
-                authorizationResponseModel._state = state;
-
-                try
+                if (!string.IsNullOrEmpty(code) &&
+                    !string.IsNullOrEmpty(state))
                 {
+                    var accessModel = new AccessModel();
 
+                    authorizationResponseModel._code = code;
+                    authorizationResponseModel._state = state;
 
-                    Console.WriteLine();
-                    throw new NotImplementedException();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine();
-                    BadRequest(ex.Message);
+                    try
+                    {
+                        var data = CredentialsProcessor.LoadCredentials<ClientModel>();
+
+                        //*** Loop Trough data (LoadCred<UserModel>) and assign local variables with value from Database! ***//
+                        foreach (var row in data)
+                        {
+                            clientId = row.ClientId;
+                            clientSecret = row.ClientSecret;
+                            serverUrl = row.ServerUrl;
+                            redirectUrl = row.RedirectUrl;
+                        }
+
+                        //*** Populate Authentication Parameters to build Response URL ***//
+                        var PopulatedAuthenticationModel = PopulateModels.PopulateModels.PopulateAuthenticationModel(clientId, clientSecret, serverUrl, redirectUrl, "authorization_code", code);
+                        
+                        var nopAuthorizationManager = new NopAuthorizationManager(PopulatedAuthenticationModel.ClientId, PopulatedAuthenticationModel.ClientSecret, PopulatedAuthenticationModel.ServerUrl);                      
+                        string responseJSON = nopAuthorizationManager.GetAuthorizationData(PopulatedAuthenticationModel);
+                        TokenAuthorizationModel tokenAuthorizationModel = JsonConvert.DeserializeObject<TokenAuthorizationModel>(responseJSON);
+
+                        accessModel.tokenAuthorizationModel = tokenAuthorizationModel;
+
+                        //*** Populate UserAccessModel with new information ***//
+                        PopulateModels.PopulateModels.PopulateUserAccessModel(accessModel, clientId, clientSecret, serverUrl, redirectUrl);
+
+                        int recordsCreated = CredentialsProcessor.InsertToken
+                        (
+                            null,
+                            tokenAuthorizationModel.AccessToken,
+                            null
+                        );
+
+                        // TODO: Here you can save your access and refresh tokens in the database. For illustration purposes we will save them in the Session and show them in the view.
+                        Session["accessToken"] = tokenAuthorizationModel.AccessToken;
+                    }
+                    catch (Exception ex)
+                    {
+                        BadRequest(ex.Message);
+                    }
+
+                    return View(accessModel);
                 }
             }
 
-            Console.WriteLine();
             return BadRequest();
         }
 

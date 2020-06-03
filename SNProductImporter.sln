@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNPIDataManager", "SNPIData
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNPIHelperLibrary", "SNPIHelperLibrary\SNPIHelperLibrary.csproj", "{AF0FE4FE-AB91-4B93-B156-6D7D3CD507BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNPIDataLibrary", "SNPIDataLibrary\SNPIDataLibrary.csproj", "{F3D9F76A-F417-4EA7-9976-1D4332CD4035}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SNPI_NopAccess_db", "SNPIdb\SNPI_NopAccess_db.sqlproj", "{842A56E2-F9BE-4386-ADD3-664C4D250D62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,16 @@ Global
 		{AF0FE4FE-AB91-4B93-B156-6D7D3CD507BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF0FE4FE-AB91-4B93-B156-6D7D3CD507BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF0FE4FE-AB91-4B93-B156-6D7D3CD507BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3D9F76A-F417-4EA7-9976-1D4332CD4035}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3D9F76A-F417-4EA7-9976-1D4332CD4035}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3D9F76A-F417-4EA7-9976-1D4332CD4035}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3D9F76A-F417-4EA7-9976-1D4332CD4035}.Release|Any CPU.Build.0 = Release|Any CPU
+		{842A56E2-F9BE-4386-ADD3-664C4D250D62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{842A56E2-F9BE-4386-ADD3-664C4D250D62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{842A56E2-F9BE-4386-ADD3-664C4D250D62}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{842A56E2-F9BE-4386-ADD3-664C4D250D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{842A56E2-F9BE-4386-ADD3-664C4D250D62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{842A56E2-F9BE-4386-ADD3-664C4D250D62}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
