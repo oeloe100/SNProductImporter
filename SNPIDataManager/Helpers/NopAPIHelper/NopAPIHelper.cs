@@ -1,4 +1,5 @@
 ﻿using Microsoft.Ajax.Utilities;
+using SNPIDataManager.Managers;
 using SNPIDataManager.Models.NopAuthorizationModels;
 using Swashbuckle.Swagger;
 using System;
@@ -42,40 +43,31 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             nopApiClient.DefaultRequestHeaders.Accept.Clear();
             nopApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
-
-        public string AuthorizeClient(string code, string grantType, string redirectUrl)
+        public async Task<string> AuthorizeClient(string code, string grantType, string redirectUrl)
         {
             string requestUriString = string.Format("{0}/api/token", _serverUrl);
-            string queryParameters = string.Format("client_id={0}&client_secret={1}&code={2}&grant_type={3}&redirect_uri={4}", _clientId, _clientSecret, code, grantType, redirectUrl);
 
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(requestUriString);
-            httpWebRequest.Method = "POST";
-            httpWebRequest.ContentType = "application/x-www-form-urlencoded";
-
-            using (new MemoryStream())
+            var data = new FormUrlEncodedContent(new[] 
             {
-                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                new KeyValuePair<string, string>("client_id", _clientId),
+                new KeyValuePair<string, string>("client_secret", _clientSecret),
+                new KeyValuePair<string, string>("code", code),
+                new KeyValuePair<string, string>("grant_type", grantType),
+                new KeyValuePair<string, string>("redirect_uri", redirectUrl)
+            });
+
+            using (HttpResponseMessage response = await nopApiClient.PostAsync(requestUriString, data))
+            {
+                if (response.IsSuccessStatusCode)
                 {
-                    streamWriter.Write(queryParameters);
-                    streamWriter.Close();
+                    var jsonResult = await response.Content.ReadAsStringAsync();
+                    return jsonResult;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
                 }
             }
-
-            var httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-
-            string json = string.Empty;
-
-            using (Stream responseStream = httpWebResponse.GetResponseStream())
-            {
-                if (responseStream != null)
-                {
-                    var streamReader = new StreamReader(responseStream);
-                    json = streamReader.ReadToEnd();
-                    streamReader.Close();
-                }
-            }
-
-            return json;
         }
     }
 }

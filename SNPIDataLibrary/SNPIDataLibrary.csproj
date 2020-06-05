@@ -45,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessLogic\CompareDBData.cs" />
     <Compile Include="BusinessLogic\CredentialsProcessor.cs" />
     <Compile Include="DataAccess\SQLDataAccess.cs" />
     <Compile Include="Models\ClientModel.cs" />

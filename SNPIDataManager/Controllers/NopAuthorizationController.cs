@@ -19,12 +19,19 @@ using Microsoft.AspNet.Identity.Owin;
 using System.Security.Claims;
 using System.Threading;
 using System.Web.Routing;
+using SNPIDataManager.Models;
+using SNPIDataManager.Helpers;
+using SNPIDataManager.Setup;
+using System.Threading.Tasks;
 
 namespace SNPIDataManager.Controllers
 {
     [Authorize]
     public class NopAuthorizationController : Controller
     {
+        UserInformation userInformation = new UserInformation();
+        NopAccessSetup setup = new NopAccessSetup();
+
         // GET: NopAuthorization
         public ActionResult Index()
         {
@@ -47,14 +54,14 @@ namespace SNPIDataManager.Controllers
                         return BadRequest();
                     }
 
-                    var compareDBData = new CompareDBData();
                     int recordsCreated;
 
-                    if (!compareDBData.DataIsExisting(model.ClientId, model.ClientSecret, model.ServerUrl, model.RedirectUrl))
+                    if (setup.IsSetup())
                     {
                         // *** SAVE CREDENTIALS TO DATABASE ***//
                         recordsCreated = CredentialsProcessor.InsertCredentials
                         (
+                            userInformation.UserId(),
                             model.ClientId,
                             model.ClientSecret,
                             model.ServerUrl,
@@ -62,10 +69,11 @@ namespace SNPIDataManager.Controllers
                         );
                     }
 
-                    //*** DONT SAVE ANYWHERE > USE SESSION ***//
+                    //*** DONT SAVE ANYWHERE ***//
                     var state = Guid.NewGuid();
                     Session["state"] = state;
 
+                    //*** Nop Authorization Url + Redirect Url ***/
                     var authorizationUrl = nopAuthorizationManager.GetAuthorizationUrl(callbackUrl, new string[] { }, state.ToString());
 
                     return Redirect(authorizationUrl);
@@ -80,7 +88,7 @@ namespace SNPIDataManager.Controllers
         }
 
         [HttpGet]
-        public ActionResult ReceiveAccessToken(string code, string state)
+        public async Task<ActionResult> ReceiveAccessToken(string code, string state)
         {
             string clientId = "", clientSecret = "", serverUrl = "", redirectUrl = "";
 
@@ -114,7 +122,9 @@ namespace SNPIDataManager.Controllers
                         var PopulatedAuthenticationModel = PopulateModels.PopulateModels.PopulateAuthenticationModel(clientId, clientSecret, serverUrl, redirectUrl, "authorization_code", code);
                         
                         var nopAuthorizationManager = new NopAuthorizationManager(PopulatedAuthenticationModel.ClientId, PopulatedAuthenticationModel.ClientSecret, PopulatedAuthenticationModel.ServerUrl);                      
-                        string responseJSON = nopAuthorizationManager.GetAuthorizationData(PopulatedAuthenticationModel);
+                        
+                        string responseJSON = await nopAuthorizationManager.GetAuthorizationData(PopulatedAuthenticationModel);
+                        
                         TokenAuthorizationModel tokenAuthorizationModel = JsonConvert.DeserializeObject<TokenAuthorizationModel>(responseJSON);
 
                         accessModel.tokenAuthorizationModel = tokenAuthorizationModel;
@@ -122,19 +132,18 @@ namespace SNPIDataManager.Controllers
                         //*** Populate UserAccessModel with new information ***//
                         PopulateModels.PopulateModels.PopulateUserAccessModel(accessModel, clientId, clientSecret, serverUrl, redirectUrl);
 
+                        string userId = userInformation.UserId();
+
                         int recordsCreated = CredentialsProcessor.InsertToken
                         (
-                            null,
+                            userId,
                             tokenAuthorizationModel.AccessToken,
-                            null
+                            tokenAuthorizationModel.RefreshToken
                         );
-
-                        // TODO: Here you can save your access and refresh tokens in the database. For illustration purposes we will save them in the Session and show them in the view.
-                        Session["accessToken"] = tokenAuthorizationModel.AccessToken;
                     }
                     catch (Exception ex)
                     {
-                        BadRequest(ex.Message);
+                       return BadRequest(ex.ToString());
                     }
 
                     return View(accessModel);

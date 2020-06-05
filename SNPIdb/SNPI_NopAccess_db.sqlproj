@@ -67,4 +67,7 @@
   <ItemGroup>
     <None Include="PublishAccessData\SNPIdb.publish.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="SNPI_NopAccess_db.refactorlog" />
+  </ItemGroup>
 </Project>

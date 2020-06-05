@@ -1,0 +1,15 @@
+﻿@model IEnumerable<SNPIDataManager.Models.NopProductsModel.ProductsModel>
+
+@{
+    ViewBag.Title = "DisplayProducts";
+}
+
+<h2>Display Products</h2>
+
+<ul>
+    @foreach (var product in Model)
+    {
+        <li>@product.id, @product.name, @product.images, @product.sku</li>
+    }
+</ul>
+

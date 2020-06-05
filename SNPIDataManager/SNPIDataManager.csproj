@@ -221,7 +221,9 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NopAuthorizationController.cs" />
+    <Compile Include="Controllers\NopControllers\CustomersController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -229,7 +231,9 @@
     <Compile Include="Helpers\APIHelper.cs" />
     <Compile Include="Helpers\CookieAuthorizationCheck.cs" />
     <Compile Include="Helpers\IAPIHelper.cs" />
+    <Compile Include="Helpers\NopAPIHelper\NopAPIClientHelper.cs" />
     <Compile Include="Helpers\NopAPIHelper\NopAPIHelper.cs" />
+    <Compile Include="Helpers\UserInformation.cs" />
     <Compile Include="Managers\NopAuthorizationManager.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -242,6 +246,10 @@
     <Compile Include="Models\NopAuthorizationModels\TokenAuthorizationModel.cs" />
     <Compile Include="Models\NopAuthorizationModels\UserAccessModel.cs" />
     <Compile Include="Models\NopAuthorizationParametersModel\AuthorizationParametersModel.cs" />
+    <Compile Include="Models\NopCustomerModel\CustomerModel.cs" />
+    <Compile Include="Models\NopCustomerModel\CustomersRootObject.cs" />
+    <Compile Include="Models\NopProductsModel\ProductsModel.cs" />
+    <Compile Include="Models\NopProductsModel\ProductsRootObject.cs" />
     <Compile Include="Models\PreLoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="PopulateModels\PopulateModels.cs" />
@@ -249,6 +257,7 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Providers\NopOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
+    <Compile Include="Setup\NopAccessSetup.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -318,6 +327,9 @@
     <Content Include="Views\Shared\_RegisterForm.cshtml" />
     <Content Include="Views\NopAuthorization\Index.cshtml" />
     <Content Include="Views\NopAuthorization\ReceiveAccessToken.cshtml" />
+    <Content Include="Views\Shared\_NopAuthorizationSetup.cshtml" />
+    <Content Include="Views\Customers\GetCustomerInformation.cshtml" />
+    <Content Include="Views\Customers\GetProducts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

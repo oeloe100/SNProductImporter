@@ -6,15 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace SNPIDataManager.Managers
 {
     public class NopAuthorizationManager
     {
-        private string _clientId;
-        private string _clientSecret;
-        private string _serverUrl;
+        public string _clientId;
+        public string _clientSecret;
+        public string _serverUrl;
 
         private readonly NopAPIHelper _nopAPIHelper;
 
@@ -51,7 +52,7 @@ namespace SNPIDataManager.Managers
             return stringBuilder.ToString();
         }
 
-        public string GetAuthorizationData(AuthorizationParametersModel authorizationParemeters)
+        public async Task<string> GetAuthorizationData(AuthorizationParametersModel authorizationParemeters)
         {
             // make sure we have the necessary parameters
             ValidateParameter("code", authorizationParemeters.Code);
@@ -61,7 +62,7 @@ namespace SNPIDataManager.Managers
             ValidateParameter("redirectUrl", authorizationParemeters.RedirectUrl);
             ValidateParameter("grantType", authorizationParemeters.GrantType);
 
-            string accessToken = _nopAPIHelper.AuthorizeClient(authorizationParemeters.Code, authorizationParemeters.GrantType, authorizationParemeters.RedirectUrl);
+            string accessToken = await _nopAPIHelper.AuthorizeClient(authorizationParemeters.Code, authorizationParemeters.GrantType, authorizationParemeters.RedirectUrl);
 
             return accessToken;
         }
