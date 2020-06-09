@@ -19,6 +19,10 @@ a {
 .folder_container {
     margin: 20px;
     padding: 10px;
-    width: 45%;
+    width: 48%;
     background-color: azure; 
+}
+
+.container_display {
+    display: contents !important;
 }

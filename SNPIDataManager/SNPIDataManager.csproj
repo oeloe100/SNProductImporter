@@ -193,9 +193,11 @@
     <Compile Include="Areas\EDCFeed\Controllers\API\InventoryDataController.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\ProductSyncController.cs" />
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
+    <Compile Include="Areas\EDCFeed\Models\CategorizedCategoryModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\EDCProductModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\IndexViewModel.cs" />
+    <Compile Include="Areas\EDCFeed\Models\ProductModel.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
     <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />

@@ -1,7 +1,11 @@
-﻿using SNPIDataManager.Areas.EDCFeed.Models;
+﻿using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using SNPIDataManager.Areas.EDCFeed.Models;
 using SNPIDataManager.Models.NopProductsModel;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -52,51 +56,73 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
             return Ok(productModel.ToList());
         }
 
-        public List<string> CategoryBuilder()
+        public List<CategoryModel> CategoryBuilder()
         {
-            List<CategoryModel> categoryModel = new List<CategoryModel>();
-            List<string> noDuplicates = new List<string>();
+            XmlDocument edcFeed = new XmlDocument();
+            edcFeed.Load(feedPath);
 
-            XmlDocument fullFeedXmlDoc = new XmlDocument();
-            fullFeedXmlDoc.Load(feedPath);
+            XmlElement root = edcFeed.DocumentElement;
 
-            XmlNodeList xmlNodeList = fullFeedXmlDoc.SelectNodes("/products/product/categories/category/cat");
+            var productNodeList = new List<ProductModel>();
 
-            try
+            var ParentedCategories = CategorizeNodes(root);
+            //var UniqueCategoryModels = categoryNodeList.DistinctBy(item => item.Title).ToList<CategoryModel>();
+
+            //*********************\\
+            List<CategoryModel> categoryNoDuplicates = new List<CategoryModel>();
+            return categoryNoDuplicates;
+        }
+
+        public IEnumerable<CategorizedCategoryModel> CategorizeNodes(XmlElement root)
+        {
+            List<CategorizedCategoryModel> CategoriesParented = new List<CategorizedCategoryModel>();
+            List<CategoryModel> CategoryModel = new List<CategoryModel>();
+
+            XmlNodeList productNodes = root.SelectNodes("//product");
+            for (var i = 0; i < productNodes.Count; i++)
             {
-                foreach (XmlNode xn in xmlNodeList)
+                if (productNodes.Count > 0) 
                 {
-                    var newModel = new CategoryModel()
+                    for (var n = 0; n < productNodes[i].ChildNodes.Count; n++) 
                     {
-                        //Id = xn["id"].InnerText,
-                        Title = xn["title"].InnerText
-                    };
+                        XmlNodeList categoriesChildNodes = productNodes[i].ChildNodes;
+                        if (categoriesChildNodes[n].Name == "categories")
+                        {
+                            for (int x = 0; x < categoriesChildNodes[n].ChildNodes.Count; x++)
+                            {
+                                if (categoriesChildNodes[n].ChildNodes[x].Name == "category")
+                                {
+                                    List<CategoryModel> CategoryModelList = new List<CategoryModel>();
+                                    
+                                    for (var d = 0; d < categoriesChildNodes[n].ChildNodes[x].ChildNodes.Count; d++)
+                                    {
+                                        var categoryModel = new CategoryModel()
+                                        {
+                                            Title = categoriesChildNodes[n].ChildNodes[x].ChildNodes[d].ChildNodes[1].InnerText
+                                        };
 
-                    categoryModel.Add(newModel);
+                                        CategoryModelList.Add(categoryModel);
+                                    }
+
+                                    CreateFinalCategoriesModel(CategoriesParented, CategoryModelList);
+                                }
+                            }
+                        }
+                    }
                 }
-
-                List<string> duplicates = new List<string>();
-
-                for (var i = 0; i < categoryModel.Count; i++)
-                {
-                    duplicates.Add(categoryModel[i].Title);
-                }
-
-                //LAZY CODE Returing only product TITLE as STRING. 
-                //For best Practice return CATEGORYMODEL (filtered without DUPS).
-                noDuplicates = new HashSet<string>(duplicates).ToList();
             }
-            catch (Exception ex)
+
+            return CategoriesParented;
+        }
+
+        public void CreateFinalCategoriesModel(List<CategorizedCategoryModel> CategoriesParented, List<CategoryModel> categoryModel)
+        {
+            var test = new CategorizedCategoryModel()
             {
-                List<string> message = new List<string>();
+                CategoryModel = categoryModel
+            };
 
-                message.Add(ex.Message);
-                message.Add(ex.StackTrace);
-
-                return message;
-            }
-
-            return noDuplicates;
+            CategoriesParented.Add(test);
         }
     }
 }
