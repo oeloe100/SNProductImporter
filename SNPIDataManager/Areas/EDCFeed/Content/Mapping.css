@@ -12,17 +12,43 @@ a {
     color: darkslateblue;
 }
 
-.fa-folder {
-    margin-bottom: 10px;
-}
-
 .folder_container {
     margin: 20px;
     padding: 10px;
     width: 48%;
-    background-color: azure; 
 }
+
+/*****/
 
 .container_display {
     display: contents !important;
+}
+
+.parentCategoryItem {
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.childCategoryItem {
+    display: inline-block;
+}
+
+.childCategoryItem_container {
+    margin-left: 46px;
+}
+
+.parentCategoryItem_container, 
+.childCategoryItemContainer,
+.PCI_Overflow{
+    display: flex;
+}
+
+.PCI_Overflow {
+    margin-left: 10px;
+    margin-top: 3px;
+}
+
+.aphaOrder,
+.PCI_Overflow {
+    cursor: pointer;
 }

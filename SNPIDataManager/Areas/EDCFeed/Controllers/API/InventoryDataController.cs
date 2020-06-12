@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.UI.WebControls;
 using System.Xml;
 
 namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
@@ -56,7 +57,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
             return Ok(productModel.ToList());
         }
 
-        public List<CategorizedCategoryModel> CategoryBuilder()
+        public IDictionary<string, List<string>> CategoryBuilder()
         {
             XmlDocument edcFeed = new XmlDocument();
             edcFeed.Load(feedPath);
@@ -69,10 +70,28 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
             
             var elapsedMs = watch.ElapsedMilliseconds;
 
-            return ParentedCategories;
+            /**********/
+
+            IDictionary<string, List<string>> RelationToView = new Dictionary<string, List<string>>();
+            ChildParentRelationForView(ParentedCategories, RelationToView);
+
+            return RelationToView;
         }
 
-        public IEnumerable<CategorizedCategoryModel> CategorizeNodes(XmlElement root)
+        private void ChildParentRelationForView(List<CategorizedCategoryModel> ParentedCategories, IDictionary<string, List<string>> dict)
+        {
+            foreach (var model in ParentedCategories)
+            {
+                if (!dict.ContainsKey(model.CategoryModel[0].Title))
+                {
+                    dict[model.CategoryModel[0].Title] = new List<string>();
+                }
+
+                dict[model.CategoryModel[0].Title].Add(model.CategoryModel[1].Title);
+            }
+        }
+
+        private IEnumerable<CategorizedCategoryModel> CategorizeNodes(XmlElement root)
         {
             List<CategorizedCategoryModel> CategoriesParented = new List<CategorizedCategoryModel>();
 
@@ -118,10 +137,6 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
                                             {
                                                 isDuplicate = false;
                                             }
-                                            else
-                                            {
-                                                isDuplicate = true;
-                                            }
                                         }
                                     }
 
@@ -140,7 +155,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
             return CategoriesParented;
         }
 
-        public bool IsDuplicate(List<CategorizedCategoryModel> CategoriesParented, string title)
+        private bool IsDuplicate(List<CategorizedCategoryModel> CategoriesParented, string title)
         {
             var item = CategoriesParented.Select(model => model.CategoryModel.Select(index => index.Title)).ToList();
 
@@ -162,7 +177,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
             return false;
         }
 
-        public void CreateFinalCategoriesModel(List<CategorizedCategoryModel> CategoriesParented, List<CategoryModel> categoryModel)
+        private void CreateFinalCategoriesModel(List<CategorizedCategoryModel> CategoriesParented, List<CategoryModel> categoryModel)
         {
             var test = new CategorizedCategoryModel()
             {
