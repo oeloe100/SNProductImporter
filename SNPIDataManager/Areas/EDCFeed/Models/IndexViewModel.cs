@@ -8,7 +8,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Models
 {
     public class IndexViewModel
     {
-        public IEnumerable<CategoriesModel> CategoriesModel {get;set;}
+        public IDictionary<ProductModel, List<ProductModel>> NopCategoriesModel {get;set;}
         public IDictionary<string, List<string>> EDCCategoriesFiltered { get; set; }
     }
 }

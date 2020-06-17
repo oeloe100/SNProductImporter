@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SNPIDataLibrary.BusinessLogic;
+using SNPIDataLibrary.DataAccess;
 using SNPIDataLibrary.Models;
 using SNPIDataManager.Areas.EDCFeed.Controllers.API;
 using SNPIDataManager.Areas.EDCFeed.Models;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -23,61 +25,30 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
         private string accessToken;
         private string serverUrl;
 
-        List<TokenModel> tokenDetails = CredentialsProcessor.LoadToken<TokenModel>();
-        List<ClientModel> credentialsDetails = CredentialsProcessor.LoadCredentials<ClientModel>();
+        NopShopCategorizationHelper nopShopCategoriesHelper = new NopShopCategorizationHelper();
 
         // GET: EDCFeed/ProductSync
         public async Task<ActionResult> Index()
         {
-            EasyAccess();
-            var Result = await NopCategorieResource();
+            accessToken = new NopQuickAccess().NopAccessToken();
+            serverUrl = new NopQuickAccess().NopServerUrl();
+
+            var NopMTV = await nopShopCategoriesHelper.NopCategoriesResource(accessToken, serverUrl);
 
             var InventoryDataController = new InventoryDataController();
-            var newData = InventoryDataController.CategoryBuilder();
+            var EdcMTV = InventoryDataController.CategoryBuilder();
 
             List<IndexViewModel> model = new List<IndexViewModel>();
 
             var indexViewModel = new IndexViewModel()
             {
-                CategoriesModel = Result,
-                EDCCategoriesFiltered = newData
+                NopCategoriesModel = NopMTV,
+                EDCCategoriesFiltered = EdcMTV
             };
 
             model.Add(indexViewModel);
 
             return View(model);
-        }
-
-        public ActionResult CreateDataMappings()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<CategoriesModel>> NopCategorieResource()
-        {
-            var clientHelper = new NopAPIClientHelper(accessToken, serverUrl);
-
-            string jsonUrl = $"/api/categories";
-            object customerData = await clientHelper.Get(jsonUrl);
-
-            var categoriesRootObject = JsonConvert.DeserializeObject<CategoriesRootObject>(customerData.ToString());
-            var categories = categoriesRootObject.Categories.Where(categorie => !string.IsNullOrEmpty(categorie.Name));
-
-            return categories;
-        }
-
-        public void EasyAccess() 
-        {
-            foreach (var obj in tokenDetails)
-            {
-                accessToken = obj.AccessToken;
-            }
-
-            foreach (var obj in credentialsDetails)
-            {
-                serverUrl = obj.ServerUrl;
-            }
-
         }
     }
 }

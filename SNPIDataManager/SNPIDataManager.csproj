@@ -239,9 +239,11 @@
     </Compile>
     <Compile Include="Helpers\APIHelper.cs" />
     <Compile Include="Helpers\CookieAuthorizationCheck.cs" />
+    <Compile Include="Helpers\EDCHelper\EDCFeedCategorizationHelper.cs" />
     <Compile Include="Helpers\IAPIHelper.cs" />
     <Compile Include="Helpers\NopAPIHelper\NopAPIClientHelper.cs" />
     <Compile Include="Helpers\NopAPIHelper\NopAPIHelper.cs" />
+    <Compile Include="Helpers\NopAPIHelper\NopShopCategorizationHelper.cs" />
     <Compile Include="Helpers\UserInformation.cs" />
     <Compile Include="Managers\NopAuthorizationManager.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
