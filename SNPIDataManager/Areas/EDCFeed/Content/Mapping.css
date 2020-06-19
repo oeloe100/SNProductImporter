@@ -12,6 +12,10 @@ a {
     color: darkslateblue;
 }
 
+ul, li {
+    list-style-type: none !important;
+}
+
 .folder_container {
     margin: 20px;
     padding: 10px;
@@ -57,7 +61,7 @@ a {
     cursor: pointer;
 }
 
-P, LI {
+p, li {
     color: black !important;
 }
 

@@ -1,6 +1,5 @@
 ﻿@model IEnumerable<SNPIDataManager.Areas.EDCFeed.Models.IndexViewModel>
 
-
 <link type="text/css" href="~/Areas/EDCFeed/Content/Mapping.css" rel="stylesheet" />
 
 @{
@@ -11,119 +10,24 @@
 
 @section Scripts{
     <script>
-        $(document).ready(function () {
-            var nopComChildren;
-            var NopComParentItems = $(".nopCom-parent-item");
-
-            OrderNopCategorieItems(NopComParentItems);
-        });
-
-        //Find Item in Supplier Children (NopCom)
-        function OrderNopCategorieItems(NopComParentItems) {
-            for (var i = 0; i < NopComParentItems.length; i++) {
-                var nopComParentItem = $(NopComParentItems)[i];
-                var nopComParentItemId = $(nopComParentItem).attr("id");
-
-                nopComChildren = $("#" + nopComParentItemId + "-children").find(".nopCom-item");
-
-                ParentNopCategorieItems(nopComChildren);
-            }
-        }
-
-        //Add Children to Parent (Right Order)
-        function ParentNopCategorieItems(nopComChildren) {
-            for (var x = 0; x < nopComChildren.length; x++) {
-                var nopComChildItem = $(nopComChildren)[x];
-                var nopComNextChildItem = $(nopComChildren)[x + 1];
-
-                if (parseInt($(nopComNextChildItem).attr("id")) != NaN &&
-                    parseInt($(nopComNextChildItem).attr("id")) > parseInt($(nopComChildItem).attr("id"))) {
-
-                    var nopComNextChildItemId = $(nopComNextChildItem).attr("id");
-                    var nopComChildItemId = $(nopComChildItem).attr("id");
-
-                    $("#" + nopComNextChildItemId + "").appendTo($("#" + nopComChildItemId + ""));
-                    $("#" + nopComNextChildItemId + "").addClass("isChild");
-                }
-                else {
-                    RemoveSelecterFromLastChildItem(nopComChildItem);
-                }
-            }
-        }
-
-        function RemoveSelecterFromLastChildItem(nopComChildItem) {
-            var lastChildClass = $(nopComChildItem).attr("id");
-            var toggleHandlerChild = $("#" + lastChildClass + "").find(".selecter-element");
-            $(toggleHandlerChild).remove();
-        }
-
         //Toggle Supplier Categorie Children (Sub Categories)
         $(".children_is_visibel").click(function () {
             var itemNumber = $(this).attr("id").split("_")[1];
             $("#B_" + itemNumber + "").toggle("slide");
         });
-
-        //Toggle Shop MAIN Categorie Child (Sub Category)
-        $(".shop-child-toggle").click(function () {
-            var parentItem = $(this).parent();
-            var parentItemId = $(parentItem).attr("id");
-            var childItem = $("#" + parentItemId + "-children");
-
-            $(childItem).toggle("slide");
-        });
-
-        //Toggle Shop Categorie Children (Sub Categories)
-        $(".nopCom-item").click(function (e) {
-            e.stopPropagation();
-
-            var clickItemId = $(this).attr("id");
-            var clickItemIntId = parseInt(clickItemId);
-            var nextClickItemIntId = clickItemIntId + 1;
-
-            if ($("#" + clickItemId + "").children.length > 0) {
-                $("#" + nextClickItemIntId + "").toggle("slide");
-            }
-        });
-    </script>    
+    </script>
 }
 
 <section class="container container_display">
     <div class="folder_container" style="margin-right: 0px; float: left; background-color: floralwhite; color: midnightblue;">
         <h3>Shop Categories</h3>
-        <ul style="margin: 10px !important">
+        <ul class="nopCategory-items" style="margin: 10px !important">
             @foreach (var item in Model)
             {
                 foreach (var newItem in item.NopCategoriesModel)
                 {
-                    <li class="fa-folder" style="list-style-type:none;">
-                        <div id="item-@newItem.Key.Id" class="nopCom-parent-item" style="display: flex;">
-                            <div class="shop-child-toggle" style="font-weight: bold; cursor: pointer;"><p style="font-size:15px;">></p></div>
-                            
-                            <div class="PCI_Overflow">
-                                <svg class="bi bi-folder-fill" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z" />
-                                </svg>
-
-                                <p class="parentCategoryItem">@newItem.Key.Title</p>
-                            </div>
-                        </div>
-
-                        <div id="item-@newItem.Key.Id-children" class="parentCategoryItem_container">
-                            @foreach (var index in newItem.Value)
-                            {
-                                <div id="@index.Id" class="nopCom-item" style="display: block;">
-                                    <div style="display: flex;">
-                                        <div class="selecter-element" style="font-weight: bold; cursor: pointer;"><p style="font-size:15px;">></p></div>
-                                        <div style="display: flex; margin: 3px 0 0 10px;">
-                                            <svg class="bi bi-folder-fill" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z" />
-                                            </svg>
-                                            <div><p style="margin-left: 10px;">@index.Title</p></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
+                    <li class="cat-item" data-id="@newItem.Id" data-parentId="@newItem.ParentId">
+                        <p>@newItem.Name</p>
                     </li>
                 }
             }
@@ -142,7 +46,7 @@
                     <li class="fa-folder" style="list-style-type:none;">
                         <div style="display: flex;">
                             <div id="A_@i" class="children_is_visibel" style="font-weight: bold; cursor: pointer;"><p style="font-size:15px;">></p></div>
-                            
+
                             <div class="PCI_Overflow">
                                 <svg class="bi bi-folder-fill" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z" />

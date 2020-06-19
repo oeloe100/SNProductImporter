@@ -16,5 +16,7 @@ namespace SNPIDataManager.Models.NopCategoriesModel
 
         [JsonProperty("parent_category_id")]
         public string ParentId { get; set; }
+
+        public IDictionary<string, CategoriesModel> NestedModel { get; set; }
     }
 }

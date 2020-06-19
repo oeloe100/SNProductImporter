@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.WebPages;
 
 namespace SNPIDataManager.Helpers.NopAPIHelper
 {
     public class NopShopCategorizationHelper
     {
-        public async Task<IDictionary<ProductModel, List<ProductModel>>> NopCategoriesResource(string accessToken, string serverUrl)
+        public async Task<IEnumerable<CategoriesModel>> NopCategoriesResource(string accessToken, string serverUrl)
         {
             var clientHelper = new NopAPIClientHelper(accessToken, serverUrl);
 
@@ -19,71 +20,72 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             object customerData = await clientHelper.Get(jsonUrl);
 
             var categoriesRootObject = JsonConvert.DeserializeObject<CategoriesRootObject>(customerData.ToString());
-            var categories = categoriesRootObject.Categories.Where(categorie => !string.IsNullOrEmpty(categorie.Name));
+            var categoriesIE = categoriesRootObject.Categories.Where(categorie => !string.IsNullOrEmpty(categorie.Name));
 
-            /*** Model To View Dictionary ***/
-            IDictionary<ProductModel, List<ProductModel>> MTVDictionary = new Dictionary<ProductModel, List<ProductModel>>();
+            List<CategoriesModel> categoriesList = categoriesIE.ToList();
 
-            /*** Order Categories (Parent > Child etc..) ***/
-            PopulateDictionaries(categories, MTVDictionary);
+            Sort(categoriesList);
 
-            return MTVDictionary;
+            return categoriesIE;
         }
 
-        private void PopulateDictionaries(IEnumerable<CategoriesModel> categories,
-            IDictionary<ProductModel,
-            List<ProductModel>> MTVDictionary)
+        private void Sort(List<CategoriesModel> categoriesUnsorted) 
         {
-            string id = "";
-            string parentId = "";
+            IDictionary<string, List<CategoriesModel>> categoriesSorted = new Dictionary<string, List<CategoriesModel>>();
 
-            ProductModel previousModel = new ProductModel();
-
-            foreach (var index in categories)
+            for (var i = 0; i < categoriesUnsorted.Count(); i++)
             {
-                if (index.ParentId == "0")
+                int id = Int16.Parse(categoriesUnsorted[i].Id);
+                int parentId = Int16.Parse(categoriesUnsorted[i].ParentId);
+
+                SortByName(categoriesUnsorted[i], categoriesSorted, id, parentId);
+            }
+        }
+
+        private void SortByName(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, int id, int parentId)
+        {
+            List<CategoriesModel> sortedModel = new List<CategoriesModel>();
+
+            if (parentId <= 0)
+            {
+                sortedModel.Add(SortedModel(unsorted));
+                sorted.Add(unsorted.Id, sortedModel);
+            }
+            else if (parentId > 0)
+            {
+                var key = unsorted.ParentId;
+                SortNested(unsorted, sorted, key);
+            }
+        }
+
+        private void SortNested(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, string key)
+        {
+            if (sorted.ContainsKey(key))
+            {
+                for (var x = 0; x < sorted[key].Count; x++)
                 {
-                    previousModel = new ProductModel()
-                    {
-                        Id = index.Id,
-                        Title = index.Name
-                    };
+                    var model = sorted[key];
+                    var nestedModel = model[x].NestedModel;
 
-                    var setup = MTVDictionary[previousModel] = new List<ProductModel>();
+                    nestedModel = new Dictionary<string, CategoriesModel>();
+                    nestedModel.Add(unsorted.Id, SortedModel(unsorted));
 
-                    id = index.Id;
-                    parentId = index.ParentId;
-                }
-                else if (index.ParentId != "0")
-                {
-                    if (index.ParentId == id)
-                    {
-                        var ChildProductModel = SetProductModel(index.Id, index.Name);
-
-                        if (!MTVDictionary.ContainsKey(previousModel))
-                        {
-                            MTVDictionary[previousModel].Add(ChildProductModel);
-                        }
-                        else
-                        {
-                            MTVDictionary[previousModel].Add(ChildProductModel);
-                        }
-
-                        id = index.Id;
-                    }
+                    //Nestedmodel is being created but not added to sorted.nestedlist. Fix this.
+                    Console.WriteLine();
                 }
             }
         }
 
-        private ProductModel SetProductModel(string id, string name)
+        private CategoriesModel SortedModel(CategoriesModel unsorted)
         {
-            var keyProductModel = new ProductModel()
+            var sortedItemModel = new CategoriesModel()
             {
-                Id = id,
-                Title = name,
+                Id = unsorted.Id,
+                ParentId = unsorted.ParentId,
+                Name = unsorted.Name
             };
 
-            return keyProductModel;
+            return sortedItemModel;
         }
     }
 }
