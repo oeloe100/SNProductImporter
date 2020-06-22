@@ -1,9 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
 using SNPIDataManager.Areas.EDCFeed.Models;
 using SNPIDataManager.Models.NopCategoriesModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.WebPages;
@@ -12,7 +14,9 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
 {
     public class NopShopCategorizationHelper
     {
-        public async Task<IEnumerable<CategoriesModel>> NopCategoriesResource(string accessToken, string serverUrl)
+        private CategoriesModel nextEntryModel;
+
+        public async Task<IDictionary<string, List<CategoriesModel>>> NopCategoriesResource(string accessToken, string serverUrl)
         {
             var clientHelper = new NopAPIClientHelper(accessToken, serverUrl);
 
@@ -24,12 +28,12 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
 
             List<CategoriesModel> categoriesList = categoriesIE.ToList();
 
-            Sort(categoriesList);
+            var categoriesSorted = Sort(categoriesList);
 
-            return categoriesIE;
+            return categoriesSorted;
         }
 
-        private void Sort(List<CategoriesModel> categoriesUnsorted) 
+        private IDictionary<string, List<CategoriesModel>> Sort(List<CategoriesModel> categoriesUnsorted) 
         {
             IDictionary<string, List<CategoriesModel>> categoriesSorted = new Dictionary<string, List<CategoriesModel>>();
 
@@ -40,6 +44,8 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
 
                 SortByName(categoriesUnsorted[i], categoriesSorted, id, parentId);
             }
+
+            return categoriesSorted;
         }
 
         private void SortByName(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, int id, int parentId)
@@ -67,13 +73,170 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
                     var model = sorted[key];
                     var nestedModel = model[x].NestedModel;
 
-                    nestedModel = new Dictionary<string, CategoriesModel>();
-                    nestedModel.Add(unsorted.Id, SortedModel(unsorted));
+                    if (nestedModel == null)
+                    {
+                        model[x].NestedModel = new Dictionary<string, CategoriesModel>();
+                        model[x].NestedModel.Add(unsorted.Id, SortedModel(unsorted));
+                    }
+                    else
+                    {
+                        model[x].NestedModel.Add(unsorted.Id, SortedModel(unsorted));
+                    }
 
-                    //Nestedmodel is being created but not added to sorted.nestedlist. Fix this.
+                    nextEntryModel = NextEntry(model, x, unsorted);
+                }
+            }
+            else
+            {
+                var firstLevelKey = FirstLevelKey(unsorted, sorted, key);
+                FindNextNestedEntry(unsorted, sorted, key, FirstLevelKey(unsorted, sorted, key));
+            }
+        }
+
+        void FindNextNestedEntry(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, string key, string firstKey)
+        {
+            if (sorted.ContainsKey(firstKey))
+            {
+                var firstEntry = sorted[firstKey];
+                SortDeepNested(unsorted, sorted, firstEntry, key);
+            }
+        }
+
+        private void SortDeepNested(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, List<CategoriesModel> entry, string key)
+        {
+            for (var i = 0; i < entry.Count; i++)
+            {
+                if (entry[i].NestedModel.ContainsKey(key))
+                {
+                    SelectEntry(i, unsorted, entry, key);                    
+                }
+                else
+                {
+                    ThirdLevelEntry(i, unsorted, entry, sorted, key);
+                }
+            }
+        }
+
+        private void SelectEntry(int i, CategoriesModel unsorted, List<CategoriesModel> entry, string key)
+        {
+            var nestedModel = entry[i].NestedModel[key].NestedModel;
+            
+            if (nestedModel == null)
+            {
+                entry[i].NestedModel[key].NestedModel = new Dictionary<string, CategoriesModel>();
+                entry[i].NestedModel[key].NestedModel.Add(unsorted.Id, SortedModel(unsorted));
+            }
+            else
+            {
+                entry[i].NestedModel[key].NestedModel.Add(unsorted.Id, SortedModel(unsorted));
+            }
+        }
+
+        private void ThirdLevelEntry(int i, CategoriesModel unsorted, List<CategoriesModel> entry, IDictionary<string, List<CategoriesModel>> sorted, string key)
+        {
+            nextEntryModel = unsorted;
+            var firstLevelKey = FirstLevelKey(unsorted, sorted, key);
+            var secondLevelKey = SecondLevelKey(firstLevelKey, key, sorted);
+
+            var model = entry[i].NestedModel[secondLevelKey].NestedModel.ContainsKey(key);
+            var nestedModelCount = entry[i].NestedModel[secondLevelKey].NestedModel[key].NestedModel;
+
+            if (model && nestedModelCount == null)
+            {
+                entry[i].NestedModel[secondLevelKey].NestedModel[key].NestedModel = new Dictionary<string, CategoriesModel>();
+                entry[i].NestedModel[secondLevelKey].NestedModel[key].NestedModel.Add(unsorted.Id, SortedModel(unsorted));
+            }
+            else
+            {
+                entry[i].NestedModel[secondLevelKey].NestedModel[key].NestedModel.Add(unsorted.Id, SortedModel(unsorted));
+            }
+        }
+
+        private string SecondLevelKey(string firstLevelKey, string key, IDictionary<string, List<CategoriesModel>> sorted)
+        {
+            for (var i = 0; i < sorted.Count; i++)
+            {
+                var secondLevel = sorted[firstLevelKey][i].NestedModel;
+                return SecondSelect(secondLevel, key);
+            }
+
+            return "Something Went Wrong?";
+        }
+
+        private string SecondSelect(IDictionary<string, CategoriesModel> nestedModel, string key)
+        {
+            string newKey = "";
+            int keyAsInteger;
+            keyAsInteger = Int16.Parse(key);
+
+            for (var i = 0; i < keyAsInteger; i++)
+            {
+                keyAsInteger--;
+                newKey = keyAsInteger.ToString();
+
+                if (nestedModel.ContainsKey(newKey))
+                {
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+            return newKey;
+        }
+
+        private string FirstLevelKey(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, string key)
+        {
+            if (nextEntryModel != null)
+            {
+                if (!sorted.ContainsKey(key))
+                {
+                    var select = Select(sorted, key);
+                    return select;
+                }
+                else
+                {
                     Console.WriteLine();
                 }
             }
+
+            return null;
+        }
+
+        private string Select(IDictionary<string, List<CategoriesModel>> sorted, string key) 
+        {
+            string newKey = "";
+            int keyAsInteger;
+            keyAsInteger = Int16.Parse(key);
+
+            for (var i = 0; i < keyAsInteger; i++)
+            {
+                keyAsInteger--;
+                newKey = keyAsInteger.ToString();
+
+                if (sorted.ContainsKey(newKey))
+                {
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+            return newKey;
+        }
+
+        private CategoriesModel NextEntry(List<CategoriesModel> model, int x, CategoriesModel unsorted) 
+        {
+            if (model[x].NestedModel.ContainsKey(unsorted.Id))
+            {
+                return model[x].NestedModel[unsorted.Id];
+            }
+
+            return null;
         }
 
         private CategoriesModel SortedModel(CategoriesModel unsorted)

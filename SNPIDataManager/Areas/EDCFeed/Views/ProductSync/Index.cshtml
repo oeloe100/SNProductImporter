@@ -10,25 +10,96 @@
 
 @section Scripts{
     <script>
+        $(document).ready(function () {
+            ToggleShopCategories();
+
+            CategoriesStyling("root-select");
+            CategoriesStyling("nopCom-flow");
+        });
+
+         //Toggle Shop Categorie Children (Sub Categories)
+        function ToggleShopCategories() {
+            var toggler = document.getElementsByClassName("root-select");
+            var i;
+
+            for (i = 0; i < toggler.length; i++) {
+                toggler[i].addEventListener("click", function () {
+                    var nested = $(this).parent();
+                    var children = $(nested).find(".nested");
+
+                    for (var x = 0; x < children.length; x++) {
+                        $(children)[x].classList.toggle("active");
+                    }
+                });
+            }
+        }
+
         //Toggle Supplier Categorie Children (Sub Categories)
         $(".children_is_visibel").click(function () {
             var itemNumber = $(this).attr("id").split("_")[1];
             $("#B_" + itemNumber + "").toggle("slide");
         });
+
+        function CategoriesStyling(selectedClass) {
+            var nested = $("." + selectedClass + "").parent();
+            var children = $(nested)
+
+            for (var i = 0; i < children.length; i++) {
+                var child = $(children)[i];
+                if (child.children.length > 1) {
+                    if (selectedClass == "root-select") {
+                        $(child).css("margin-left", "-7px");
+                    }
+                    else {
+                        $(child).css("margin-left", "-2.5px");
+                    }
+                }
+            }
+        }
     </script>
 }
 
 <section class="container container_display">
     <div class="folder_container" style="margin-right: 0px; float: left; background-color: floralwhite; color: midnightblue;">
         <h3>Shop Categories</h3>
-        <ul class="nopCategory-items" style="margin: 10px !important">
-            @foreach (var item in Model)
+        <ul style="margin: 10px !important;">
+            @foreach (var root in Model)
             {
-                foreach (var newItem in item.NopCategoriesModel)
+                foreach (var firstIndex in root.NopCategoriesModel)
                 {
-                    <li class="cat-item" data-id="@newItem.Id" data-parentId="@newItem.ParentId">
-                        <p>@newItem.Name</p>
-                    </li>
+                    foreach (var firstIndexValue in firstIndex.Value)
+                    {
+                        <li>@firstIndexValue.Name</li>
+                        if (firstIndexValue.NestedModel != null)
+                        {
+                            <ul>
+                            @foreach (var secondIndex in firstIndexValue.NestedModel)
+                            {
+                                <li>@secondIndex.Value.Name</li>
+                                if (secondIndex.Value.NestedModel != null)
+                                {
+                                    <ul>
+                                    @foreach (var thirdIndex in secondIndex.Value.NestedModel)
+                                    {
+                                        <li>@thirdIndex.Value.Name</li>
+                                        if (thirdIndex.Value.NestedModel != null)
+                                        {
+                                            <ul>
+                                            @foreach (var thirdIndexValue in thirdIndex.Value.NestedModel)
+                                            {
+
+                                                <li>@thirdIndexValue.Value.Name</li>
+
+                                            }
+                                            </ul>
+                                        }
+                                    }
+                                    </ul>
+                                }
+                            }
+                            </ul>
+                        }
+                    }
                 }
             }
         </ul>
@@ -36,41 +107,19 @@
 
     <div class="folder_container" style="margin-right: 0px; float: right; background-color: floralwhite; color: midnightblue;">
         <h3>Supplier Categories</h3>
-        <ul style="margin: 10px !important">
-            @{ var i = 0; }
+        <ul style="margin: 10px !important; padding-inline-start: 41px;">
             @foreach (var item in Model)
             {
                 foreach (var newItem in item.EDCCategoriesFiltered)
                 {
-                    i++;
-                    <li class="fa-folder" style="list-style-type:none;">
-                        <div style="display: flex;">
-                            <div id="A_@i" class="children_is_visibel" style="font-weight: bold; cursor: pointer;"><p style="font-size:15px;">></p></div>
+                    <li>@newItem.Key</li>
+                    <ul>
+                        @foreach (var index in newItem.Value)
+                        {
 
-                            <div class="PCI_Overflow">
-                                <svg class="bi bi-folder-fill" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z" />
-                                </svg>
-
-                                <p class="parentCategoryItem">@newItem.Key</p>
-                            </div>
-                        </div>
-
-                        <div id="B_@i" class="parentCategoryItem_container">
-                            <div class="childCategoryItem_container">
-                                @foreach (var index in newItem.Value)
-                                {
-                                    <ul class="aphaOrder" style="padding-left: 0;">
-                                        <svg class="bi bi-folder-fill" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z" />
-                                        </svg>
-
-                                        <li class="childCategoryItem">@index</li>
-                                    </ul>
-                                }
-                            </div>
-                        </div>
-                    </li>
+                            <li>@index</li>
+                        }
+                    </ul>
                 }
             }
         </ul>

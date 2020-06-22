@@ -68,3 +68,32 @@ p, li {
 .bi.bi-folder-fill {
     color: firebrick !important;
 }
+
+/*********/
+
+/* Style the caret/arrow */
+.caret {
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.caret-down::before {
+    transform: rotate(90deg);
+}
+
+/* Hide the nested list */
+.nested {
+    display: none !important;
+    margin-left: -6px;
+    /*margin-top: 20px !important;*/
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.active {
+    display: block !important;
+}
+
+span.caret > p {
+    width: 200px;
+}
