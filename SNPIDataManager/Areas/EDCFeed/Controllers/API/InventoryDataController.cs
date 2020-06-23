@@ -12,16 +12,26 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.UI.WebControls;
 using System.Xml;
+using SNPIDataManager.Areas.EDCFeed.Helpers;
+using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
+using SNPIDataManager.Areas.EDCFeed.Models.ProductModels.TestModels;
 
 namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
 {
     public class InventoryDataController : ApiController
     {
+        /// <summary>
+        /// Local FeedPath Bv. C:/ Etc. (Use this only in Development)
+        /// </summary>
         private string feedPath = "C:/Users/sexxnation/Downloads/TEMP/eg_xml_feed_2015_nl.xml";
 
+        /// <summary>
+        /// Test API request. Get Every Product (id, title, HsCode) from Supplier XML Formatted PRODUCTS.
+        /// </summary>
+        /// <returns></returns>
         public IHttpActionResult InventoryData()
         {
-            List<EDCProductModel> productModel = new List<EDCProductModel>();
+            List<EDCTestProductModel> productModel = new List<EDCTestProductModel>();
 
             //For production download xml data from url below. Like
             //Download Limit by EDC is 4x A Day. Scedual download for once a day. Like 24:00.
@@ -39,11 +49,11 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
             {
                 foreach (XmlNode xn in xmlNodeList)
                 {
-                    var newModel = new EDCProductModel()
+                    var newModel = new EDCTestProductModel()
                     {
                         Id = xn["id"].InnerText,
                         Title = xn["title"].InnerText,
-                        HsCode = xn["popularity"].InnerText
+                        Popularity = xn["popularity"].InnerText
                     };
 
                     productModel.Add(newModel);
@@ -57,6 +67,10 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
             return Ok(productModel.ToList());
         }
 
+        /// <summary>
+        /// Build Supplier Categories and return to View.
+        /// </summary>
+        /// <returns></returns>
         public IDictionary<string, List<string>> CategoryBuilder()
         {
             XmlDocument edcFeed = new XmlDocument();
@@ -65,13 +79,13 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
             XmlElement root = edcFeed.DocumentElement;
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            List<CategorizedCategoryModel> ParentedCategories = SNPIDataManager.Helpers.EDCHelper.EDCFeedCategorizationHelper.CategorizeNodes(root).ToList();
+            List<CategoryModelList> ParentedCategories = EDCCategoriesHelper.CategorizeNodes(root).ToList();
             watch.Stop();
-            
+
             var elapsedMs = watch.ElapsedMilliseconds;
 
             IDictionary<string, List<string>> RelationToView = new Dictionary<string, List<string>>();
-            SNPIDataManager.Helpers.EDCHelper.EDCFeedCategorizationHelper.ChildParentRelationForView(ParentedCategories, RelationToView);
+            EDCCategoriesHelper.ChildParentRelationForView(ParentedCategories, RelationToView);
 
             return RelationToView;
         }

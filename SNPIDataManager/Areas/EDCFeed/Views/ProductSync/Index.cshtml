@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SNPIDataManager.Areas.EDCFeed.Models.IndexViewModel>
+﻿@model IEnumerable<SNPIDataManager.Areas.EDCFeed.Models.CategoryModels.CategoriesViewModel>
 
 <link type="text/css" href="~/Areas/EDCFeed/Content/Mapping.css" rel="stylesheet" />
 
@@ -65,7 +65,7 @@
         <ul style="margin: 10px !important;">
             @foreach (var root in Model)
             {
-                foreach (var firstIndex in root.NopCategoriesModel)
+                foreach (var firstIndex in root.NopCategoriesDict)
                 {
                     foreach (var firstIndexValue in firstIndex.Value)
                     {
@@ -110,7 +110,7 @@
         <ul style="margin: 10px !important; padding-inline-start: 41px;">
             @foreach (var item in Model)
             {
-                foreach (var newItem in item.EDCCategoriesFiltered)
+                foreach (var newItem in item.EDCCategoriesDict)
                 {
                     <li>@newItem.Key</li>
                     <ul>

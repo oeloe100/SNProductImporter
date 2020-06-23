@@ -4,6 +4,8 @@ using SNPIDataLibrary.DataAccess;
 using SNPIDataLibrary.Models;
 using SNPIDataManager.Areas.EDCFeed.Controllers.API;
 using SNPIDataManager.Areas.EDCFeed.Models;
+using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
+using SNPIDataManager.Areas.EDCFeed.Models.ProductModels;
 using SNPIDataManager.Helpers.NopAPIHelper;
 using SNPIDataManager.Models.NopCategoriesModel;
 using SNPIDataManager.Models.NopProductsModel;
@@ -33,20 +35,20 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
             accessToken = new NopQuickAccess().NopAccessToken();
             serverUrl = new NopQuickAccess().NopServerUrl();
 
-            var NopMTV = await nopShopCategoriesHelper.NopCategoriesResource(accessToken, serverUrl);
+            var nopCategoriesDict = await nopShopCategoriesHelper.NopCategoriesResource(accessToken, serverUrl);
 
             var InventoryDataController = new InventoryDataController();
-            var EdcMTV = InventoryDataController.CategoryBuilder();
+            var edcCategoriesDict = InventoryDataController.CategoryBuilder();
 
-            List<IndexViewModel> model = new List<IndexViewModel>();
+            List<CategoriesViewModel> model = new List<CategoriesViewModel>();
 
-            var indexViewModel = new IndexViewModel()
+            var categoriesViewModel = new CategoriesViewModel()
             {
-                NopCategoriesModel = NopMTV,
-                EDCCategoriesFiltered = EdcMTV
+                NopCategoriesDict = nopCategoriesDict,
+                EDCCategoriesDict = edcCategoriesDict
             };
 
-            model.Add(indexViewModel);
+            model.Add(categoriesViewModel);
 
             return View(model);
         }

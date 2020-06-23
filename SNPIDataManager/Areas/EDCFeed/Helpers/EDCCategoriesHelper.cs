@@ -1,17 +1,20 @@
 ﻿using SNPIDataManager.Areas.EDCFeed.Models;
+using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
+using WebGrease.Css.Ast.Selectors;
 
-namespace SNPIDataManager.Helpers.EDCHelper
+namespace SNPIDataManager.Areas.EDCFeed.Helpers
 {
-    public static class EDCFeedCategorizationHelper
+    public static class EDCCategoriesHelper
     {
-        public static IEnumerable<CategorizedCategoryModel> CategorizeNodes(XmlElement root)
+        public static IEnumerable<CategoryModelList> CategorizeNodes(XmlElement root)
         {
-            List<CategorizedCategoryModel> CategoriesParented = new List<CategorizedCategoryModel>();
+            List<CategoryModelList> CategoriesParented = new List<CategoryModelList>();
 
             XmlNodeList productNodes = root.SelectNodes("//product");
             for (var i = 0; i < productNodes.Count; i++)
@@ -46,7 +49,7 @@ namespace SNPIDataManager.Helpers.EDCHelper
                                     }
 
                                     /*** Check if every category entry in CheckEveryEntry(Bool List) = false (duplicate). 
-                                     * If not we Can Savely add Category (May Be Duplicate) With SubCategory (Unique) ***/
+                                        * If not we Can Savely add Category (May Be Duplicate) With SubCategory (Unique) ***/
                                     if (CheckEveryEntry.Count == categoriesChildNodes[n].ChildNodes[x].ChildNodes.Count)
                                     {
                                         for (var v = 0; v < CheckEveryEntry.Count; v++)
@@ -73,7 +76,7 @@ namespace SNPIDataManager.Helpers.EDCHelper
             return CategoriesParented;
         }
 
-        public static void ChildParentRelationForView(List<CategorizedCategoryModel> ParentedCategories, IDictionary<string, List<string>> dict)
+        public static void ChildParentRelationForView(List<CategoryModelList> ParentedCategories, IDictionary<string, List<string>> dict)
         {
             foreach (var model in ParentedCategories)
             {
@@ -86,7 +89,7 @@ namespace SNPIDataManager.Helpers.EDCHelper
             }
         }
 
-        private static bool IsDuplicate(List<CategorizedCategoryModel> CategoriesParented, string title)
+        private static bool IsDuplicate(List<CategoryModelList> CategoriesParented, string title)
         {
             var item = CategoriesParented.Select(model => model.CategoryModel.Select(index => index.Title)).ToList();
 
@@ -108,9 +111,9 @@ namespace SNPIDataManager.Helpers.EDCHelper
             return false;
         }
 
-        private static void CreateFinalCategoriesModel(List<CategorizedCategoryModel> CategoriesParented, List<CategoryModel> categoryModel)
+        private static void CreateFinalCategoriesModel(List<CategoryModelList> CategoriesParented, List<CategoryModel> categoryModel)
         {
-            var test = new CategorizedCategoryModel()
+            var test = new CategoryModelList()
             {
                 CategoryModel = categoryModel
             };
@@ -119,3 +122,5 @@ namespace SNPIDataManager.Helpers.EDCHelper
         }
     }
 }
+ 
+ 

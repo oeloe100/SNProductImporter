@@ -194,11 +194,11 @@
     <Compile Include="Areas\EDCFeed\Controllers\API\InventoryDataController.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\ProductSyncController.cs" />
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
-    <Compile Include="Areas\EDCFeed\Models\CategorizedCategoryModel.cs" />
-    <Compile Include="Areas\EDCFeed\Models\CategoryModel.cs" />
-    <Compile Include="Areas\EDCFeed\Models\EDCProductModel.cs" />
-    <Compile Include="Areas\EDCFeed\Models\IndexViewModel.cs" />
-    <Compile Include="Areas\EDCFeed\Models\ProductModel.cs" />
+    <Compile Include="Areas\EDCFeed\Helpers\EDCCategoriesHelper.cs" />
+    <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModelList.cs" />
+    <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModel.cs" />
+    <Compile Include="Areas\EDCFeed\Models\ProductModels\TestModels\EDCTestProductModel.cs" />
+    <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoriesViewModel.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
     <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
@@ -239,8 +239,6 @@
     </Compile>
     <Compile Include="Helpers\APIHelper.cs" />
     <Compile Include="Helpers\CookieAuthorizationCheck.cs" />
-    <Compile Include="Helpers\EDCHelper\EDCFeedCategorizationHelper.cs" />
-    <Compile Include="Helpers\IAPIHelper.cs" />
     <Compile Include="Helpers\NopAPIHelper\NopAPIClientHelper.cs" />
     <Compile Include="Helpers\NopAPIHelper\NopAPIHelper.cs" />
     <Compile Include="Helpers\NopAPIHelper\NopShopCategorizationHelper.cs" />
@@ -352,7 +350,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\EDCFeed\Data\" />
     <Folder Include="Areas\HelpPage\Views\Home\" />
   </ItemGroup>
   <ItemGroup>
