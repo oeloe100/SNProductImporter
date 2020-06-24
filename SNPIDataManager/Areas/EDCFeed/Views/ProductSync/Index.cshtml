@@ -6,97 +6,119 @@
     ViewBag.Title = "Index";
 }
 
-<h2>EDC Mapping</h2>
+<h2>EDC Product Importer</h2>
 
 @section Scripts{
     <script>
-        $(document).ready(function () {
-            ToggleShopCategories();
+        var progress = 0;
+        var progressToString = "";
 
-            CategoriesStyling("root-select");
-            CategoriesStyling("nopCom-flow");
+        $(document).ready(function () {
+            SelectedShopCategory();
+            SelectedSupplierCategory();
         });
 
-         //Toggle Shop Categorie Children (Sub Categories)
-        function ToggleShopCategories() {
-            var toggler = document.getElementsByClassName("root-select");
-            var i;
+        function SelectedShopCategory() {
+            var selectedClass = document.getElementsByClassName("select-shop-category");
 
-            for (i = 0; i < toggler.length; i++) {
-                toggler[i].addEventListener("click", function () {
-                    var nested = $(this).parent();
-                    var children = $(nested).find(".nested");
-
-                    for (var x = 0; x < children.length; x++) {
-                        $(children)[x].classList.toggle("active");
-                    }
+            for (var i = 0; i < selectedClass.length; i++) {
+                selectedClass[i].addEventListener("click", function () {
+                    var value = this.innerText;
+                    var selectedBoxChild = $(".shop-box-selected").children();
+                    $(".shop-box-selected").children()[0].value = value;
+                    ManageProgress();
                 });
             }
         }
 
-        //Toggle Supplier Categorie Children (Sub Categories)
-        $(".children_is_visibel").click(function () {
-            var itemNumber = $(this).attr("id").split("_")[1];
-            $("#B_" + itemNumber + "").toggle("slide");
-        });
+        function SelectedSupplierCategory() {
+            var selectedClass = document.getElementsByClassName("select-supplier-category");
 
-        function CategoriesStyling(selectedClass) {
-            var nested = $("." + selectedClass + "").parent();
-            var children = $(nested)
-
-            for (var i = 0; i < children.length; i++) {
-                var child = $(children)[i];
-                if (child.children.length > 1) {
-                    if (selectedClass == "root-select") {
-                        $(child).css("margin-left", "-7px");
-                    }
-                    else {
-                        $(child).css("margin-left", "-2.5px");
-                    }
-                }
+            for (var i = 0; i < selectedClass.length; i++) {
+                selectedClass[i].addEventListener("click", function () {
+                    var value = this.innerText;
+                    var selectedBoxChild = $(".supplier-box-selected").children();
+                    $(".supplier-box-selected").children()[0].value = value;
+                    ManageProgress();
+                });
             }
         }
+
+        function ManageProgress(value) {
+            if (value != "" && $(".progress-bar").css("width") == "0px") {
+                $(".progress-bar").css("width", "50%");
+                $(".progress-bar").text("50%");
+            }
+            else if (value != "" && $(".progress-bar").css("width") == "105px") {
+                $(".progress-bar").css("width", "100%");
+                $(".progress-bar").text("100%");
+            }
+        }
+
+        $(".custom-btn").click(function () {
+            $(".shop-box-selected").children()[0].value = "";
+            $(".supplier-box-selected").children()[0].value = "";
+
+            $(".progress-bar").css("width", "0px");
+            $(".progress-bar").text("");
+        });
     </script>
 }
 
-<section class="container container_display">
-    <div class="folder_container" style="margin-right: 0px; float: left; background-color: floralwhite; color: midnightblue;">
+
+<div class="row box-container">
+    <div class="box-center-container">
+        <button type="button" class="btn btn-primary btn-lg btn-block custom-btn">Create Link</button>
+
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+        </div>
+
+        <div class="col shop-box-selected">
+            <input type="text" class="form-control" readonly />
+        </div>
+        <div class="col supplier-box-selected">
+            <input type="text" class="form-control" readonly />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col category-box shop-box">
         <h3>Shop Categories</h3>
         <ul style="margin: 10px !important;">
             @foreach (var root in Model)
             {
-                foreach (var firstIndex in root.NopCategoriesDict)
+                foreach (var levelOne in root.NopCategoriesDict)
                 {
-                    foreach (var firstIndexValue in firstIndex.Value)
+                    foreach (var levelOneValue in levelOne.Value)
                     {
-                        <li>@firstIndexValue.Name</li>
-                        if (firstIndexValue.NestedModel != null)
+                        <li><a class="select-shop-category"><p>@levelOneValue.Name</p></a></li>
+                        if (levelOneValue.NestedModel != null)
                         {
                             <ul>
-                            @foreach (var secondIndex in firstIndexValue.NestedModel)
-                            {
-                                <li>@secondIndex.Value.Name</li>
-                                if (secondIndex.Value.NestedModel != null)
+                                @foreach (var levelTwoNestedModel in levelOneValue.NestedModel)
                                 {
-                                    <ul>
-                                    @foreach (var thirdIndex in secondIndex.Value.NestedModel)
+                                    <li><a class="select-shop-category"><p>@levelTwoNestedModel.Value.Name</p></a></li>
+                                    if (levelTwoNestedModel.Value.NestedModel != null)
                                     {
-                                        <li>@thirdIndex.Value.Name</li>
-                                        if (thirdIndex.Value.NestedModel != null)
-                                        {
-                                            <ul>
-                                            @foreach (var thirdIndexValue in thirdIndex.Value.NestedModel)
+                                        <ul>
+                                            @foreach (var LevelThreeNestedModel in levelTwoNestedModel.Value.NestedModel)
                                             {
-
-                                                <li>@thirdIndexValue.Value.Name</li>
-
+                                                <li><a class="select-shop-category"><p>@LevelThreeNestedModel.Value.Name</p></a></li>
+                                                if (LevelThreeNestedModel.Value.NestedModel != null)
+                                                {
+                                                    <ul>
+                                                        @foreach (var levelFourNestedModel in LevelThreeNestedModel.Value.NestedModel)
+                                                        {
+                                                            <li><a class="select-shop-category"><p>@levelFourNestedModel.Value.Name</p></a></li>
+                                                        }
+                                                    </ul>
+                                                }
                                             }
-                                            </ul>
-                                        }
+                                        </ul>
                                     }
-                                    </ul>
                                 }
-                            }
                             </ul>
                         }
                     }
@@ -105,23 +127,24 @@
         </ul>
     </div>
 
-    <div class="folder_container" style="margin-right: 0px; float: right; background-color: floralwhite; color: midnightblue;">
+    <div class="col category-box supplier-box">
         <h3>Supplier Categories</h3>
         <ul style="margin: 10px !important; padding-inline-start: 41px;">
-            @foreach (var item in Model)
+            @foreach (var root in Model)
             {
-                foreach (var newItem in item.EDCCategoriesDict)
+                foreach (var edcDict in root.EDCCategoriesDict)
                 {
-                    <li>@newItem.Key</li>
+                    <li><a class="select-supplier-category"><p>@edcDict.Key</p></a></li>
+
                     <ul>
-                        @foreach (var index in newItem.Value)
+                        @foreach (var edcNestedDict in edcDict.Value)
                         {
 
-                            <li>@index</li>
+                            <li><a class="select-supplier-category"><p>@edcNestedDict</p></a></li>
                         }
                     </ul>
                 }
             }
         </ul>
     </div>
-</section>
+</div>

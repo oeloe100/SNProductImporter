@@ -1,17 +1,76 @@
-﻿h2 {
+﻿H2 {
     text-align: center;
+    padding: 35px;
 }
 
-h3 {
+H3 {
     padding-inline-start: 49px;
     margin-bottom: 20px;
 }
 
-a {
+A {
     text-decoration: none !important;
     color: darkslateblue;
+    display: inline-block;
+    cursor: pointer;
 }
 
-ul, li {
+UL, LI {
     list-style-type: none !important;
+}
+
+div.shop-box-selected > input {
+    background-color: snow !important;
+}
+div.supplier-box-selected > input {
+    background-color: honeydew !important;
+}
+
+.box-container {
+    border: 1px solid lavenderblush;
+    border-radius: 7px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.box-center-container {
+    width: 250px;
+    margin: auto;
+    padding: 10px;
+}
+
+.category-box {
+    margin-right: 0px;
+    color: midnightblue;
+    width: 550px;
+}
+.supplier-box {
+    float: right;
+    background-color: honeydew;
+}
+.shop-box {
+    float: left;
+    background-color: snow;
+}
+
+.shop-box-selected,
+.supplier-box-selected {
+    margin: 10px;
+}
+
+.custom-btn,
+.progress {
+    margin: 10px;
+}
+
+.custom-btn {
+    width: 91%;
+    padding: 5px 10px;
+}
+.progress-bar {
+    text-align: center;
+}
+
+.progress.active .progress-bar {
+    -webkit-transition: none !important;
+    transition: none !important;
 }
