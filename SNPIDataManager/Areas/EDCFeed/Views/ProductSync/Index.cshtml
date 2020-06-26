@@ -14,45 +14,35 @@
         var progressToString = "";
 
         $(document).ready(function () {
-            SelectedShopCategory();
-            SelectedSupplierCategory();
+            SelectedCategory("shop");
+            SelectedCategory("supplier");
         });
 
-        function SelectedShopCategory() {
-            var selectedClass = document.getElementsByClassName("select-shop-category");
+        function SelectedCategory(margent) {
+            var selectedClass = document.getElementsByClassName("select-" + margent + "-category");
 
             for (var i = 0; i < selectedClass.length; i++) {
                 selectedClass[i].addEventListener("click", function () {
                     var value = this.innerText;
-                    var selectedBoxChild = $(".shop-box-selected").children();
-                    $(".shop-box-selected").children()[0].value = value;
+                    var selectedBoxChild = $("." + margent + "-box-selected").children();
+                    $("." + margent + "-box-selected").children()[0].value = value;
                     ManageProgress();
                 });
             }
         }
 
-        function SelectedSupplierCategory() {
-            var selectedClass = document.getElementsByClassName("select-supplier-category");
-
-            for (var i = 0; i < selectedClass.length; i++) {
-                selectedClass[i].addEventListener("click", function () {
-                    var value = this.innerText;
-                    var selectedBoxChild = $(".supplier-box-selected").children();
-                    $(".supplier-box-selected").children()[0].value = value;
-                    ManageProgress();
-                });
+        function ManageProgress() {
+            if ($(".progress-bar").css("width") == "0px") {
+                SetProgress("50%");
+            }
+            else if ($(".progress-bar").css("width") == "105px") {
+                SetProgress("100%");
             }
         }
 
-        function ManageProgress(value) {
-            if (value != "" && $(".progress-bar").css("width") == "0px") {
-                $(".progress-bar").css("width", "50%");
-                $(".progress-bar").text("50%");
-            }
-            else if (value != "" && $(".progress-bar").css("width") == "105px") {
-                $(".progress-bar").css("width", "100%");
-                $(".progress-bar").text("100%");
-            }
+        function SetProgress(value) {
+            $(".progress-bar").css("width", "" + value + "");
+            $(".progress-bar").text("" + value + "");
         }
 
         $(".custom-btn").click(function () {
