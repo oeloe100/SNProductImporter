@@ -22,7 +22,7 @@ using System.Web.Mvc;
 
 namespace SNPIDataManager.Areas.EDCFeed.Controllers
 {
-    public class ProductSyncController : Controller
+    public class EDCFeedMappingController : Controller
     {
         private string accessToken;
         private string serverUrl;
