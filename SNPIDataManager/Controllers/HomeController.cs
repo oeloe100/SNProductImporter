@@ -1,4 +1,5 @@
 ﻿using Microsoft.Ajax.Utilities;
+using Microsoft.AspNet.Identity;
 using SNPIDataManager.Helpers;
 using SNPIDataManager.Models;
 using SNPIHelperLibrary;
@@ -32,6 +33,7 @@ namespace SNPIDataManager.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 var helperInstance = new APIHelper();
                 try
                 {

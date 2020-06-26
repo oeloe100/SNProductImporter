@@ -16,6 +16,7 @@ namespace SNPIDataManager
     public partial class Startup
     {
         public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
+        public static OAuthAuthorizationServerOptions NopOAuthOptions { get; private set; }
 
         public static string PublicClientId { get; private set; }
 
@@ -39,12 +40,27 @@ namespace SNPIDataManager
                 Provider = new ApplicationOAuthProvider(PublicClientId),
                 AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
+                ApplicationCanDisplayErrors = true,
                 // In production mode set AllowInsecureHttp = false
                 AllowInsecureHttp = true
             };
 
             // Enable the application to use bearer tokens to authenticate users
             app.UseOAuthBearerTokens(OAuthOptions);
+
+            NopOAuthOptions = new OAuthAuthorizationServerOptions
+            {
+                AuthorizeEndpointPath = new PathString("/NopAuthorize"),
+                TokenEndpointPath = new PathString("/NopToken"),
+                Provider = new NopOAuthProvider(),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(10),
+                ApplicationCanDisplayErrors = true,
+                //true only in development
+                AllowInsecureHttp = true,
+            };
+
+            app.UseOAuthAuthorizationServer(NopOAuthOptions);
+
 
             // Uncomment the following lines to enable logging in with third party login providers
             //app.UseMicrosoftAccountAuthentication(

@@ -16,11 +16,9 @@ namespace SNPIDataManager.Helpers
 
             if (HttpContext.Current.Request.Cookies[cookiename] != null)
             {
-                Console.WriteLine();
                 return true;
             }
 
-            Console.WriteLine();
             return false;
         }
     }

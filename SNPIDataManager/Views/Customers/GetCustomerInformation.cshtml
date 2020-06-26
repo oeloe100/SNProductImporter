@@ -1,0 +1,15 @@
+﻿@model IEnumerable<SNPIDataManager.Models.NopCustomerModel.CustomerModel>
+
+@{
+    ViewBag.Title = "GetCustomerInformation";
+}
+
+<h2>Users Information</h2>
+
+<ul>
+    @foreach (var customer in Model)
+    { 
+        <li>@customer.FirstName, @customer.LastName</li>
+    }
+</ul>
+

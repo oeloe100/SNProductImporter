@@ -14,6 +14,20 @@ namespace SNPIDataManager
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "Submit",
+                url: "Submit",
+                defaults: new { controller = "NopAuthorization", action = "Authorize" },
+                namespaces: new[] { "SNPIDataManager.Controllers" }
+            );
+
+            routes.MapRoute(
+                name: "TokenEP",
+                url: "NopAuthorize",
+                defaults: new { controller = "NopAuthorization", action = "ReceiveAccessToken"},
+                namespaces: new[] { "SNPIDataManager.Controllers" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },

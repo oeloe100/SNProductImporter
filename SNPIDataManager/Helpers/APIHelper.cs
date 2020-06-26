@@ -1,4 +1,5 @@
 ﻿using Microsoft.Ajax.Utilities;
+using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SNPIDataManager.Models;
@@ -9,7 +10,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mime;
+using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -51,7 +54,7 @@ namespace SNPIDataManager.Helpers
                 {
                     var result = await response.Content.ReadAsAsync<AuthenticatedUser>();
                     result.IsLoggedIn = true;
-                    
+
                     var loginObject = new PreLoginModel()
                     {
                         _AuthenticatedUser = result,
