@@ -9,6 +9,6 @@ namespace SNPIDataManager.Areas.EDCFeed.Models.CategoryModels
     public class CategoriesViewModel
     {
         public IDictionary<string, List<CategoriesModel>> NopCategoriesDict {get;set;}
-        public IDictionary<string, List<string>> EDCCategoriesDict { get; set; }
+        public IDictionary<string, List<CategoryModel>> EDCCategoriesDict { get; set; }
     }
 }

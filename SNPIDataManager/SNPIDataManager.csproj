@@ -192,11 +192,13 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\API\InventoryDataController.cs" />
+    <Compile Include="Areas\EDCFeed\Controllers\API\SaveMappingsController.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\EDCFeedMappingController.cs" />
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
     <Compile Include="Areas\EDCFeed\Helpers\EDCCategoriesHelper.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModelList.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModel.cs" />
+    <Compile Include="Areas\EDCFeed\Models\MappingModels\MappingModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\ProductModels\TestModels\EDCTestProductModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoriesViewModel.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
@@ -232,7 +234,9 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NopAuthorizationController.cs" />
+    <Compile Include="Controllers\NopControllers\CategoriesController.cs" />
     <Compile Include="Controllers\NopControllers\CustomersController.cs" />
+    <Compile Include="Controllers\NopControllers\ProductsController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -316,6 +320,7 @@
     <Content Include="Areas\EDCFeed\Views\Shared\_ShopFeed.cshtml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\EDCFeed\edc-feed.js" />
+    <Content Include="Scripts\EDCFeed\edc-mappings-ajax.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />
     <Content Include="Scripts\jquery-3.5.1.slim.js" />
@@ -352,8 +357,8 @@
     <Content Include="Views\NopAuthorization\ReceiveAccessToken.cshtml" />
     <Content Include="Views\Shared\_NopAuthorizationSetup.cshtml" />
     <Content Include="Views\Customers\GetCustomerInformation.cshtml" />
-    <Content Include="Views\Customers\GetProducts.cshtml" />
-    <Content Include="Views\Customers\GetCategories.cshtml" />
+    <Content Include="Views\Products\GetProducts.cshtml" />
+    <Content Include="Views\Categories\GetCategories.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

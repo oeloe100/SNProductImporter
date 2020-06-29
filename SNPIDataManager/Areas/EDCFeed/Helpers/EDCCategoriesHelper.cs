@@ -76,17 +76,30 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
             return CategoriesParented;
         }
 
-        public static void ChildParentRelationForView(List<CategoryModelList> ParentedCategories, IDictionary<string, List<string>> dict)
+        public static void ChildParentRelationForView(List<CategoryModelList> ParentedCategories, IDictionary<string, List<CategoryModel>> dict)
         {
             foreach (var model in ParentedCategories)
             {
                 if (!dict.ContainsKey(model.CategoryModel[0].Title))
                 {
-                    dict[model.CategoryModel[0].Title] = new List<string>();
+                    dict[model.CategoryModel[0].Title] = new List<CategoryModel>();
                 }
 
-                dict[model.CategoryModel[0].Title].Add(model.CategoryModel[1].Title);
+                dict[model.CategoryModel[0].Title].Add(SetCategoryModel
+                    (
+                        model.CategoryModel[1].Title, 
+                        model.CategoryModel[1].Id)
+                    );
             }
+        }
+
+        public static CategoryModel SetCategoryModel(string title, string id)
+        {
+            return new CategoryModel()
+            {
+                Title = title,
+                Id = id
+            };
         }
 
         private static bool IsDuplicate(List<CategoryModelList> CategoriesParented, string title)
@@ -113,12 +126,12 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
 
         private static void CreateFinalCategoriesModel(List<CategoryModelList> CategoriesParented, List<CategoryModel> categoryModel)
         {
-            var test = new CategoryModelList()
+            var model = new CategoryModelList()
             {
                 CategoryModel = categoryModel
             };
 
-            CategoriesParented.Add(test);
+            CategoriesParented.Add(model);
         }
     }
 }

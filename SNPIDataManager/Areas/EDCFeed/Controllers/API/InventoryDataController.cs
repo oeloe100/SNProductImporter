@@ -71,7 +71,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
         /// Build Supplier Categories and return to View.
         /// </summary>
         /// <returns></returns>
-        public IDictionary<string, List<string>> CategoryBuilder()
+        public IDictionary<string, List<CategoryModel>> CategoryBuilder()
         {
             XmlDocument edcFeed = new XmlDocument();
             edcFeed.Load(feedPath);
@@ -84,7 +84,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
 
             var elapsedMs = watch.ElapsedMilliseconds;
 
-            IDictionary<string, List<string>> RelationToView = new Dictionary<string, List<string>>();
+            IDictionary<string, List<CategoryModel>> RelationToView = new Dictionary<string, List<CategoryModel>>();
             EDCCategoriesHelper.ChildParentRelationForView(ParentedCategories, RelationToView);
 
             return RelationToView;
