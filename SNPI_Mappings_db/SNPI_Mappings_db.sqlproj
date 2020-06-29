@@ -3,16 +3,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>SNPI_NopAccess_db</Name>
+    <Name>SNPI_Mappings_db</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{842a56e2-f9be-4386-add3-664c4d250d62}</ProjectGuid>
+    <ProjectGuid>{309bca16-6a12-4625-b514-d8f1b5eb7cfd}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>SNPIdb</RootNamespace>
-    <AssemblyName>SNPIdb</AssemblyName>
+    <RootNamespace>SNPI_Mappings_db</RootNamespace>
+    <AssemblyName>SNPI_Mappings_db</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -62,13 +62,12 @@
     <Folder Include="RefactorLog" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\NopDataAccess.sql" />
-    <Build Include="dbo\Tables\NopTokens.sql" />
+    <Build Include="dbo\Tables\EDCMappings.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PublishAccessData\SNPIdb.publish.xml" />
+    <RefactorLog Include="RefactorLog\SNPI_Mappings_db.refactorlog" />
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="RefactorLog\SNPI_NopAccess_db.refactorlog" />
+    <None Include="PublishAccessData\SNPI_Mappings_db.publish.xml" />
   </ItemGroup>
 </Project>
