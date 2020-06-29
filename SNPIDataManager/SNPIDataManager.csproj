@@ -245,6 +245,7 @@
     </Compile>
     <Compile Include="Helpers\APIHelper.cs" />
     <Compile Include="Helpers\CookieAuthorizationCheck.cs" />
+    <Compile Include="Helpers\NopAccessHelper.cs" />
     <Compile Include="Helpers\NopAPIHelper\NopAPIClientHelper.cs" />
     <Compile Include="Helpers\NopAPIHelper\NopAPIHelper.cs" />
     <Compile Include="Helpers\NopAPIHelper\NopShopCategorizationHelper.cs" />

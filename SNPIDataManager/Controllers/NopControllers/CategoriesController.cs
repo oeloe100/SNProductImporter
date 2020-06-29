@@ -10,30 +10,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using SNPIDataManager.Helpers;
+using SNPIHelperLibrary;
 
 namespace SNPIDataManager.Controllers.NopControllers
 {
     public class CategoriesController : Controller
     {
-        private string accessToken;
-        private string serverUrl;
+        NopAccessHelper NopAccessHelper;
+        public CategoriesController() 
+        {
+            NopAccessHelper helper = new NopAccessHelper();
+            NopAccessHelper = helper;
+        }
 
         [HttpGet]
         public async Task<ActionResult> GetCategories()
-{
-            var tokenDetails = CredentialsProcessor.LoadToken<TokenModel>();
-            var credentialsDetails = CredentialsProcessor.LoadCredentials<ClientModel>();
-            foreach (var obj in tokenDetails)
-            {
-                accessToken = obj.AccessToken;
-            }
-
-            foreach (var obj in credentialsDetails)
-            {
-                serverUrl = obj.ServerUrl;
-            }
-
-            var clientHelper = new NopAPIClientHelper(accessToken, serverUrl);
+        {
+            var clientHelper = new NopAPIClientHelper(NopAccessHelper.accessToken, NopAccessHelper.serverUrl);
 
             string jsonUrl = $"/api/categories";
             object customerData = await clientHelper.Get(jsonUrl);
