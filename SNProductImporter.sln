@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNPIDataLibrary", "SNPIData
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SNPI_NopAccess_db", "SNPIdb\SNPI_NopAccess_db.sqlproj", "{842A56E2-F9BE-4386-ADD3-664C4D250D62}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{7593AED5-E5BD-4D51-B93B-72C9F82998C4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApplication", "WebApplication", "{9C4D3BF8-104D-4B16-8DEA-F5609A4F3FDE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +42,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B20D281E-AF9B-418A-9B45-08A952BC8D37} = {9C4D3BF8-104D-4B16-8DEA-F5609A4F3FDE}
+		{AF0FE4FE-AB91-4B93-B156-6D7D3CD507BB} = {9C4D3BF8-104D-4B16-8DEA-F5609A4F3FDE}
+		{F3D9F76A-F417-4EA7-9976-1D4332CD4035} = {7593AED5-E5BD-4D51-B93B-72C9F82998C4}
+		{842A56E2-F9BE-4386-ADD3-664C4D250D62} = {7593AED5-E5BD-4D51-B93B-72C9F82998C4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BC1DEA77-9886-4CF1-8F5E-2F7C9F58E3EC}
