@@ -1,22 +1,22 @@
 ﻿var progress = 0;
 var progressToString = "";
-var selectedHTML = new Array();
+
+var selectedCategories = new Array();
 
 $(document).ready(function () {
-    SelectedCategory("shop");
-    SelectedCategory("supplier");
+    MappingMechanism("shop");
+    MappingMechanism("supplier");
 });
 
-function SelectedCategory(margent) {
+function MappingMechanism(margent) {
     var selectedClass = document.getElementsByClassName("select-" + margent + "-category");
 
     for (var i = 0; i < selectedClass.length; i++) {
         selectedClass[i].addEventListener("click", function () {
             var value = this.innerText;
             var selectedBoxChild = $("." + margent + "-box-selected").children();
-
             $("." + margent + "-box-selected").children()[0].value = value;
-            selectedHTML.push($(this).children()[0]);
+            selectedCategories.push($(this).children()[0]);
 
             ManageProgress();
         });
