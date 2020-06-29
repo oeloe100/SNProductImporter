@@ -25,7 +25,7 @@ namespace SNPIDataManager.Controllers.NopControllers
         [HttpGet]
         public async Task<ActionResult> GetProducts()
         {
-            var tokenDetails = CredentialsProcessor.LoadToken<TokenModel>();
+            var tokenDetails = TokenProcessor.LoadToken<TokenModel>();
             var credentialsDetails = CredentialsProcessor.LoadCredentials<ClientModel>();
             var clientHelper = new NopAPIClientHelper(NopAccessHelper.accessToken, NopAccessHelper.serverUrl);
 

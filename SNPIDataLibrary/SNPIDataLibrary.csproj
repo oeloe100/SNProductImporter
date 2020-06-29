@@ -46,9 +46,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\CredentialsProcessor.cs" />
-    <Compile Include="DataAccess\NopQuickAccess.cs" />
+    <Compile Include="BusinessLogic\MappingProcessor.cs" />
+    <Compile Include="BusinessLogic\TokenProcessor.cs" />
     <Compile Include="DataAccess\SQLDataAccess.cs" />
     <Compile Include="Models\ClientModel.cs" />
+    <Compile Include="Models\MappingModel.cs" />
     <Compile Include="Models\TokenModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

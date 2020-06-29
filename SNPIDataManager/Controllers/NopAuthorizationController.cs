@@ -134,7 +134,7 @@ namespace SNPIDataManager.Controllers
 
                         string userId = userInformation.UserId();
 
-                        int recordsCreated = CredentialsProcessor.InsertToken
+                        int recordsCreated = TokenProcessor.InsertToken
                         (
                             userId,
                             tokenAuthorizationModel.AccessToken,

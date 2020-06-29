@@ -9,6 +9,7 @@ using SNPIDataManager.Areas.EDCFeed.Models.ProductModels;
 using SNPIDataManager.Helpers.NopAPIHelper;
 using SNPIDataManager.Models.NopCategoriesModel;
 using SNPIDataManager.Models.NopProductsModel;
+using SNPIHelperLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,18 +25,17 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
 {
     public class EDCFeedMappingController : Controller
     {
-        private string accessToken;
-        private string serverUrl;
-
-        NopShopCategorizationHelper nopShopCategoriesHelper = new NopShopCategorizationHelper();
+        NopAccessHelper NopAccessHelper;
+        public EDCFeedMappingController()
+        {
+            NopAccessHelper helper = new NopAccessHelper();
+            NopAccessHelper = helper;
+        }
 
         // GET: EDCFeed/ProductSync
         public async Task<ActionResult> Index()
         {
-            accessToken = new NopQuickAccess().NopAccessToken();
-            serverUrl = new NopQuickAccess().NopServerUrl();
-
-            var nopCategoriesDict = await nopShopCategoriesHelper.NopCategoriesResource(accessToken, serverUrl);
+            var nopCategoriesDict = await NopShopCategorizationHelper.NopCategoriesResource(NopAccessHelper.accessToken, NopAccessHelper.serverUrl);
 
             var InventoryDataController = new InventoryDataController();
             var edcCategoriesDict = InventoryDataController.CategoryBuilder();
