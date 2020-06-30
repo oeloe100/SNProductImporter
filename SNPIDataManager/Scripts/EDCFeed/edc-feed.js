@@ -13,10 +13,10 @@ function MappingMechanism(margent) {
 
     for (var i = 0; i < selectedClass.length; i++) {
         selectedClass[i].addEventListener("click", function () {
-            var value = this.innerText;
             var selectedBoxChild = $("." + margent + "-box-selected").children();
+            var value = this.innerText;
             $("." + margent + "-box-selected").children()[0].value = value;
-            selectedCategories.push($(this).children()[0]);
+            console.log($(this).children()[0]);
 
             ManageProgress();
         });

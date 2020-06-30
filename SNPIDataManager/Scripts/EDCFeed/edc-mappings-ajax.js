@@ -1,47 +1,43 @@
 ﻿var inputFields = $("input[name='cat-value']");
 var shopMainCategory = $(".select-shop-category");
 
-$("#create-link").click(function () {
-    var proceed = false;
+var inputArray = new Array();
 
+$("#create-link").click(function () {
     for (var i = 0; i < inputFields.length; i++) {
         if (inputFields[i].value != undefined &&
             inputFields[i].value != "") {
-
-            ValidateLinks();
-            ClearLinkBoxInput(inputFields[i]);
+            inputArray.push(inputFields[i].value);
         }
     }
 
-    if (proceed) {
-        PostSelectedMapping();
-    }
-
+    PostData(inputArray);
+    ClearLinkBoxInput();
     ResetProgressBar();
 });
 
-function ValidateLinks() {
-    if (inputFields[i].value == $(selectedCategories[selectedCategories.length - 2]).text() ||
-        inputFields[i].value == $(selectedCategories[selectedCategories.length - 1]).text()) {
+function PostData(dataToPost) {
+    var postData = { id: "testId", name: "name" };
 
-        proceed = true;
-    }
-    else {
-        alert("Selected Categories Do NOT Match!");
-        proceed = false;
-    }
+    $.ajax({
+        url: '/Mapping/CreateMapping',
+        data: JSON.stringify(postData),
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function (result) {
+            console.log(result);
+        },
+        failure: function (jqXHR, textStatus, errorThrown) {
+            alert("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText);
+        }
+    });
 }
 
-function PostSelectedMapping() {
-    console.log(selectedCategories[selectedCategories.length - 2]);
-    console.log(selectedCategories[selectedCategories.length - 1]);
-
-    selectedCategories = [];
-    proceed = false;
-}
-
-function ClearLinkBoxInput(inputField) {
-    inputField.value = "";
+function ClearLinkBoxInput() {
+    $(inputFields).each(function (index) {
+        inputFields[index].value = "";
+    });
 }
 
 function ResetProgressBar() {

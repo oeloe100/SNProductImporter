@@ -192,10 +192,10 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\API\InventoryDataController.cs" />
+    <Compile Include="Areas\EDCFeed\Controllers\API\SaveMappingsController.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\EDCFeedMappingController.cs" />
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
     <Compile Include="Areas\EDCFeed\Helpers\EDCCategoriesHelper.cs" />
-    <Compile Include="Areas\EDCFeed\Helpers\SaveMappings.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModelList.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\ProductModels\TestModels\EDCTestProductModel.cs" />
