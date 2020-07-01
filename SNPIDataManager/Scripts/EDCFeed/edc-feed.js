@@ -16,7 +16,6 @@ function MappingMechanism(margent) {
             var selectedBoxChild = $("." + margent + "-box-selected").children();
             var value = this.innerText;
             $("." + margent + "-box-selected").children()[0].value = value;
-            console.log($(this).children()[0]);
 
             ManageProgress();
         });

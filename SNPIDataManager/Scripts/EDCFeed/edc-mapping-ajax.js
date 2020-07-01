@@ -3,6 +3,10 @@ var shopMainCategory = $(".select-shop-category");
 
 var inputArray = new Array();
 
+$(function () {
+    
+});
+
 $("#create-link").click(function () {
     for (var i = 0; i < inputFields.length; i++) {
         if (inputFields[i].value != undefined &&
@@ -11,20 +15,25 @@ $("#create-link").click(function () {
         }
     }
 
-    PostData(inputArray);
+    PostData();
     ClearLinkBoxInput();
     ResetProgressBar();
 });
 
-function PostData(dataToPost) {
-    var postData = { id: "testId", name: "name" };
+function PostData() {
+    var data = new Array();
+
+    $(inputArray).each(function (index) {
+        var obj = { "id": SelectInputID(inputArray[index], index), "title": inputArray[index] };
+        data.push(obj);
+    });
 
     $.ajax({
         url: '/Mapping/CreateMapping',
-        data: JSON.stringify(postData),
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
+        data: JSON.stringify(data),
         success: function (result) {
             console.log(result);
         },
@@ -32,6 +41,24 @@ function PostData(dataToPost) {
             alert("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText);
         }
     });
+}
+
+function SelectInputID(data, index) {
+    var categoryItem = SelectBoxNestedElement(index);
+
+    for (var i = 0; i < categoryItem.length; i++) {
+        if ($(categoryItem[i]).text() == data)
+            return $(categoryItem[i]).attr("id");
+    }
+}
+
+function SelectBoxNestedElement(index) {
+    switch (index) {
+        case 0:
+            return $(".shop-box").find("p");
+        case 1:
+            return $(".supplier-box").find("p")
+    }
 }
 
 function ClearLinkBoxInput() {

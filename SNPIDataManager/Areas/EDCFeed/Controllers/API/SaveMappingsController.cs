@@ -8,6 +8,7 @@ using Microsoft.Ajax.Utilities;
 using System.Web.Helpers;
 using Newtonsoft.Json.Serialization;
 using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
+using Newtonsoft.Json;
 
 namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
 {
@@ -19,14 +20,12 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
 
         [HttpPost]
         [Route("Mapping/CreateMapping")]
-        public IHttpActionResult PostCreatedMapping([FromBody] CategoryModel model)
+        public IHttpActionResult PostCreatedMapping([FromBody] List<CategoryModel> model)
         {
             Console.WriteLine(model);
-            //MappingProcessor mappingProcessor = new MappingProcessor();
 
             try
-            {
-                //mappingProcessor.InsterCreatedMapping(null, null)
+            {                
                 if (model == null)
                     return InternalServerError();
                     
