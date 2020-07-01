@@ -8,14 +8,14 @@ $(document).ready(function () {
     MappingMechanism("supplier");
 });
 
-function MappingMechanism(margent) {
-    var selectedClass = document.getElementsByClassName("select-" + margent + "-category");
+function MappingMechanism(vendor) {
+    var selectedClass = document.getElementsByClassName("select-" + vendor + "-category");
 
     for (var i = 0; i < selectedClass.length; i++) {
         selectedClass[i].addEventListener("click", function () {
-            var selectedBoxChild = $("." + margent + "-box-selected").children();
             var value = this.innerText;
-            $("." + margent + "-box-selected").children()[0].value = value;
+            $("." + vendor + "-box-selected").children()[0].value = value;
+            $(this).children().attr("vendor", vendor);
 
             ManageProgress();
         });
