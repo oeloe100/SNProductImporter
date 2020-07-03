@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SNPIDataLibrary.Models.MappingModel>
+
+@{
+    ViewBag.Title = "DisplayMappings";
+}
+
+<h2>Display Mappings</h2>
+
+<div class="row" style="float: right; padding: 20px; padding-right: 15px;">
+    <button type="button" class="btn btn-danger delete-mappings" style="padding: 7px 15px;">Delete All</button>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.shopCategory)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.supplierCategory)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.shopCategoryId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.supplierCategoryId)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.shopCategory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.supplierCategory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.shopCategoryId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.supplierCategoryId)
+            </td>
+            <td>
+                <a class="delete-mapping" id="@item.id">Delete</a>
+            </td>
+        </tr>
+    }
+
+</table>
+

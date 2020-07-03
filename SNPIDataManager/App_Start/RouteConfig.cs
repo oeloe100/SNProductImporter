@@ -16,7 +16,7 @@ namespace SNPIDataManager
             routes.MapRoute(
                 name: "InsertMapping",
                 url: "MappingMiddelware/InsertMapping",
-                defaults: new { controller = "InsertMapping", action = "InsertMappingModel" },
+                defaults: new { controller = "EDCFeedMapping", action = "InsertMappingModel" },
                 namespaces: new[] { "SNPIDataManager.Areas.EDCFeed.Controllers" }
             );
 

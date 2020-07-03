@@ -1,32 +1,27 @@
-﻿using Newtonsoft.Json;
-using SNPIDataLibrary.BusinessLogic;
-using SNPIDataLibrary.DataAccess;
+﻿using SNPIDataLibrary.BusinessLogic;
 using SNPIDataLibrary.Models;
 using SNPIDataManager.Areas.EDCFeed.Controllers.API;
-using SNPIDataManager.Areas.EDCFeed.Models;
 using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
-using SNPIDataManager.Areas.EDCFeed.Models.ProductModels;
+using SNPIDataManager.Helpers;
 using SNPIDataManager.Helpers.NopAPIHelper;
-using SNPIDataManager.Models.NopCategoriesModel;
-using SNPIDataManager.Models.NopProductsModel;
 using SNPIHelperLibrary;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using System.Web.Http.Results;
 using System.Web.Mvc;
 using AuthorizeAttribute = System.Web.Http.AuthorizeAttribute;
+using SNPIDataLibrary.DataAccess;
+using System.Text;
 
 namespace SNPIDataManager.Areas.EDCFeed.Controllers
 {
     [Authorize]
     public class EDCFeedMappingController : Controller
     {
+        //private APIAuthMiddelwareHelper _APIAuthMiddelwareHelper;
+        private UserInformation _UserInformation;
+        private MappingProcessor _MappingProcessor;
+
         NopAccessHelper NopAccessHelper;
         public EDCFeedMappingController()
         {
@@ -53,6 +48,106 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
             model.Add(categoriesViewModel);
 
             return View(model);
+        }
+
+        [Authorize]
+        public JsonResult InsertMappingModel(List<CategoryModel> model)
+        {
+            Console.WriteLine();
+            if (Session["ApplicationLoginToken"] != null)
+            {
+                //_APIAuthMiddelwareHelper = new APIAuthMiddelwareHelper(Session["ApplicationLoginToken"].ToString());
+                _UserInformation = new UserInformation();
+                _MappingProcessor = new MappingProcessor();
+
+                try
+                {
+                    var mappingModel = CategoryToMappingModel(model);
+                    mappingModel.id = _UserInformation.UserId();
+                    _MappingProcessor.InsterCreatedMapping(mappingModel);
+
+                    return Json(_MappingProcessor);
+                }
+                catch (Exception ex)
+                {
+                    return Json(ex.Message + ex.StackTrace);
+                }
+            }
+            else
+            {
+                return Json("Logout");
+            }
+        }
+
+        public ActionResult DisplayMappings() 
+        {
+            _UserInformation = new UserInformation();
+            _MappingProcessor = new MappingProcessor();
+
+            try
+            {
+                var mappings = _MappingProcessor.RetrieveMapping<MappingModel>();
+                return View(mappings);
+            }
+            catch (Exception ex)
+            {
+                return View(ex);
+            }
+        }
+
+        [HttpPost]
+        // POST: EDCFeed/EDCFeedMapping/DeleteMapping{id}
+        public string DeleteMapping(int id)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            try 
+            {
+                var data = SQLDataAccess.DeleteMapping(id, "SNPI_Mappings_db");
+                stringBuilder.AppendFormat("Deleted Row {0}", id);
+                return stringBuilder.ToString();
+            } 
+            catch (Exception ex)
+            {
+                return ex.Message + ex.StackTrace;
+            }
+        }
+
+        [HttpPost]
+        // POST: EDCFeed/EDCFeedMapping/DeleteMapping
+        public string DeleteMapping(List<int> idList)
+        {
+            try
+            {
+                var data = SQLDataAccess.DeleteMappings(idList, "SNPI_Mappings_db");
+                return data;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message + ex.StackTrace;
+            }
+        }
+
+        private MappingModel CategoryToMappingModel(List<CategoryModel> model)
+        {
+            var mappingModel = new MappingModel();
+
+            foreach (var attribute in model)
+            {
+                switch (attribute.Vendor)
+                {
+                    case "shop":
+                        mappingModel.shopCategory = attribute.Title;
+                        mappingModel.shopCategoryId = attribute.Id;
+                        break;
+                    case "supplier":
+                        mappingModel.supplierCategory = attribute.Title;
+                        mappingModel.supplierCategoryId = attribute.Id;
+                        break;
+                }
+            }
+
+            return mappingModel;
         }
     }
 }

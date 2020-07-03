@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SNPIDataLibrary.DataAccess;
-using SNPIDataManager.Areas.EDCFeed.Models.MappingModels;
+using SNPIDataLibrary.Models;
 
 namespace SNPIDataLibrary.BusinessLogic
 {
@@ -18,14 +18,20 @@ namespace SNPIDataLibrary.BusinessLogic
             {
                 id = model.id,
                 shopCategory = model.shopCategory,
-                shopId = model.shopId,
+                shopCategoryId = model.supplierCategoryId,
                 supplierCategory = model.supplierCategory,
-                supplierId = model.supplierId
+                supplierCategoryId = model.shopCategoryId
             };
 
-            sql = @"INSERT INTO dbo.EDCMappings (userId, shopCategory, shopCategoryId, supplierCategory, supplierCategoryId) VALUES (@id, @shopCategory, @shopId, @supplierCategory, @supplierId);";
+            sql = @"INSERT INTO dbo.EDCMappings (userId, shopCategory, shopCategoryId, supplierCategory, supplierCategoryId) VALUES (@id, @shopCategory, @shopCategoryId, @supplierCategory, @supplierCategoryId);";
 
             return SQLDataAccess.SaveData<MappingModel>(sql, mappingModel, "SNPI_Mappings_db");
+        }
+
+        public List<MappingModel> RetrieveMapping <MappingModel>() 
+        {
+            string sql = @"SELECT id, shopCategory, shopCategoryId, supplierCategory, supplierCategoryId FROM dbo.EDCMappings";
+            return SQLDataAccess.LoadData<MappingModel>(sql, "SNPI_Mappings_db");
         }
     }
 }

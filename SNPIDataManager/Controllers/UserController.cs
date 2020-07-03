@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using SNPIDataManager.Areas.EDCFeed.Helpers;
+using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

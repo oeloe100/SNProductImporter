@@ -2,10 +2,7 @@
 var shopMainCategory = $(".select-shop-category");
 
 var inputArray = new Array();
-
-$(function () {
-    
-});
+var pathname = window.location.pathname;
 
 $("#create-link").click(function () {
     for (var i = 0; i < inputFields.length; i++) {
@@ -98,4 +95,40 @@ function ClearLinkBoxInput() {
 function ResetProgressBar() {
     $(".progress-bar").css("width", "0px");
     $(".progress-bar").text("");
+}
+
+/* Manage Existing Mappings */
+
+if (pathname == "/EDCFeed/EDCFeedMapping/DisplayMappings") {
+    $(".delete-mapping").click(function () {
+        console.log($(this));
+        $.ajax({
+            url: "/EDCFeed/EDCFeedMapping/DeleteMapping/" + $(this).attr("id") + "",
+            type: "POST",
+            success: function (result) {
+                console.log(result);
+            },
+            function(jqXHR, textStatus, errorThrown) {
+                alert("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText);
+            }
+        });
+    });
+
+    $(".delete-mappings").click(function () {
+        var tbody = $(".table").children();
+        console.log($(tbody).children());
+        /*$.ajax({
+            url: "/EDCFeed/EDCFeedMapping/DeleteMapping/",
+            type: "POST",
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(),
+            success: function (result) {
+                console.log(result);
+            },
+            function(jqXHR, textStatus, errorThrown) {
+                alert("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText);
+            }
+        });*/
+    });
 }
