@@ -28,18 +28,40 @@ function PostData() {
 
     $(inputArray).each(function (index) {
         var vendor = $(inputArray[index]).attr("vendor");
-        var obj = { "id": SelectInputID(inputArray[index], vendor), "title": inputArray[index].value };
+        var obj = { "id": SelectInputID(inputArray[index], vendor), "title": inputArray[index].value, "Vendor": vendor };
         data.push(obj);
     });
 
     $.ajax({
-        url: '/Mapping/CreateMapping',
+        url: '/MappingMiddelware/InsertMapping',
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
+        //crossDomain: true,
+        //xhrFields: {
+        //    withCredentials: true
+        //},
         data: JSON.stringify(data),
         success: function (result) {
             console.log(result);
+            if (result == "Logout")
+                Logout();
+        },
+        failure: function (jqXHR, textStatus, errorThrown) {
+            alert("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText);
+        }
+    });
+}
+
+function Logout() {
+    console.log("Logout2");
+    $.ajax({
+        url: '/Home/Logout',
+        type: 'POST',
+        contentType: 'html',
+        success: function (result) {
+            console.log(result);
+            window.location.replace("https://localhost:44365/");
         },
         failure: function (jqXHR, textStatus, errorThrown) {
             alert("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText);

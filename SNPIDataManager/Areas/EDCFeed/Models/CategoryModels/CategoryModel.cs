@@ -9,5 +9,6 @@ namespace SNPIDataManager.Areas.EDCFeed.Models.CategoryModels
     {
         public string Id { get; set; }
         public string Title { get; set; }
+        public string Vendor { get; set; }
     }
 }

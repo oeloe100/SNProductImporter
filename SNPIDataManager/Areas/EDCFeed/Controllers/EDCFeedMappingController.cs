@@ -20,9 +20,11 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Results;
 using System.Web.Mvc;
+using AuthorizeAttribute = System.Web.Http.AuthorizeAttribute;
 
 namespace SNPIDataManager.Areas.EDCFeed.Controllers
 {
+    [Authorize]
     public class EDCFeedMappingController : Controller
     {
         NopAccessHelper NopAccessHelper;

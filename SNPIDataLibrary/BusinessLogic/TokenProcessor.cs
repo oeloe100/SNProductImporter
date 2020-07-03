@@ -26,14 +26,14 @@ namespace SNPIDataLibrary.BusinessLogic
 
             sql = @"INSERT INTO dbo.NopTokens (userId, accessToken, refreshToken, date) VALUES (@UserId, @AccessToken, @RefreshToken, @Date);";
 
-            return SQLDataAccess.SaveData(sql, tokenModel);
+            return SQLDataAccess.SaveData(sql, tokenModel, "SNPI_NopAccess_db");
         }
 
         public static List<TokenModel> LoadToken<TokenModel>()
         {
             string sql = @"SELECT userId, accessToken, refreshToken, date FROM dbo.NopTokens;";
 
-            return SQLDataAccess.LoadData<TokenModel>(sql);
+            return SQLDataAccess.LoadData<TokenModel>(sql, "SNPI_NopAccess_db");
         }
     }
 }

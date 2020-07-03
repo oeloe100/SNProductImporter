@@ -15,6 +15,7 @@ using SNPIHelperLibrary;
 
 namespace SNPIDataManager.Controllers.NopControllers
 {
+    [Authorize]
     public class CategoriesController : Controller
     {
         NopAccessHelper NopAccessHelper;
@@ -30,9 +31,9 @@ namespace SNPIDataManager.Controllers.NopControllers
             var clientHelper = new NopAPIClientHelper(NopAccessHelper.accessToken, NopAccessHelper.serverUrl);
 
             string jsonUrl = $"/api/categories";
-            object customerData = await clientHelper.Get(jsonUrl);
+            object categoriesData = await clientHelper.Get(jsonUrl);
 
-            var categoriesRootObject = JsonConvert.DeserializeObject<CategoriesRootObject>(customerData.ToString());
+            var categoriesRootObject = JsonConvert.DeserializeObject<CategoriesRootObject>(categoriesData.ToString());
             var categories = categoriesRootObject.Categories.Where(categorie => !string.IsNullOrEmpty(categorie.Name));
 
             var matchingValues = categories.Where(item => item.ParentId == item.Id);

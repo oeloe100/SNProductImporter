@@ -23,14 +23,14 @@ namespace SNPIDataLibrary.BusinessLogic
 
             string sql = @"INSERT INTO dbo.dataAccess (userId, clientId, clientSecret, serverUrl, redirectUrl) VALUES (@UserId, @ClientId, @ClientSecret, @ServerUrl, @RedirectUrl);";
 
-            return SQLDataAccess.SaveData(sql, clientDataModel);
+            return SQLDataAccess.SaveData(sql, clientDataModel, "SNPI_NopAccess_db");
         }
 
         public static List<ClientModel> LoadCredentials<ClientModel>()
         {
             string sql = @"SELECT userId, clientId, clientSecret, serverUrl, redirectUrl FROM dbo.dataAccess;";
 
-            return SQLDataAccess.LoadData<ClientModel>(sql);
+            return SQLDataAccess.LoadData<ClientModel>(sql, "SNPI_NopAccess_db");
         }
     }
 }

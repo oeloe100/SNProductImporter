@@ -18,6 +18,7 @@ namespace SNPIDataManager.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult> _Register(PreLoginModel model)
         {

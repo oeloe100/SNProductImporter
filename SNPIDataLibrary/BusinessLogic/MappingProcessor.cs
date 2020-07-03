@@ -10,22 +10,22 @@ namespace SNPIDataLibrary.BusinessLogic
 {
     public class MappingProcessor
     {
-        public int InsterCreatedMapping(MappingModel model, string id)
+        public int InsterCreatedMapping(MappingModel model)
         {
             string sql;
 
             var mappingModel = new MappingModel()
             {
-                id = id,
+                id = model.id,
                 shopCategory = model.shopCategory,
                 shopId = model.shopId,
                 supplierCategory = model.supplierCategory,
                 supplierId = model.supplierId
             };
 
-            sql = @"INSERT INTO dbo.EDCMappings (id, shopCategory, shopId, supplierCategory, supplierId) VALUES (@id, @shopCategory, @shopId, @supplierCategory, @supplierId);";
+            sql = @"INSERT INTO dbo.EDCMappings (userId, shopCategory, shopCategoryId, supplierCategory, supplierCategoryId) VALUES (@id, @shopCategory, @shopId, @supplierCategory, @supplierId);";
 
-            return SQLDataAccess.SaveData<MappingModel>(sql, mappingModel);
+            return SQLDataAccess.SaveData<MappingModel>(sql, mappingModel, "SNPI_Mappings_db");
         }
     }
 }

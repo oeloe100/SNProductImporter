@@ -29,8 +29,6 @@ namespace SNPIDataManager.Controllers.NopControllers
         [HttpGet]
         public async Task<ActionResult> GetCustomerInformation()
         {
-            var tokenDetails = TokenProcessor.LoadToken<TokenModel>();
-            var credentialsDetails = CredentialsProcessor.LoadCredentials<ClientModel>();
             var clientHelper = new NopAPIClientHelper(NopAccessHelper.accessToken, NopAccessHelper.serverUrl);
 
             //string jsonUrl = $"/api/customers?fields=id,first_name,last_name";

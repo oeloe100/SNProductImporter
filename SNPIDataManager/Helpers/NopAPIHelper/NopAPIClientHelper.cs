@@ -42,7 +42,6 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
 
         public async Task<object> Get(string path)
         {
-            string encodedData = string.Empty;
             string requestUriString = string.Format("{0}{1}", _serverUrl, path);
 
             using (nopClient)

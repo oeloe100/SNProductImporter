@@ -1,11 +1,13 @@
 ﻿using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
 using SNPIDataManager.Helpers;
 using SNPIDataManager.Models;
 using SNPIHelperLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Controllers;
@@ -19,7 +21,7 @@ namespace SNPIDataManager.Controllers
 {
     public class HomeController : Controller
     {
-        string loginPartialView = DMHelper.SelectQuickPartialView("Login");
+        readonly string loginPartialView = DMHelper.SelectQuickPartialView("Login");
 
         public ActionResult Index()
         {
@@ -28,6 +30,7 @@ namespace SNPIDataManager.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult> Login(PreLoginModel user)
         {
@@ -43,6 +46,8 @@ namespace SNPIDataManager.Controllers
                         result._AuthenticatedUser.Access_Token != null)
                     {
                         FormsAuthentication.SetAuthCookie(result._AuthenticatedUser.Username, false);
+                        Session["ApplicationLoginToken"] = result._AuthenticatedUser.Access_Token;
+
                         return await Task.Run(() => View(result));
                     }
                 }
@@ -59,6 +64,7 @@ namespace SNPIDataManager.Controllers
             return await Task.Run(() => this.View(loginPartialView));
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult Logout()
         {

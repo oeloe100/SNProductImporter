@@ -13,22 +13,22 @@ namespace SNPIDataLibrary.DataAccess
 {
     class SQLDataAccess
     {
-        public static string GetConnectionString(string connectionName = "SNPI_NopAccess_db")
+        public static string GetConnectionString(string connectionName)
         {
             return ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
         }
 
-        public static List<T> LoadData<T>(string sql)
+        public static List<T> LoadData<T>(string sql, string connectionString)
         {
-            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString(connectionString)))
             {
                 return cnn.Query<T>(sql).ToList();
             }
         }
 
-        public static int SaveData<T>(string sql, T data)
+        public static int SaveData<T>(string sql, T data, string connectionString)
         {
-            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            using (IDbConnection cnn = new SqlConnection(GetConnectionString(connectionString)))
             {
                 return cnn.Execute(sql, data);
             }

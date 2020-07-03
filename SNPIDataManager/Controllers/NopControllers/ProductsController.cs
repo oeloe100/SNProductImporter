@@ -13,6 +13,7 @@ using SNPIHelperLibrary;
 
 namespace SNPIDataManager.Controllers.NopControllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         NopAccessHelper NopAccessHelper;
@@ -25,16 +26,14 @@ namespace SNPIDataManager.Controllers.NopControllers
         [HttpGet]
         public async Task<ActionResult> GetProducts()
         {
-            var tokenDetails = TokenProcessor.LoadToken<TokenModel>();
-            var credentialsDetails = CredentialsProcessor.LoadCredentials<ClientModel>();
             var clientHelper = new NopAPIClientHelper(NopAccessHelper.accessToken, NopAccessHelper.serverUrl);
 
             string jsonUrl = $"/api/products?fields=id,name,images,sku";
-            object customerData = await clientHelper.Get(jsonUrl);
+            object productsData = await clientHelper.Get(jsonUrl);
 
-            var customerRootObject = JsonConvert.DeserializeObject<ProductsRootObject>(customerData.ToString());
+            var productsRootObject = JsonConvert.DeserializeObject<ProductsRootObject>(productsData.ToString());
 
-            var products = customerRootObject.Customers.Where(
+            var products = productsRootObject.Customers.Where(
                     product => !string.IsNullOrEmpty(product.id.ToString()) &&
                     !string.IsNullOrEmpty(product.name) &&
                     product.images != null);

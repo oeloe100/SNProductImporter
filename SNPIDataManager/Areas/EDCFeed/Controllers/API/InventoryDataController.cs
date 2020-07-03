@@ -18,6 +18,7 @@ using SNPIDataManager.Areas.EDCFeed.Models.ProductModels.TestModels;
 
 namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
 {
+    [Authorize]
     public class InventoryDataController : ApiController
     {
         /// <summary>

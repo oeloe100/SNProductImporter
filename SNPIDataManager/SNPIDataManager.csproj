@@ -191,10 +191,11 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\EDCFeed\Controllers\InsertMappingController.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\API\InventoryDataController.cs" />
-    <Compile Include="Areas\EDCFeed\Controllers\API\SaveMappingsController.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\EDCFeedMappingController.cs" />
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
+    <Compile Include="Areas\EDCFeed\Helpers\ClientHelper.cs" />
     <Compile Include="Areas\EDCFeed\Helpers\EDCCategoriesHelper.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModelList.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModel.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\APIAuthMiddelwareHelper.cs" />
     <Compile Include="Helpers\APIHelper.cs" />
     <Compile Include="Helpers\CookieAuthorizationCheck.cs" />
     <Compile Include="Helpers\NopAccessHelper.cs" />
