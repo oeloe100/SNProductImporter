@@ -99,6 +99,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
         // POST: EDCFeed/EDCFeedMapping/DeleteMapping{id}
         public string DeleteMapping(int id)
         {
+            //Console.WriteLine();
             StringBuilder stringBuilder = new StringBuilder();
 
             try 
@@ -114,17 +115,25 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
         }
 
         [HttpPost]
-        // POST: EDCFeed/EDCFeedMapping/DeleteMapping
-        public string DeleteMapping(List<int> idList)
+        // POST: EDCFeed/EDCFeedMapping/DeleteMappings
+        public JsonResult DeleteMappings(List<int> idList)
         {
-            try
+            //Console.WriteLine();
+            if (idList != null)
             {
-                var data = SQLDataAccess.DeleteMappings(idList, "SNPI_Mappings_db");
-                return data;
+                try
+                {
+                    var data = SQLDataAccess.DeleteMappings(idList, "SNPI_Mappings_db");
+                    return Json("Deleted The following Mappings: " + idList);
+                }
+                catch (Exception ex)
+                {
+                    return Json(ex.Message + ex.StackTrace);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                return ex.Message + ex.StackTrace;
+                return null;
             }
         }
 

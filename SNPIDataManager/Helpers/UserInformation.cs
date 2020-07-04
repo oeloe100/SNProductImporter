@@ -20,7 +20,7 @@ namespace SNPIDataManager.Helpers
 
         public string UserId()
         {
-            if (!string.IsNullOrEmpty(user.Id))
+            if (user != null)
                 return user.Id;
             else
                 return null;

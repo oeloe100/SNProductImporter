@@ -29,6 +29,8 @@ function PostData() {
         data.push(obj);
     });
 
+    console.log(data);
+
     $.ajax({
         url: '/MappingMiddelware/InsertMapping',
         type: 'POST',
@@ -101,12 +103,12 @@ function ResetProgressBar() {
 
 if (pathname == "/EDCFeed/EDCFeedMapping/DisplayMappings") {
     $(".delete-mapping").click(function () {
-        console.log($(this));
+        var currentRow = $(this).closest("tr");
         $.ajax({
             url: "/EDCFeed/EDCFeedMapping/DeleteMapping/" + $(this).attr("id") + "",
             type: "POST",
             success: function (result) {
-                console.log(result);
+                $(currentRow).remove();
             },
             function(jqXHR, textStatus, errorThrown) {
                 alert("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText);
@@ -116,19 +118,27 @@ if (pathname == "/EDCFeed/EDCFeedMapping/DisplayMappings") {
 
     $(".delete-mappings").click(function () {
         var tbody = $(".table").children();
-        console.log($(tbody).children());
-        /*$.ajax({
-            url: "/EDCFeed/EDCFeedMapping/DeleteMapping/",
+        var row = $(tbody).children();
+        var deleteMapping = $(row).find(".delete-mapping");
+        var data = new Array();
+
+        $(deleteMapping).each(function () {
+            var id = $(this).attr("id");
+            data.push(id);
+        });
+
+        $.ajax({
+            url: "/EDCFeed/EDCFeedMapping/DeleteMappings",
             type: "POST",
             contentType: 'application/json',
             dataType: 'json',
-            data: JSON.stringify(),
+            data: JSON.stringify(data),
             success: function (result) {
-                console.log(result);
+                $(row).not(":first").remove();
             },
             function(jqXHR, textStatus, errorThrown) {
                 alert("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText);
             }
-        });*/
+        });
     });
 }
