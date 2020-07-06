@@ -13,11 +13,18 @@ namespace SNPIDataLibrary.DataAccess
 {
     public static class SQLDataAccess
     {
-        public static string GetConnectionString(string connectionName)
+        private static string GetConnectionString(string connectionName)
         {
             return ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
         }
 
+        /// <summary>
+        /// Delete provided data from database
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public static List<T> LoadData<T>(string sql, string connectionString)
         {
             using (IDbConnection cnn = new SqlConnection(GetConnectionString(connectionString)))
@@ -26,6 +33,14 @@ namespace SNPIDataLibrary.DataAccess
             }
         }
 
+        /// <summary>
+        /// Save provided data to database
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <param name="data"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public static int SaveData<T>(string sql, T data, string connectionString)
         {
             using (IDbConnection cnn = new SqlConnection(GetConnectionString(connectionString)))
@@ -34,6 +49,14 @@ namespace SNPIDataLibrary.DataAccess
             }
         }
 
+        //*** Delete Methods has no BusinessLogic involved ***\\
+
+        /// <summary>
+        /// Delete Single Mapping
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public static int DeleteMapping(int Id, string connectionString)
         {
             using (IDbConnection cnn = new SqlConnection(GetConnectionString(connectionString)))
@@ -42,6 +65,12 @@ namespace SNPIDataLibrary.DataAccess
             }
         }
 
+        /// <summary>
+        /// Delete All/Multiple Mappings
+        /// </summary>
+        /// <param name="idList"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
         public static string DeleteMappings(List<int> idList, string connectionString)
         {
             using (IDbConnection cnn = new SqlConnection(GetConnectionString(connectionString)))

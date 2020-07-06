@@ -40,6 +40,7 @@ namespace SNPIDataManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("/Submit")]
         public ActionResult Authorize(UserAccessModel model)
         {
             if (ModelState.IsValid)
@@ -59,7 +60,7 @@ namespace SNPIDataManager.Controllers
                     if (setup.IsSetup())
                     {
                         // *** SAVE CREDENTIALS TO DATABASE ***//
-                        recordsCreated = CredentialsProcessor.InsertCredentials
+                        recordsCreated = CredentialsProcessor.InsertUserCredentials
                         (
                             userInformation.UserId(),
                             model.ClientId,
@@ -102,12 +103,12 @@ namespace SNPIDataManager.Controllers
                 {
                     var accessModel = new AccessModel();
 
-                    authorizationResponseModel._code = code;
-                    authorizationResponseModel._state = state;
+                    authorizationResponseModel.Code = code;
+                    authorizationResponseModel.State = state;
 
                     try
                     {
-                        var data = CredentialsProcessor.LoadCredentials<ClientModel>();
+                        var data = CredentialsProcessor.LoadUserCredentials<ClientModel>();
 
                         //*** Loop Trough data (LoadCred<UserModel>) and assign local variables with value from Database! ***//
                         foreach (var row in data)
@@ -127,7 +128,7 @@ namespace SNPIDataManager.Controllers
                         
                         TokenAuthorizationModel tokenAuthorizationModel = JsonConvert.DeserializeObject<TokenAuthorizationModel>(responseJSON);
 
-                        accessModel.tokenAuthorizationModel = tokenAuthorizationModel;
+                        accessModel.TokenAuthorizationModel = tokenAuthorizationModel;
 
                         //*** Populate UserAccessModel with new information ***//
                         PopulateModels.PopulateModels.PopulateUserAccessModel(accessModel, clientId, clientSecret, serverUrl, redirectUrl);

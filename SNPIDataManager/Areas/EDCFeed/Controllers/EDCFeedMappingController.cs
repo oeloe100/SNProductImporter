@@ -12,82 +12,77 @@ using System.Web.Mvc;
 using AuthorizeAttribute = System.Web.Http.AuthorizeAttribute;
 using SNPIDataLibrary.DataAccess;
 using System.Text;
+using SNPIDataManager.Setup;
 
 namespace SNPIDataManager.Areas.EDCFeed.Controllers
 {
     [Authorize]
     public class EDCFeedMappingController : Controller
     {
-        //private APIAuthMiddelwareHelper _APIAuthMiddelwareHelper;
         private UserInformation _UserInformation;
-        private MappingProcessor _MappingProcessor;
+        private NopAccessHelper _NopAccessHelper;
+        private NopAccessSetup _NopAccessSetup;
 
-        NopAccessHelper NopAccessHelper;
         public EDCFeedMappingController()
         {
-            NopAccessHelper helper = new NopAccessHelper();
-            NopAccessHelper = helper;
+            _NopAccessHelper = new NopAccessHelper();
+            _UserInformation = new UserInformation();
+            _NopAccessSetup = new NopAccessSetup();
         }
 
-        // GET: EDCFeed/ProductSync
         public async Task<ActionResult> Index()
         {
-            var nopCategoriesDict = await NopShopCategorizationHelper.NopCategoriesResource(NopAccessHelper.accessToken, NopAccessHelper.serverUrl);
-
-            var InventoryDataController = new InventoryDataController();
-            var edcCategoriesDict = InventoryDataController.CategoryBuilder();
-
-            List<CategoriesViewModel> model = new List<CategoriesViewModel>();
-
-            var categoriesViewModel = new CategoriesViewModel()
+            try
             {
-                NopCategoriesDict = nopCategoriesDict,
-                EDCCategoriesDict = edcCategoriesDict
-            };
+                var nopCategoriesDict = await NopShopCategorizationHelper.NopCategoriesResource(_NopAccessHelper.accessToken, _NopAccessHelper.serverUrl);
 
-            model.Add(categoriesViewModel);
+                var InventoryDataController = new InventoryDataController();
+                var edcCategoriesDict = InventoryDataController.CategoryBuilder();
 
-            return View(model);
+                List<CategoriesViewModel> model = new List<CategoriesViewModel>();
+
+                var categoriesViewModel = new CategoriesViewModel()
+                {
+                    NopCategoriesDict = nopCategoriesDict,
+                    EDCCategoriesDict = edcCategoriesDict
+                };
+
+                model.Add(categoriesViewModel);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                if (_NopAccessSetup.IsSetup())
+                    return View("~/Views/Home/Index.cshtml");
+                else
+                    return View(ex);
+            }
         }
 
         [Authorize]
         public JsonResult InsertMappingModel(List<CategoryModel> model)
         {
-            Console.WriteLine();
-            if (Session["ApplicationLoginToken"] != null)
+            try
             {
-                //_APIAuthMiddelwareHelper = new APIAuthMiddelwareHelper(Session["ApplicationLoginToken"].ToString());
-                _UserInformation = new UserInformation();
-                _MappingProcessor = new MappingProcessor();
+                var mappingModel = CategoryToMappingModel(model);
+                mappingModel.Id = _UserInformation.UserId();
+                var insertMapping = MappingProcessor.InsterCreatedMapping(mappingModel);
 
-                try
-                {
-                    var mappingModel = CategoryToMappingModel(model);
-                    mappingModel.id = _UserInformation.UserId();
-                    _MappingProcessor.InsterCreatedMapping(mappingModel);
-
-                    return Json(_MappingProcessor);
-                }
-                catch (Exception ex)
-                {
-                    return Json(ex.Message + ex.StackTrace);
-                }
+                return Json(insertMapping);
             }
-            else
+            catch (Exception ex)
             {
-                return Json("Logout");
+                return Json(ex.Message + ex.StackTrace);
             }
         }
 
         public ActionResult DisplayMappings() 
         {
-            _UserInformation = new UserInformation();
-            _MappingProcessor = new MappingProcessor();
-
             try
             {
-                var mappings = _MappingProcessor.RetrieveMapping<MappingModel>();
-                return View(mappings);
+                var retrieveMapping = MappingProcessor.RetrieveMapping<MappingModel>();
+                return View(retrieveMapping);
             }
             catch (Exception ex)
             {
@@ -96,10 +91,8 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
         }
 
         [HttpPost]
-        // POST: EDCFeed/EDCFeedMapping/DeleteMapping{id}
         public string DeleteMapping(int id)
         {
-            //Console.WriteLine();
             StringBuilder stringBuilder = new StringBuilder();
 
             try 
@@ -115,10 +108,8 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
         }
 
         [HttpPost]
-        // POST: EDCFeed/EDCFeedMapping/DeleteMappings
         public JsonResult DeleteMappings(List<int> idList)
         {
-            //Console.WriteLine();
             if (idList != null)
             {
                 try
@@ -146,12 +137,12 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
                 switch (attribute.Vendor)
                 {
                     case "shop":
-                        mappingModel.shopCategory = attribute.Title;
-                        mappingModel.shopCategoryId = attribute.Id;
+                        mappingModel.ShopCategory = attribute.Title;
+                        mappingModel.ShopCategoryId = attribute.Id;
                         break;
                     case "supplier":
-                        mappingModel.supplierCategory = attribute.Title;
-                        mappingModel.supplierCategoryId = attribute.Id;
+                        mappingModel.SupplierCategory = attribute.Title;
+                        mappingModel.SupplierCategoryId = attribute.Id;
                         break;
                 }
             }

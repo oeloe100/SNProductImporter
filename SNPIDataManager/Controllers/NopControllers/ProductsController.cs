@@ -34,9 +34,9 @@ namespace SNPIDataManager.Controllers.NopControllers
             var productsRootObject = JsonConvert.DeserializeObject<ProductsRootObject>(productsData.ToString());
 
             var products = productsRootObject.Customers.Where(
-                    product => !string.IsNullOrEmpty(product.id.ToString()) &&
-                    !string.IsNullOrEmpty(product.name) &&
-                    product.images != null);
+                    product => !string.IsNullOrEmpty(product.Id.ToString()) &&
+                    !string.IsNullOrEmpty(product.Name) &&
+                    product.Images != null);
 
             return View(products);
         }

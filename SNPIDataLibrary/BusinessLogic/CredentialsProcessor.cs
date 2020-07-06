@@ -10,7 +10,7 @@ namespace SNPIDataLibrary.BusinessLogic
 {
     public static class CredentialsProcessor
     {
-        public static int InsertCredentials(string userId, string clientId, string clientSecret, string serverUrl, string redirectUrl)
+        public static int InsertUserCredentials(string userId, string clientId, string clientSecret, string serverUrl, string redirectUrl)
         {
             ClientModel clientDataModel = new ClientModel
             {
@@ -26,7 +26,7 @@ namespace SNPIDataLibrary.BusinessLogic
             return SQLDataAccess.SaveData(sql, clientDataModel, "SNPI_NopAccess_db");
         }
 
-        public static List<ClientModel> LoadCredentials<ClientModel>()
+        public static List<ClientModel> LoadUserCredentials<ClientModel>()
         {
             string sql = @"SELECT userId, clientId, clientSecret, serverUrl, redirectUrl FROM dbo.dataAccess;";
 

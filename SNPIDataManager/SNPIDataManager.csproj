@@ -266,7 +266,7 @@
     <Compile Include="Models\NopCategoriesModel\CategoriesRootObject.cs" />
     <Compile Include="Models\NopCustomerModel\CustomerModel.cs" />
     <Compile Include="Models\NopCustomerModel\CustomersRootObject.cs" />
-    <Compile Include="Models\NopProductsModel\ProductsModel.cs" />
+    <Compile Include="Models\NopProductsModel\ProductModel.cs" />
     <Compile Include="Models\NopProductsModel\ProductsRootObject.cs" />
     <Compile Include="Models\PreLoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
@@ -367,7 +367,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\EDCFeed\Views\DisplayMappings\" />
     <Folder Include="Areas\HelpPage\Views\Home\" />
     <Folder Include="Areas\Mappings\Data\" />
     <Folder Include="Areas\Mappings\Views\ManageMappings\" />

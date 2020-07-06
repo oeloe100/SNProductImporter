@@ -8,9 +8,9 @@ using SNPIDataLibrary.Models;
 
 namespace SNPIDataLibrary.BusinessLogic
 {
-    public class MappingProcessor
+    public static class MappingProcessor
     {
-        public int InsterCreatedMapping(MappingModel model)
+        public static int InsterCreatedMapping(MappingModel model)
         {
             string sql;
 
@@ -19,7 +19,7 @@ namespace SNPIDataLibrary.BusinessLogic
             return SQLDataAccess.SaveData<MappingModel>(sql, model, "SNPI_Mappings_db");
         }
 
-        public List<MappingModel> RetrieveMapping <MappingModel>() 
+        public static List<MappingModel> RetrieveMapping <MappingModel>() 
         {
             string sql = @"SELECT id, shopCategory, shopCategoryId, supplierCategory, supplierCategoryId FROM dbo.EDCMappings";
             return SQLDataAccess.LoadData<MappingModel>(sql, "SNPI_Mappings_db");

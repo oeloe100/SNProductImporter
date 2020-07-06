@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SNPIDataManager.Models.NopProductsModel.ProductsModel>
+﻿@model IEnumerable<SNPIDataManager.Models.NopProductsModel.ProductModel>
 
 @{
     ViewBag.Title = "DisplayProducts";
@@ -9,7 +9,7 @@
 <ul>
     @foreach (var product in Model)
     {
-        <li>@product.id, @product.name, @product.images, @product.sku</li>
+        <li>@product.Id, @product.Name, @product.Images, @product.Sku</li>
     }
 </ul>
 

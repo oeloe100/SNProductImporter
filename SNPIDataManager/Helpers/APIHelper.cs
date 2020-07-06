@@ -22,21 +22,11 @@ namespace SNPIDataManager.Helpers
 {
     public class APIHelper
     {
-        public HttpClient apiClient;
+        private APIAuthMiddelwareHelper _ApiClient;
 
         public APIHelper()
         {
-            InitializeClient();
-        }
-
-        private void InitializeClient()
-        {
-            string api = ConfigurationManager.AppSettings["api"];
-
-            apiClient = new HttpClient();
-            apiClient.BaseAddress = new Uri(api);
-            apiClient.DefaultRequestHeaders.Accept.Clear();
-            apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _ApiClient = new APIAuthMiddelwareHelper("");
         }
 
         public async Task<PreLoginModel> Authenticate(string username, string password)
@@ -48,7 +38,7 @@ namespace SNPIDataManager.Helpers
                 new KeyValuePair<string, string>("password", password),
             });
 
-            using (HttpResponseMessage response = await apiClient.PostAsync("/Token", data))
+            using (HttpResponseMessage response = await _ApiClient.ApiMiddelwareClient.PostAsync("/Token", data))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -57,7 +47,7 @@ namespace SNPIDataManager.Helpers
 
                     var loginObject = new PreLoginModel()
                     {
-                        _AuthenticatedUser = result,
+                        AuthenticatedUser = result,
                     };
 
                     return loginObject;
@@ -81,16 +71,16 @@ namespace SNPIDataManager.Helpers
             var jsonString = JsonConvert.SerializeObject(obj);
             var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
-            using (apiClient)
+            using (_ApiClient.ApiMiddelwareClient)
             {
-                var result = await apiClient.PostAsync(apiClient.BaseAddress + "/api/Account/Register", content);
+                var result = await _ApiClient.ApiMiddelwareClient.PostAsync(_ApiClient.ApiMiddelwareClient.BaseAddress + "/api/Account/Register", content);
 
                 if (result.IsSuccessStatusCode)
                 {
                     string resultContent = await result.Content.ReadAsStringAsync();
                     var newObj = new PreLoginModel()
                     {
-                        _RegisterModel = obj
+                        RegisterModel = obj
                     };
 
                     return newObj;

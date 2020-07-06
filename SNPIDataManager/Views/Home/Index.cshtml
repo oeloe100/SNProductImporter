@@ -1,11 +1,23 @@
 ﻿@using Microsoft.AspNet.Identity
+@using SNPIDataManager.Setup;
 @using Project = SNPIDataManager.Helpers.CookieAuthorizationCheck;
 
 @{
     ViewBag.Title = "SNPI Login";
 }
 
+@{
+    NopAccessSetup setup = new NopAccessSetup();
+}
+
 @if (Project.CookieAuthCheck() == false)
 {
     Html.RenderPartial("_LoginForm");
+}
+else
+{
+    if (setup.IsSetup())
+    {
+        Html.RenderPartial("~/Views/Shared/_NopAuthorizationSetup.cshtml");
+    }
 }

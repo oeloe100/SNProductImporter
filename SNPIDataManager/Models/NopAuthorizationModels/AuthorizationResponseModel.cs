@@ -7,7 +7,7 @@ namespace SNPIDataManager.Models.NopAuthorizationModels
 {
     public class AuthorizationResponseModel
     {
-        public string _code { get; set; }
-        public string _state { get; set; }
+        public string Code { get; set; }
+        public string State { get; set; }
     }
 }

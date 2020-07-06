@@ -28,9 +28,9 @@ namespace SNPIDataManager.Controllers
                 {
                     var result = await helperInstance.Registrate
                         (
-                            model._RegisterModel.Email,
-                            model._RegisterModel.Password,
-                            model._RegisterModel.ConfirmPassword
+                            model.RegisterModel.Email,
+                            model.RegisterModel.Password,
+                            model.RegisterModel.ConfirmPassword
                         );
 
                     return await Task.Run(() => View("~/Views/Home/Index.cshtml"));

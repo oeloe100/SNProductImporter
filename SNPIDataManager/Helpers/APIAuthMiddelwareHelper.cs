@@ -28,7 +28,8 @@ namespace SNPIDataManager.Helpers
             ApiMiddelwareClient = new HttpClient();
             ApiMiddelwareClient.BaseAddress = new Uri(api);
             ApiMiddelwareClient.DefaultRequestHeaders.Accept.Clear();
-            ApiMiddelwareClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _AccessToken);
+            if (!string.IsNullOrEmpty(_AccessToken))
+                ApiMiddelwareClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _AccessToken);
             ApiMiddelwareClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
     }

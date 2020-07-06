@@ -8,7 +8,7 @@ using SNPIDataLibrary.DataAccess;
 
 namespace SNPIDataLibrary.BusinessLogic
 {
-    public class TokenProcessor
+    public static class TokenProcessor
     {
         public static int InsertToken(string id, string accessToken, string refreshToken)
         {

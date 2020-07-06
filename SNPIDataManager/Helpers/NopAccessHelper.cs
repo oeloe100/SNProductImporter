@@ -22,7 +22,7 @@ namespace SNPIHelperLibrary
         public NopAccessHelper()
         {
             var tokenDetails = TokenProcessor.LoadToken<TokenModel>();
-            var credentialsDetails = CredentialsProcessor.LoadCredentials<ClientModel>();
+            var credentialsDetails = CredentialsProcessor.LoadUserCredentials<ClientModel>();
             
             foreach (var obj in tokenDetails)
             {

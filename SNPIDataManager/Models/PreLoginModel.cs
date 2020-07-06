@@ -7,9 +7,9 @@ namespace SNPIDataManager.Models
 {
     public class PreLoginModel
     {
-        public RegisterModel _RegisterModel { get; set; }
-        public LoginModel _LoginModel { get; set; }
-        public AuthenticatedUser _AuthenticatedUser { get; set; }
-        public ErrorHandlerModel _ErrorHandlerModel { get; set; }
+        public RegisterModel RegisterModel { get; set; }
+        public LoginModel LoginModel { get; set; }
+        public AuthenticatedUser AuthenticatedUser { get; set; }
+        public ErrorHandlerModel ErrorHandlerModel { get; set; }
     }
 }
