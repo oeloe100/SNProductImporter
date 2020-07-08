@@ -1,0 +1,42 @@
+﻿<div class="col category-box shop-box">
+    <h3>Shop Categories</h3>
+    <ul style="margin: 10px !important;">
+        @foreach (var root in Model)
+        {
+            foreach (var levelOne in root.NopCategoriesDict)
+            {
+                foreach (var levelOneValue in levelOne.Value)
+                {
+                    <li><a class="select-shop-category"><p id="@levelOneValue.Id">@levelOneValue.Name</p></a></li>
+                    if (levelOneValue.NestedModel != null)
+                    {
+                        <ul>
+                            @foreach (var levelTwoNestedModel in levelOneValue.NestedModel)
+                            {
+                                <li><a class="select-shop-category"><p id="@levelTwoNestedModel.Value.Id">@levelTwoNestedModel.Value.Name</p></a></li>
+                                if (levelTwoNestedModel.Value.NestedModel != null)
+                                {
+                                    <ul>
+                                        @foreach (var LevelThreeNestedModel in levelTwoNestedModel.Value.NestedModel)
+                                        {
+                                            <li><a class="select-shop-category"><p id="@LevelThreeNestedModel.Value.Id">@LevelThreeNestedModel.Value.Name</p></a></li>
+                                            if (LevelThreeNestedModel.Value.NestedModel != null)
+                                            {
+                                                <ul>
+                                                    @foreach (var levelFourNestedModel in LevelThreeNestedModel.Value.NestedModel)
+                                                    {
+                                                        <li><a class="select-shop-category"><p id="@levelFourNestedModel.Value.Id">@levelFourNestedModel.Value.Name</p></a></li>
+                                                    }
+                                                </ul>
+                                            }
+                                        }
+                                    </ul>
+                                }
+                            }
+                        </ul>
+                    }
+                }
+            }
+        }
+    </ul>
+</div>

@@ -14,6 +14,13 @@ namespace SNPIDataManager
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "InsertMapping",
+                url: "MappingMiddelware/InsertMapping",
+                defaults: new { controller = "EDCFeedMapping", action = "InsertMappingModel" },
+                namespaces: new[] { "SNPIDataManager.Areas.EDCFeed.Controllers" }
+            );
+
+            routes.MapRoute(
                 name: "Submit",
                 url: "Submit",
                 defaults: new { controller = "NopAuthorization", action = "Authorize" },

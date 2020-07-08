@@ -1,0 +1,20 @@
+﻿@model IEnumerable<SNPIDataManager.Areas.EDCFeed.Models.CategoryModels.CategoriesViewModel>
+
+<link type="text/css" href="~/Areas/EDCFeed/Content/Mapping.css" rel="stylesheet" />
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>EDC Product Importer</h2>
+
+@section Scripts{
+    <script></script>
+}
+
+@{ Html.RenderPartial("_LinkBox"); }
+
+<div class="row">
+    @{ Html.RenderPartial("_ShopFeed", Model); }
+    @{ Html.RenderPartial("_SupplierFeed", Model); }
+</div>

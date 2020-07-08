@@ -29,8 +29,14 @@ namespace SNPIDataManager.Controllers
     [Authorize]
     public class NopAuthorizationController : Controller
     {
-        UserInformation userInformation = new UserInformation();
-        NopAccessSetup setup = new NopAccessSetup();
+        private readonly UserInformation _UserInformation;
+        private readonly NopAccessSetup _Setup;
+
+        public NopAuthorizationController()
+        {
+            _UserInformation = new UserInformation();
+            _Setup = new NopAccessSetup();
+        }
 
         // GET: NopAuthorization
         public ActionResult Index()
@@ -40,6 +46,7 @@ namespace SNPIDataManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("/Submit")]
         public ActionResult Authorize(UserAccessModel model)
         {
             if (ModelState.IsValid)
@@ -56,12 +63,12 @@ namespace SNPIDataManager.Controllers
 
                     int recordsCreated;
 
-                    if (setup.IsSetup())
+                    if (_Setup.IsSetup())
                     {
                         // *** SAVE CREDENTIALS TO DATABASE ***//
-                        recordsCreated = CredentialsProcessor.InsertCredentials
+                        recordsCreated = CredentialsProcessor.InsertUserCredentials
                         (
-                            userInformation.UserId(),
+                            _UserInformation.UserId(),
                             model.ClientId,
                             model.ClientSecret,
                             model.ServerUrl,
@@ -102,12 +109,12 @@ namespace SNPIDataManager.Controllers
                 {
                     var accessModel = new AccessModel();
 
-                    authorizationResponseModel._code = code;
-                    authorizationResponseModel._state = state;
+                    authorizationResponseModel.Code = code;
+                    authorizationResponseModel.State = state;
 
                     try
                     {
-                        var data = CredentialsProcessor.LoadCredentials<ClientModel>();
+                        var data = CredentialsProcessor.LoadUserCredentials<ClientModel>();
 
                         //*** Loop Trough data (LoadCred<UserModel>) and assign local variables with value from Database! ***//
                         foreach (var row in data)
@@ -127,14 +134,14 @@ namespace SNPIDataManager.Controllers
                         
                         TokenAuthorizationModel tokenAuthorizationModel = JsonConvert.DeserializeObject<TokenAuthorizationModel>(responseJSON);
 
-                        accessModel.tokenAuthorizationModel = tokenAuthorizationModel;
+                        accessModel.TokenAuthorizationModel = tokenAuthorizationModel;
 
                         //*** Populate UserAccessModel with new information ***//
                         PopulateModels.PopulateModels.PopulateUserAccessModel(accessModel, clientId, clientSecret, serverUrl, redirectUrl);
 
-                        string userId = userInformation.UserId();
+                        string userId = _UserInformation.UserId();
 
-                        int recordsCreated = CredentialsProcessor.InsertToken
+                        int recordsCreated = TokenProcessor.InsertToken
                         (
                             userId,
                             tokenAuthorizationModel.AccessToken,

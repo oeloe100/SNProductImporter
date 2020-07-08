@@ -59,6 +59,7 @@
     <Folder Include="dbo" />
     <Folder Include="dbo\Tables" />
     <Folder Include="PublishAccessData" />
+    <Folder Include="RefactorLog" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\NopDataAccess.sql" />
@@ -68,6 +69,6 @@
     <None Include="PublishAccessData\SNPIdb.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="SNPI_NopAccess_db.refactorlog" />
+    <RefactorLog Include="RefactorLog\SNPI_NopAccess_db.refactorlog" />
   </ItemGroup>
 </Project>

@@ -6,18 +6,18 @@ using System.Web;
 
 namespace SNPIDataManager.Models.NopProductsModel
 {
-    public class ProductsModel
+    public class ProductModel
     {
         [JsonProperty("id")]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty("images")]
-        public object images { get; set; }
+        public object Images { get; set; }
 
         [JsonProperty("sku")]
-        public string sku { get; set; }
+        public string Sku { get; set; }
     }
 }

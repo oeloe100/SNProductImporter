@@ -18,6 +18,7 @@ using SNPIDataManager.Areas.EDCFeed.Models.ProductModels.TestModels;
 
 namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
 {
+    [Authorize]
     public class InventoryDataController : ApiController
     {
         /// <summary>
@@ -25,53 +26,18 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
         /// </summary>
         private string feedPath = "C:/Users/sexxnation/Downloads/TEMP/eg_xml_feed_2015_nl.xml";
 
-        /// <summary>
-        /// Test API request. Get Every Product (id, title, HsCode) from Supplier XML Formatted PRODUCTS.
-        /// </summary>
-        /// <returns></returns>
-        public IHttpActionResult InventoryData()
-        {
-            List<EDCTestProductModel> productModel = new List<EDCTestProductModel>();
-
-            //For production download xml data from url below. Like
-            //Download Limit by EDC is 4x A Day. Scedual download for once a day. Like 24:00.
-            //using (System.Net.WebClient client = new System.Net.WebClient())
-            //{
-            //    client.DownloadFile("http://api.edc.nl/b2b_feed.php?key=4500c66ct0e0w63c8r4129tc80e622rr&sort=xml&type=xml&lang=nl&version=2015", "some.xml");
-            //}
-
-            XmlDocument fullFeedXmlDoc = new XmlDocument();
-            fullFeedXmlDoc.Load(feedPath);
-
-            XmlNodeList xmlNodeList = fullFeedXmlDoc.SelectNodes("/products/product");
-
-            try
-            {
-                foreach (XmlNode xn in xmlNodeList)
-                {
-                    var newModel = new EDCTestProductModel()
-                    {
-                        Id = xn["id"].InnerText,
-                        Title = xn["title"].InnerText,
-                        Popularity = xn["popularity"].InnerText
-                    };
-
-                    productModel.Add(newModel);
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.ToString());
-            }
-
-            return Ok(productModel.ToList());
-        }
+        //For production download xml data from url below. Like
+        //Download Limit by EDC is 4x A Day. Scedual download for once a day. Like 24:00.
+        //using (System.Net.WebClient client = new System.Net.WebClient())
+        //{
+        //    client.DownloadFile("http://api.edc.nl/b2b_feed.php?key=4500c66ct0e0w63c8r4129tc80e622rr&sort=xml&type=xml&lang=nl&version=2015", "some.xml");
+        //}
 
         /// <summary>
         /// Build Supplier Categories and return to View.
         /// </summary>
         /// <returns></returns>
-        public IDictionary<string, List<string>> CategoryBuilder()
+        public IDictionary<string, List<CategoryModel>> CategoryBuilder()
         {
             XmlDocument edcFeed = new XmlDocument();
             edcFeed.Load(feedPath);
@@ -84,7 +50,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
 
             var elapsedMs = watch.ElapsedMilliseconds;
 
-            IDictionary<string, List<string>> RelationToView = new Dictionary<string, List<string>>();
+            IDictionary<string, List<CategoryModel>> RelationToView = new Dictionary<string, List<CategoryModel>>();
             EDCCategoriesHelper.ChildParentRelationForView(ParentedCategories, RelationToView);
 
             return RelationToView;

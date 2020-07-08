@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNet.Identity;
+using SNPIDataManager.Areas.EDCFeed.Helpers;
+using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace SNPIDataManager.Controllers
@@ -11,6 +14,7 @@ namespace SNPIDataManager.Controllers
     [Authorize]
     public class UserController : ApiController
     {
+        [HttpGet]
         public IEnumerable<string> Get()
         {
             string userId = RequestContext.Principal.Identity.GetUserId();

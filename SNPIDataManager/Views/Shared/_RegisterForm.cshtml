@@ -13,19 +13,19 @@
                         <div id="no-bg" class="input-group-prepend">
                             <span id="fa-custom" class="input-group-text"><i class="fas fa-user">Username</i></span>
                         </div>
-                        @Html.EditorFor(Model => Model._RegisterModel.Email)
+                        @Html.EditorFor(Model => Model.RegisterModel.Email)
                     </div>
                     <div class="input-group form-group">
                         <div id="no-bg" class="input-group-prepend">
                             <span id="fa-custom" class="input-group-text"><i class="fas fa-key">Password</i></span>
                         </div>
-                        @Html.PasswordFor(Model => Model._RegisterModel.Password)
+                        @Html.PasswordFor(Model => Model.RegisterModel.Password)
                     </div>
                     <div class="input-group form-group">
                         <div id="no-bg" class="input-group-prepend">
                             <span id="fa-custom" class="input-group-text"><i class="fas fa-key">Confirm Password</i></span>
                         </div>
-                        @Html.PasswordFor(Model => Model._RegisterModel.ConfirmPassword)
+                        @Html.PasswordFor(Model => Model.RegisterModel.ConfirmPassword)
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Login" class="btn float-right login_btn">
@@ -33,8 +33,8 @@
                 }
             </div>
             <div class="errContainer">
-                @Html.ValidationMessageFor(Model => Model._RegisterModel.Email)
-                @Html.ValidationMessageFor(Model => Model._RegisterModel.Password)
+                @Html.ValidationMessageFor(Model => Model.RegisterModel.Email)
+                @Html.ValidationMessageFor(Model => Model.RegisterModel.Password)
 
                 @Html.ValidationMessage("LoginErrMessage") <br />
                 @Html.ValidationMessage("LoginErrDescription")

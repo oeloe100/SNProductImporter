@@ -7,7 +7,7 @@ namespace SNPIDataManager.Models.NopAuthorizationModels
 {
     public class AccessModel
     {
-        public TokenAuthorizationModel tokenAuthorizationModel { get; set; }
-        public UserAccessModel userAccessModel { get; set; }
+        public TokenAuthorizationModel TokenAuthorizationModel { get; set; }
+        public UserAccessModel UserAccessModel { get; set; }
     }
 }

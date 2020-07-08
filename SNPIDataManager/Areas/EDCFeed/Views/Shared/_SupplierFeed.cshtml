@@ -1,0 +1,20 @@
+﻿<div class="col category-box supplier-box">
+    <h3>Supplier Categories</h3>
+    <ul style="margin: 10px !important; padding-inline-start: 41px;">
+        @foreach (var root in Model)
+        {
+            foreach (var edcDict in root.EDCCategoriesDict)
+            {
+                <li><a class="select-supplier-category"><p>@edcDict.Key</p></a></li>
+
+                <ul>
+                    @foreach (var edcNestedDict in edcDict.Value)
+                    {
+
+                        <li><a class="select-supplier-category"><p id="@edcNestedDict.Id">@edcNestedDict.Title</p></a></li>
+                    }
+                </ul>
+            }
+        }
+    </ul>
+</div>

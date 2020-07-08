@@ -19,7 +19,7 @@ namespace SNPIDataManager.Setup
 
         public bool IsSetup()
         {
-            var data = CredentialsProcessor.LoadCredentials<ClientModel>();
+            var data = CredentialsProcessor.LoadUserCredentials<ClientModel>();
 
             if (data.Count > 0)
             {

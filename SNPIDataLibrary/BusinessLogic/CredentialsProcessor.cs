@@ -10,7 +10,7 @@ namespace SNPIDataLibrary.BusinessLogic
 {
     public static class CredentialsProcessor
     {
-        public static int InsertCredentials(string userId, string clientId, string clientSecret, string serverUrl, string redirectUrl)
+        public static int InsertUserCredentials(string userId, string clientId, string clientSecret, string serverUrl, string redirectUrl)
         {
             ClientModel clientDataModel = new ClientModel
             {
@@ -23,40 +23,14 @@ namespace SNPIDataLibrary.BusinessLogic
 
             string sql = @"INSERT INTO dbo.dataAccess (userId, clientId, clientSecret, serverUrl, redirectUrl) VALUES (@UserId, @ClientId, @ClientSecret, @ServerUrl, @RedirectUrl);";
 
-            return SQLDataAccess.SaveData(sql, clientDataModel);
+            return SQLDataAccess.SaveData(sql, clientDataModel, "SNPI_NopAccess_db");
         }
 
-        public static List<ClientModel> LoadCredentials<ClientModel>()
+        public static List<ClientModel> LoadUserCredentials<ClientModel>()
         {
             string sql = @"SELECT userId, clientId, clientSecret, serverUrl, redirectUrl FROM dbo.dataAccess;";
 
-            return SQLDataAccess.LoadData<ClientModel>(sql);
-        }
-
-        public static int InsertToken(string id, string accessToken, string refreshToken)
-        {
-            string sql;
-
-            DateTime date = DateTime.Now;
-
-            TokenModel tokenModel = new TokenModel()
-            {
-                UserId = id,
-                AccessToken = accessToken,
-                RefreshToken = refreshToken,
-                Date = date
-            };
-
-            sql = @"INSERT INTO dbo.NopTokens (userId, accessToken, refreshToken, date) VALUES (@UserId, @AccessToken, @RefreshToken, @Date);";
-
-            return SQLDataAccess.SaveData(sql, tokenModel);
-        }
-
-        public static List<TokenModel> LoadToken<TokenModel>()
-        {
-            string sql = @"SELECT userId, accessToken, refreshToken, date FROM dbo.NopTokens;";
-
-            return SQLDataAccess.LoadData<TokenModel>(sql);
+            return SQLDataAccess.LoadData<ClientModel>(sql, "SNPI_NopAccess_db");
         }
     }
 }

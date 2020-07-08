@@ -1,11 +1,13 @@
 ﻿using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
 using SNPIDataManager.Helpers;
 using SNPIDataManager.Models;
 using SNPIHelperLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Controllers;
@@ -19,15 +21,21 @@ namespace SNPIDataManager.Controllers
 {
     public class HomeController : Controller
     {
-        string loginPartialView = DMHelper.SelectQuickPartialView("Login");
+        private readonly string _LoginPartialView;
+
+        public HomeController()
+        {
+            _LoginPartialView = "~/Views/Shared/_LoginForm.cshtml";
+        }
 
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            ViewBag.Title = "Welcome Home!";
 
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult> Login(PreLoginModel user)
         {
@@ -37,12 +45,13 @@ namespace SNPIDataManager.Controllers
                 var helperInstance = new APIHelper();
                 try
                 {
-                    var result = await helperInstance.Authenticate(user._LoginModel.Username, user._LoginModel.Password);
+                    var result = await helperInstance.Authenticate(user.LoginModel.Username, user.LoginModel.Password);
 
-                    if (result._AuthenticatedUser.Username != null &&
-                        result._AuthenticatedUser.Access_Token != null)
+                    if (result.AuthenticatedUser.Username != null &&
+                        result.AuthenticatedUser.Access_Token != null)
                     {
-                        FormsAuthentication.SetAuthCookie(result._AuthenticatedUser.Username, false);
+                        FormsAuthentication.SetAuthCookie(result.AuthenticatedUser.Username, false);
+
                         return await Task.Run(() => View(result));
                     }
                 }
@@ -51,14 +60,15 @@ namespace SNPIDataManager.Controllers
                     ModelState.AddModelError("LoginErrMessage", ex.Message);
                     ModelState.AddModelError("LoginErrDescription", DMHelper.ErrBuilder(ex.Message));
 
-                    return await Task.Run(() => this.View(loginPartialView));
+                    return await Task.Run(() => this.View(_LoginPartialView));
                 }
             }
 
             ModelState.AddModelError("LoginErrDescription", DMHelper.ErrBuilder(""));
-            return await Task.Run(() => this.View(loginPartialView));
+            return await Task.Run(() => this.View(_LoginPartialView));
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult Logout()
         {

@@ -12,11 +12,11 @@ using System.Web.WebPages;
 
 namespace SNPIDataManager.Helpers.NopAPIHelper
 {
-    public class NopShopCategorizationHelper
+    public static class NopShopCategorizationHelper
     {
-        private CategoriesModel nextEntryModel;
+        private static CategoriesModel nextEntryModel;
 
-        public async Task<IDictionary<string, List<CategoriesModel>>> NopCategoriesResource(string accessToken, string serverUrl)
+        public static async Task<IDictionary<string, List<CategoriesModel>>> NopCategoriesResource(string accessToken, string serverUrl)
         {
             var clientHelper = new NopAPIClientHelper(accessToken, serverUrl);
 
@@ -33,7 +33,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             return categoriesSorted;
         }
 
-        private IDictionary<string, List<CategoriesModel>> Sort(List<CategoriesModel> categoriesUnsorted) 
+        private static IDictionary<string, List<CategoriesModel>> Sort(List<CategoriesModel> categoriesUnsorted) 
         {
             IDictionary<string, List<CategoriesModel>> categoriesSorted = new Dictionary<string, List<CategoriesModel>>();
 
@@ -48,7 +48,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             return categoriesSorted;
         }
 
-        private void SortByName(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, int id, int parentId)
+        private static void SortByName(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, int id, int parentId)
         {
             List<CategoriesModel> sortedModel = new List<CategoriesModel>();
 
@@ -64,7 +64,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             }
         }
 
-        private void SortNested(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, string key)
+        private static void SortNested(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, string key)
         {
             if (sorted.ContainsKey(key))
             {
@@ -93,7 +93,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             }
         }
 
-        void FindNextNestedEntry(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, string key, string firstKey)
+        private static void FindNextNestedEntry(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, string key, string firstKey)
         {
             if (sorted.ContainsKey(firstKey))
             {
@@ -102,7 +102,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             }
         }
 
-        private void SortDeepNested(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, List<CategoriesModel> entry, string key)
+        private static void SortDeepNested(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, List<CategoriesModel> entry, string key)
         {
             for (var i = 0; i < entry.Count; i++)
             {
@@ -117,7 +117,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             }
         }
 
-        private void SelectEntry(int i, CategoriesModel unsorted, List<CategoriesModel> entry, string key)
+        private static void SelectEntry(int i, CategoriesModel unsorted, List<CategoriesModel> entry, string key)
         {
             var nestedModel = entry[i].NestedModel[key].NestedModel;
             
@@ -132,7 +132,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             }
         }
 
-        private void ThirdLevelEntry(int i, CategoriesModel unsorted, List<CategoriesModel> entry, IDictionary<string, List<CategoriesModel>> sorted, string key)
+        private static void ThirdLevelEntry(int i, CategoriesModel unsorted, List<CategoriesModel> entry, IDictionary<string, List<CategoriesModel>> sorted, string key)
         {
             nextEntryModel = unsorted;
             var firstLevelKey = FirstLevelKey(unsorted, sorted, key);
@@ -152,7 +152,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             }
         }
 
-        private string SecondLevelKey(string firstLevelKey, string key, IDictionary<string, List<CategoriesModel>> sorted)
+        private static string SecondLevelKey(string firstLevelKey, string key, IDictionary<string, List<CategoriesModel>> sorted)
         {
             for (var i = 0; i < sorted.Count; i++)
             {
@@ -163,7 +163,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             return "Something Went Wrong?";
         }
 
-        private string SecondSelect(IDictionary<string, CategoriesModel> nestedModel, string key)
+        private static string SecondSelect(IDictionary<string, CategoriesModel> nestedModel, string key)
         {
             string newKey = "";
             int keyAsInteger;
@@ -187,7 +187,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             return newKey;
         }
 
-        private string FirstLevelKey(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, string key)
+        private static string FirstLevelKey(CategoriesModel unsorted, IDictionary<string, List<CategoriesModel>> sorted, string key)
         {
             if (nextEntryModel != null)
             {
@@ -205,7 +205,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             return null;
         }
 
-        private string Select(IDictionary<string, List<CategoriesModel>> sorted, string key) 
+        private static string Select(IDictionary<string, List<CategoriesModel>> sorted, string key) 
         {
             string newKey = "";
             int keyAsInteger;
@@ -229,7 +229,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             return newKey;
         }
 
-        private CategoriesModel NextEntry(List<CategoriesModel> model, int x, CategoriesModel unsorted) 
+        private static CategoriesModel NextEntry(List<CategoriesModel> model, int x, CategoriesModel unsorted) 
         {
             if (model[x].NestedModel.ContainsKey(unsorted.Id))
             {
@@ -239,7 +239,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             return null;
         }
 
-        private CategoriesModel SortedModel(CategoriesModel unsorted)
+        private static CategoriesModel SortedModel(CategoriesModel unsorted)
         {
             var sortedItemModel = new CategoriesModel()
             {

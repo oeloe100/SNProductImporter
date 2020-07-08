@@ -19,44 +19,35 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
 {
     public class NopAPIHelper
     {
-        public HttpClient nopApiClient;
+        private APIAuthMiddelwareHelper _ApiClient;
 
-        private readonly string _clientId;
-        private readonly string _clientSecret;
-        private readonly string _serverUrl;
+        private readonly string _ClientId;
+        private readonly string _ClientSecret;
+        private readonly string _ServerUrl;
 
         public NopAPIHelper(string clientId, string clientSecret, string serverUrl)
         {
-            _clientId = clientId;
-            _clientSecret = clientSecret;
-            _serverUrl = serverUrl;
+            _ApiClient = new APIAuthMiddelwareHelper("");
 
-            InitializeClient();
+            _ClientId = clientId;
+            _ClientSecret = clientSecret;
+            _ServerUrl = serverUrl;
         }
 
-        public void InitializeClient()
-        {
-            string api = ConfigurationManager.AppSettings["api"];
-
-            nopApiClient = new HttpClient();
-            nopApiClient.BaseAddress = new Uri(api);
-            nopApiClient.DefaultRequestHeaders.Accept.Clear();
-            nopApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        }
         public async Task<string> AuthorizeClient(string code, string grantType, string redirectUrl)
         {
-            string requestUriString = string.Format("{0}/api/token", _serverUrl);
+            string requestUriString = string.Format("{0}/api/token", _ServerUrl);
 
             var data = new FormUrlEncodedContent(new[] 
             {
-                new KeyValuePair<string, string>("client_id", _clientId),
-                new KeyValuePair<string, string>("client_secret", _clientSecret),
+                new KeyValuePair<string, string>("client_id", _ClientId),
+                new KeyValuePair<string, string>("client_secret", _ClientSecret),
                 new KeyValuePair<string, string>("code", code),
                 new KeyValuePair<string, string>("grant_type", grantType),
                 new KeyValuePair<string, string>("redirect_uri", redirectUrl)
             });
 
-            using (HttpResponseMessage response = await nopApiClient.PostAsync(requestUriString, data))
+            using (HttpResponseMessage response = await _ApiClient.ApiMiddelwareClient.PostAsync(requestUriString, data))
             {
                 if (response.IsSuccessStatusCode)
                 {

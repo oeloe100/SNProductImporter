@@ -9,6 +9,6 @@ namespace SNPIDataManager.Models.NopProductsModel
     public class ProductsRootObject
     {
         [JsonProperty("products")]
-        public List<ProductsModel> Customers { get; set; }
+        public List<ProductModel> Customers { get; set; }
     }
 }

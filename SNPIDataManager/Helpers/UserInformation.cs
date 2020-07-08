@@ -10,17 +10,22 @@ namespace SNPIDataManager.Helpers
 {
     public class UserInformation
     {
-        ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindByName
-                    (System.Web.HttpContext.Current.User.Identity.GetUserName());
+        private readonly ApplicationUser _User;
 
         public UserInformation()
         {
+            _User = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindByName
+                    (HttpContext.Current.User.Identity.GetUserName());
+
             UserId();
         }
 
         public string UserId()
         {
-            return user.Id;
+            if (_User != null)
+                return _User.Id;
+            else
+                return null;
         }
     }
 }

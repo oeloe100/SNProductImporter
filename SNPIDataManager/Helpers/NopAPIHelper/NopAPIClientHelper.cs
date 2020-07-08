@@ -16,38 +16,22 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
 {
     public class NopAPIClientHelper
     {
-        private HttpClient nopClient;
-
-        private readonly string _accessToken;
-        private readonly string _serverUrl;
+        private readonly APIAuthMiddelwareHelper _ApiClient;
+        private readonly string _ServerUrl;
 
         public NopAPIClientHelper(string accessToken, string serverUrl)
         {
-            _accessToken = accessToken;
-            _serverUrl = serverUrl;
-
-            InitializeClient();
-        }
-
-        public void InitializeClient()
-        {
-            string api = ConfigurationManager.AppSettings["api"];
-
-            nopClient = new HttpClient();
-            nopClient.BaseAddress = new Uri(api);
-            nopClient.DefaultRequestHeaders.Accept.Clear();
-            nopClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-            nopClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _ApiClient = new APIAuthMiddelwareHelper(accessToken);
+            _ServerUrl = serverUrl;
         }
 
         public async Task<object> Get(string path)
         {
-            string encodedData = string.Empty;
-            string requestUriString = string.Format("{0}{1}", _serverUrl, path);
+            string requestUriString = string.Format("{0}{1}", _ServerUrl, path);
 
-            using (nopClient)
+            using (_ApiClient.ApiMiddelwareClient)
             {
-                var result = await nopClient.GetAsync(requestUriString);
+                var result = await _ApiClient.ApiMiddelwareClient.GetAsync(requestUriString);
 
                 if (result.IsSuccessStatusCode)
                 {

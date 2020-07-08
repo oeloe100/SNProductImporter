@@ -26,7 +26,7 @@ namespace SNPIDataManager.PopulateModels
 
         public static void PopulateUserAccessModel(AccessModel model, string clientId, string clientSecret, string serverUrl, string redirectUrl)
         {
-            model.userAccessModel = new UserAccessModel()
+            model.UserAccessModel = new UserAccessModel()
             {
                 ClientId = clientId,
                 ClientSecret = clientSecret,
