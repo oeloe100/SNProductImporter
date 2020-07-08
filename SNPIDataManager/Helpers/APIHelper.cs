@@ -22,7 +22,7 @@ namespace SNPIDataManager.Helpers
 {
     public class APIHelper
     {
-        private APIAuthMiddelwareHelper _ApiClient;
+        private readonly APIAuthMiddelwareHelper _ApiClient;
 
         public APIHelper()
         {

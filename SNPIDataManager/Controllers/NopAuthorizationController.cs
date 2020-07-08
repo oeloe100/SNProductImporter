@@ -29,8 +29,14 @@ namespace SNPIDataManager.Controllers
     [Authorize]
     public class NopAuthorizationController : Controller
     {
-        UserInformation userInformation = new UserInformation();
-        NopAccessSetup setup = new NopAccessSetup();
+        private readonly UserInformation _UserInformation;
+        private readonly NopAccessSetup _Setup;
+
+        public NopAuthorizationController()
+        {
+            _UserInformation = new UserInformation();
+            _Setup = new NopAccessSetup();
+        }
 
         // GET: NopAuthorization
         public ActionResult Index()
@@ -57,12 +63,12 @@ namespace SNPIDataManager.Controllers
 
                     int recordsCreated;
 
-                    if (setup.IsSetup())
+                    if (_Setup.IsSetup())
                     {
                         // *** SAVE CREDENTIALS TO DATABASE ***//
                         recordsCreated = CredentialsProcessor.InsertUserCredentials
                         (
-                            userInformation.UserId(),
+                            _UserInformation.UserId(),
                             model.ClientId,
                             model.ClientSecret,
                             model.ServerUrl,
@@ -133,7 +139,7 @@ namespace SNPIDataManager.Controllers
                         //*** Populate UserAccessModel with new information ***//
                         PopulateModels.PopulateModels.PopulateUserAccessModel(accessModel, clientId, clientSecret, serverUrl, redirectUrl);
 
-                        string userId = userInformation.UserId();
+                        string userId = _UserInformation.UserId();
 
                         int recordsCreated = TokenProcessor.InsertToken
                         (

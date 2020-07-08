@@ -19,19 +19,18 @@ namespace SNPIDataManager.Controllers.NopControllers
     [Authorize]
     public class CustomersController : Controller
     {
-        NopAccessHelper NopAccessHelper;
+        private readonly NopAccessHelper _NopAccessHelper;
+
         public CustomersController()
         {
-            NopAccessHelper helper = new NopAccessHelper();
-            NopAccessHelper = helper;
+            _NopAccessHelper = new NopAccessHelper();
         }
 
         [HttpGet]
         public async Task<ActionResult> GetCustomerInformation()
         {
-            var clientHelper = new NopAPIClientHelper(NopAccessHelper.accessToken, NopAccessHelper.serverUrl);
+            var clientHelper = new NopAPIClientHelper(_NopAccessHelper.AccessToken, _NopAccessHelper.ServerUrl);
 
-            //string jsonUrl = $"/api/customers?fields=id,first_name,last_name";
             string jsonUrl = $"/api/customers?fields=id,first_name,last_name";
             object customerData = await clientHelper.Get(jsonUrl);
 

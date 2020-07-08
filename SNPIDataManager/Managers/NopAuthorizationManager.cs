@@ -13,17 +13,17 @@ namespace SNPIDataManager.Managers
 {
     public class NopAuthorizationManager
     {
-        public string _clientId;
-        public string _clientSecret;
-        public string _serverUrl;
+        public string _ClientId;
+        public string _ClientSecret;
+        public string _ServerUrl;
 
         private readonly NopAPIHelper _nopAPIHelper;
 
         public NopAuthorizationManager(string clientId, string clientSecret, string serverUrl)
         {
-            _clientId = clientId;
-            _clientSecret = clientSecret;
-            _serverUrl = serverUrl;
+            _ClientId = clientId;
+            _ClientSecret = clientSecret;
+            _ServerUrl = serverUrl;
 
             _nopAPIHelper = new NopAPIHelper(clientId, clientSecret, serverUrl);
         }
@@ -33,8 +33,8 @@ namespace SNPIDataManager.Managers
             var stringBuilder = new StringBuilder();
             string callbackUrl = new Uri(redirectUrl).ToString();
 
-            stringBuilder.AppendFormat("{0}/oauth/authorize", _serverUrl);
-            stringBuilder.AppendFormat("?client_id={0}", HttpUtility.UrlEncode(_clientId));
+            stringBuilder.AppendFormat("{0}/oauth/authorize", _ServerUrl);
+            stringBuilder.AppendFormat("?client_id={0}", HttpUtility.UrlEncode(_ClientId));
             stringBuilder.AppendFormat("&redirect_uri={0}", HttpUtility.UrlEncode(callbackUrl));
             stringBuilder.Append("&response_type=code");
 

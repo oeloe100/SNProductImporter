@@ -34,7 +34,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
         {
             try
             {
-                var nopCategoriesDict = await NopShopCategorizationHelper.NopCategoriesResource(_NopAccessHelper.accessToken, _NopAccessHelper.serverUrl);
+                var nopCategoriesDict = await NopShopCategorizationHelper.NopCategoriesResource(_NopAccessHelper.AccessToken, _NopAccessHelper.ServerUrl);
 
                 var InventoryDataController = new InventoryDataController();
                 var edcCategoriesDict = InventoryDataController.CategoryBuilder();
@@ -60,7 +60,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
             }
         }
 
-        [Authorize]
+        [HttpPost]
         public JsonResult InsertMappingModel(List<CategoryModel> model)
         {
             try
@@ -77,6 +77,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
             }
         }
 
+        [HttpGet]
         public ActionResult DisplayMappings() 
         {
             try

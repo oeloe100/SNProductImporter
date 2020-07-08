@@ -194,7 +194,6 @@
     <Compile Include="Areas\EDCFeed\Controllers\API\InventoryDataController.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\EDCFeedMappingController.cs" />
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
-    <Compile Include="Areas\EDCFeed\Helpers\ClientHelper.cs" />
     <Compile Include="Areas\EDCFeed\Helpers\EDCCategoriesHelper.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModelList.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModel.cs" />
@@ -228,8 +227,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Areas\Mappings\Controllers\ManageMappingsController.cs" />
-    <Compile Include="Areas\Mappings\MappingsAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NopAuthorizationController.cs" />
@@ -315,7 +312,6 @@
     <Content Include="Areas\EDCFeed\Views\_ViewStart.cshtml" />
     <Content Include="Areas\EDCFeed\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\EDCFeed\Views\EDCFeedMapping\Index.cshtml" />
-    <Content Include="Areas\Mappings\Views\web.config" />
     <Content Include="Areas\EDCFeed\Views\Shared\_LinkBox.cshtml" />
     <Content Include="Areas\EDCFeed\Views\Shared\_SupplierFeed.cshtml" />
     <Content Include="Areas\EDCFeed\Views\Shared\_ShopFeed.cshtml" />
@@ -368,9 +364,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\HelpPage\Views\Home\" />
-    <Folder Include="Areas\Mappings\Data\" />
-    <Folder Include="Areas\Mappings\Views\ManageMappings\" />
-    <Folder Include="Areas\Mappings\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
