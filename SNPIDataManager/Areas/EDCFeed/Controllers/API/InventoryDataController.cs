@@ -12,9 +12,9 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.UI.WebControls;
 using System.Xml;
-using SNPIDataManager.Areas.EDCFeed.Helpers;
 using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
 using SNPIDataManager.Areas.EDCFeed.Models.ProductModels.TestModels;
+using SNPIDataManager.Areas.EDCFeed.Builder;
 
 namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
 {
@@ -37,23 +37,17 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers.API
         /// Build Supplier Categories and return to View.
         /// </summary>
         /// <returns></returns>
-        public IDictionary<string, List<CategoryModel>> CategoryBuilder()
+        public IDictionary<string, List<SupplierModel>> CategoryBuilder()
         {
             XmlDocument edcFeed = new XmlDocument();
             edcFeed.Load(feedPath);
 
             XmlElement root = edcFeed.DocumentElement;
+            SupplierCategoryBuilder builder = new SupplierCategoryBuilder(root);
+            
+            var items = builder._RelationToView;
 
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            List<CategoryModelList> ParentedCategories = EDCCategoriesHelper.CategorizeNodes(root).ToList();
-            watch.Stop();
-
-            var elapsedMs = watch.ElapsedMilliseconds;
-
-            IDictionary<string, List<CategoryModel>> RelationToView = new Dictionary<string, List<CategoryModel>>();
-            EDCCategoriesHelper.ChildParentRelationForView(ParentedCategories, RelationToView);
-
-            return RelationToView;
+            return items;
         }
     }
 }
