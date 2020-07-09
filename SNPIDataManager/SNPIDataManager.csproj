@@ -195,6 +195,7 @@
     <Compile Include="Areas\EDCFeed\Controllers\API\InventoryDataController.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\EDCFeedMappingController.cs" />
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
+    <Compile Include="Areas\EDCFeed\Helpers\SupplierFeedHelper.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModelList.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\SupplierModel.cs" />
@@ -364,7 +365,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\EDCFeed\Helpers\" />
     <Folder Include="Areas\HelpPage\Views\Home\" />
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,12 @@
                     @foreach (var edcNestedDict in edcDict.Value)
                     {
 
-                        <li><a class="select-supplier-category"><p id="@edcNestedDict.Id">@edcNestedDict.Title</p></a></li>
+                        <li>
+                            <a class="select-supplier-category" style="display: flex">
+                                <p id="@edcNestedDict.Id">@edcNestedDict.Title</p>
+                                <p style="margin-left: 10px; font-weight: bold;">(@edcNestedDict.ProductCount)</p>
+                            </a>
+                        </li>
                     }
                 </ul>
             }

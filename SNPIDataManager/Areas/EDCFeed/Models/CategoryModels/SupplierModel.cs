@@ -12,5 +12,6 @@ namespace SNPIDataManager.Areas.EDCFeed.Models.CategoryModels
         public int Layer { get; set; }
         public string ParentId { get; set; }
         public string ParentTitle { get; set; }
+        public int ProductCount { get; set; }
     }
 }
