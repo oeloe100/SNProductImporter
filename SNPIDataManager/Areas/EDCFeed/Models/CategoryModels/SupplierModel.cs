@@ -7,11 +7,11 @@ namespace SNPIDataManager.Areas.EDCFeed.Models.CategoryModels
 {
     public class SupplierModel
     {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public int Layer { get; set; }
-        public string ParentId { get; set; }
-        public string ParentTitle { get; set; }
+        public string RootId { get; set; }
+        public string RootTitle { get; set; }
+        public string ChildId { get; set; }
+        public string ChildTitle { get; set; }
         public int ProductCount { get; set; }
+        public int Layer { get; set; }
     }
 }

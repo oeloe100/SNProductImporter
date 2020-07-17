@@ -17,6 +17,8 @@ namespace SNPIDataManager
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
+            //TODO: configure API to use Other (than bearer) token auth.
+
             // Web API routes
             config.MapHttpAttributeRoutes();
 

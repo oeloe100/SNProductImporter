@@ -10,8 +10,6 @@ $("#create-link").click(function () {
             inputFields[i].value != "") {
             if (inputArray[i] != inputFields[i].value)
                 inputArray.push(inputFields[i]);
-
-            //console.log(inputFields[i]);
         }
     }
 
@@ -28,8 +26,6 @@ function PostData() {
         var obj = { "id": SelectInputID(inputArray[index], vendor), "title": inputArray[index].value, "Vendor": vendor };
         data.push(obj);
     });
-
-    console.log(data);
 
     $.ajax({
         url: '/MappingMiddelware/InsertMapping',
@@ -73,7 +69,7 @@ function SelectInputID(data, vendor) {
 
     for (var i = 0; i < categoryItem.length; i++) {
         if ($(categoryItem[i]).text() == data.value) {
-            console.log($(categoryItem[i]));
+            //console.log($(categoryItem[i]));
             return $(categoryItem[i]).attr("id");
         }
     }
@@ -100,7 +96,6 @@ function ResetProgressBar() {
 }
 
 /* Manage Existing Mappings */
-
 if (pathname == "/EDCFeed/EDCFeedMapping/DisplayMappings") {
     $(".delete-mapping").click(function () {
         var currentRow = $(this).closest("tr");
@@ -139,6 +134,23 @@ if (pathname == "/EDCFeed/EDCFeedMapping/DisplayMappings") {
             function(jqXHR, textStatus, errorThrown) {
                 alert("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText);
             }
+        });
+    });
+
+    //*** Run/Start Sync (Mapping) ***\\
+    $(function () {
+        $(".start-mappings").click(function () {
+            console.log("start");
+            $.ajax({
+                url: "/MappingMiddelware/StartMapping",
+                type: "POST",
+                success: function (result) {
+
+                },
+                function(jqXHR, textStatus, errorThrown) {
+                    alert("Status: " + jqXHR.status + "; Error: " + jqXHR.responseText);
+                }
+            });
         });
     });
 }

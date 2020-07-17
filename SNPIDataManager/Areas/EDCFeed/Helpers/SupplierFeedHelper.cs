@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace SNPIDataManager.Areas.EDCFeed.Helpers
 {
@@ -26,7 +27,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
                             {
                                 if (categoriesChildNodes[n].ChildNodes[x].Name == "category")
                                 {
-                                     nodeList.Add(categoriesChildNodes[n].ChildNodes[x]);
+                                    nodeList.Add(categoriesChildNodes[n].ChildNodes[x]);
                                 }
                             }
                         }
@@ -35,6 +36,18 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
             }
 
             return nodeList;
+        }
+
+        internal IEnumerable<XElement> SelectProductNodesByCategory(string feedPath, string mappedCategoryId)
+        {
+            XElement products = XElement.Load(feedPath);
+
+            var productByCategoryQuery = from product in products.Elements("product")
+                                         where (string)product.Element("categories").Element("category")
+                                         .Elements("cat").ElementAt(1).Element("id") == mappedCategoryId
+                                         select product;
+
+            return productByCategoryQuery;
         }
     }
 }

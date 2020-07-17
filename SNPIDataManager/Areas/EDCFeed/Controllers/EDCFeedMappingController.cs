@@ -1,6 +1,5 @@
 ﻿using SNPIDataLibrary.BusinessLogic;
 using SNPIDataLibrary.Models;
-using SNPIDataManager.Areas.EDCFeed.Controllers.API;
 using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
 using SNPIDataManager.Helpers;
 using SNPIDataManager.Helpers.NopAPIHelper;
@@ -13,6 +12,7 @@ using AuthorizeAttribute = System.Web.Http.AuthorizeAttribute;
 using SNPIDataLibrary.DataAccess;
 using System.Text;
 using SNPIDataManager.Setup;
+using SNPIDataManager.Areas.EDCFeed.Helpers;
 
 namespace SNPIDataManager.Areas.EDCFeed.Controllers
 {
@@ -32,20 +32,19 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
 
         public async Task<ActionResult> Index()
         {
+            var model = new List<CategoriesViewModel>();
+            var categoriesViewModel = new CategoriesViewModel();
+
             try
             {
-                var nopCategoriesDict = await NopShopCategorizationHelper.NopCategoriesResource(_NopAccessHelper.AccessToken, _NopAccessHelper.ServerUrl);
+                var nopCategoriesDict = await NopShopCategorizationHelper.NopCategoriesResource(
+                    _NopAccessHelper.AccessToken, 
+                    _NopAccessHelper.ServerUrl);
+                var edcCategoriesDict = InventoryDataHelper.CategoryBuilder();
 
-                var InventoryDataController = new InventoryDataController();
-                var edcCategoriesDict = InventoryDataController.CategoryBuilder();
 
-                List<CategoriesViewModel> model = new List<CategoriesViewModel>();
-
-                var categoriesViewModel = new CategoriesViewModel()
-                {
-                    NopCategoriesDict = nopCategoriesDict,
-                    EDCCategoriesDict = edcCategoriesDict
-                };
+                categoriesViewModel.NopCategoriesDict = nopCategoriesDict;
+                categoriesViewModel.EDCCategoriesDict = edcCategoriesDict;
 
                 model.Add(categoriesViewModel);
 

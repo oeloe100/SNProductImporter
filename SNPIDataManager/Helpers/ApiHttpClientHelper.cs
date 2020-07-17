@@ -10,12 +10,12 @@ using System.Web;
 
 namespace SNPIDataManager.Helpers
 {
-    public class APIAuthMiddelwareHelper
+    public class ApiHttpClientHelper
     {
-        public HttpClient ApiMiddelwareClient;
+        public HttpClient ApiHttpClient;
         private readonly string _AccessToken;
 
-        public APIAuthMiddelwareHelper(string accessToken)
+        public ApiHttpClientHelper(string accessToken)
         {
             _AccessToken = accessToken;
             InitializeClient();
@@ -25,12 +25,12 @@ namespace SNPIDataManager.Helpers
         {
             string api = ConfigurationManager.AppSettings["api"];
 
-            ApiMiddelwareClient = new HttpClient();
-            ApiMiddelwareClient.BaseAddress = new Uri(api);
-            ApiMiddelwareClient.DefaultRequestHeaders.Accept.Clear();
+            ApiHttpClient = new HttpClient();
+            ApiHttpClient.BaseAddress = new Uri(api);
+            ApiHttpClient.DefaultRequestHeaders.Accept.Clear();
             if (!string.IsNullOrEmpty(_AccessToken))
-                ApiMiddelwareClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _AccessToken);
-            ApiMiddelwareClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                ApiHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _AccessToken);
+            ApiHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
     }
 }

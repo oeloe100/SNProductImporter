@@ -19,7 +19,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
 {
     public class NopAPIHelper
     {
-        private APIAuthMiddelwareHelper _ApiClient;
+        private ApiHttpClientHelper _ApiClient;
 
         private readonly string _ClientId;
         private readonly string _ClientSecret;
@@ -27,7 +27,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
 
         public NopAPIHelper(string clientId, string clientSecret, string serverUrl)
         {
-            _ApiClient = new APIAuthMiddelwareHelper("");
+            _ApiClient = new ApiHttpClientHelper("");
 
             _ClientId = clientId;
             _ClientSecret = clientSecret;
@@ -47,7 +47,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
                 new KeyValuePair<string, string>("redirect_uri", redirectUrl)
             });
 
-            using (HttpResponseMessage response = await _ApiClient.ApiMiddelwareClient.PostAsync(requestUriString, data))
+            using (HttpResponseMessage response = await _ApiClient.ApiHttpClient.PostAsync(requestUriString, data))
             {
                 if (response.IsSuccessStatusCode)
                 {

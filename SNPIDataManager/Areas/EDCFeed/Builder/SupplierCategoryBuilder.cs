@@ -5,20 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace SNPIDataManager.Areas.EDCFeed.Builder
 {
     public class SupplierCategoryBuilder : SupplierFeedHelper
     {
-        public readonly IDictionary<string, List<SupplierModel>> _RelationToView;
+        public readonly IDictionary<string, List<SupplierModel>> RelationToView;
         private readonly List<SupplierModel> _SupplierModel;
         private readonly XmlElement _Root;
 
-        public SupplierCategoryBuilder(XmlElement root)
+        public SupplierCategoryBuilder(XmlElement root, string feedPath)
         {
-            _Root = root;
-            _RelationToView = new Dictionary<string, List<SupplierModel>>();
+            RelationToView = new Dictionary<string, List<SupplierModel>>();
             _SupplierModel = new List<SupplierModel>();
+            _Root = root;
 
             BuildCategories();
             BuildCategoryRelation();
@@ -26,12 +27,12 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
 
         private void BuildCategories()
         {
-            bool containsModel = false;
             var startNode = SelectCategoryNodes(_Root);
+            var containsModel = false;
             var parentId = "";
             var parentTitle = "";
 
-            for (var i = 0; i < startNode.Count; i++)
+            for (var i = 0; i < startNode.Count(); i++)
             {
                 for (var x = 0; x < startNode[i].ChildNodes.Count; x++)
                 {
@@ -45,15 +46,16 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
 
                     var supplierModel = new SupplierModel()
                     {
-                        Id = deepNestedChildNode.ChildNodes[0].InnerText,
-                        Title = deepNestedChildNode.ChildNodes[1].InnerText,
+                        RootId = deepNestedChildNode.ChildNodes[0].InnerText,
+                        RootTitle = deepNestedChildNode.ChildNodes[1].InnerText,
                         Layer = x,
-                        ParentId = parentId,
-                        ParentTitle = parentTitle
+                        ChildId = parentId,
+                        ChildTitle = parentTitle
                     };
 
                     containsModel = _SupplierModel.Where<SupplierModel>
-                        (index => index.Id == supplierModel.Id && index.Title == supplierModel.Title).Count() > 0;
+                        (index => index.RootId == supplierModel.RootId && 
+                        index.RootTitle == supplierModel.RootTitle).Count() > 0;
 
                     AddProductCount(ref supplierModel, supplierModel);
 
@@ -70,12 +72,12 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
                 switch (_SupplierModel[i].Layer)
                 {
                     case 0:
-                        _RelationToView.Add(
-                            _SupplierModel[i].Title, 
+                        RelationToView.Add(
+                            _SupplierModel[i].RootTitle, 
                             new List<SupplierModel>());
                         break;
                     case 1:
-                        _RelationToView[_SupplierModel[i].ParentTitle].Add(
+                        RelationToView[_SupplierModel[i].ChildTitle].Add(
                             _SupplierModel[i]);
                         break;
                 }
@@ -85,7 +87,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
         private void AddProductCount(ref SupplierModel supplierModel, SupplierModel model)
         {
             var existingModel = _SupplierModel.Where<SupplierModel>
-                    (index => index.Id == model.Id && index.Title == model.Title).ToList();
+                    (index => index.RootId == model.RootId && index.RootTitle == model.RootTitle).ToList();
 
             switch (existingModel.Count)
             {

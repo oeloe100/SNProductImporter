@@ -191,10 +191,11 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\EDCFeed\Builder\MappingProductBuilder.cs" />
     <Compile Include="Areas\EDCFeed\Builder\SupplierCategoryBuilder.cs" />
-    <Compile Include="Areas\EDCFeed\Controllers\API\InventoryDataController.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\EDCFeedMappingController.cs" />
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
+    <Compile Include="Areas\EDCFeed\Helpers\InventoryDataHelper.cs" />
     <Compile Include="Areas\EDCFeed\Helpers\SupplierFeedHelper.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModelList.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModel.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NopAuthorizationController.cs" />
+    <Compile Include="Controllers\NopControllers\ProductsSyncController.cs" />
     <Compile Include="Controllers\NopControllers\CategoriesController.cs" />
     <Compile Include="Controllers\NopControllers\CustomersController.cs" />
     <Compile Include="Controllers\NopControllers\ProductsController.cs" />
@@ -241,8 +243,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\APIAuthMiddelwareHelper.cs" />
+    <Compile Include="Helpers\ApiHttpClientHelper.cs" />
     <Compile Include="Helpers\APIHelper.cs" />
+    <Compile Include="Helpers\ApiHttpShopHelper.cs" />
     <Compile Include="Helpers\CookieAuthorizationCheck.cs" />
     <Compile Include="Helpers\NopAccessHelper.cs" />
     <Compile Include="Helpers\NopAPIHelper\NopAPIClientHelper.cs" />
@@ -267,6 +270,7 @@
     <Compile Include="Models\NopCustomerModel\CustomersRootObject.cs" />
     <Compile Include="Models\NopProductsModel\ProductModel.cs" />
     <Compile Include="Models\NopProductsModel\ProductsRootObject.cs" />
+    <Compile Include="Models\NopProductsModel\ProductSyncModel.cs" />
     <Compile Include="Models\PreLoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="PopulateModels\PopulateModels.cs" />
@@ -276,6 +280,7 @@
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Setup\NopAccessSetup.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Wrapper\ProductBody.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\EDCFeed\Content\Mapping.css" />

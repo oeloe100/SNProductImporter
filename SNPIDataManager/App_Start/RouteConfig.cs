@@ -14,6 +14,13 @@ namespace SNPIDataManager
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "StartMapping",
+                url: "MappingMiddelware/StartMapping",
+                defaults: new { controller = "ProductsSync", action = "MapProducts" },
+                namespaces: new[] { "SNPIDataManager.Controllers.NopControllers" }
+            );
+
+            routes.MapRoute(
                 name: "InsertMapping",
                 url: "MappingMiddelware/InsertMapping",
                 defaults: new { controller = "EDCFeedMapping", action = "InsertMappingModel" },

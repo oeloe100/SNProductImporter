@@ -22,11 +22,11 @@ namespace SNPIDataManager.Helpers
 {
     public class APIHelper
     {
-        private readonly APIAuthMiddelwareHelper _ApiClient;
+        private readonly ApiHttpClientHelper _ApiClient;
 
         public APIHelper()
         {
-            _ApiClient = new APIAuthMiddelwareHelper("");
+            _ApiClient = new ApiHttpClientHelper("");
         }
 
         public async Task<PreLoginModel> Authenticate(string username, string password)
@@ -38,7 +38,7 @@ namespace SNPIDataManager.Helpers
                 new KeyValuePair<string, string>("password", password),
             });
 
-            using (HttpResponseMessage response = await _ApiClient.ApiMiddelwareClient.PostAsync("/Token", data))
+            using (HttpResponseMessage response = await _ApiClient.ApiHttpClient.PostAsync("/Token", data))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -71,9 +71,9 @@ namespace SNPIDataManager.Helpers
             var jsonString = JsonConvert.SerializeObject(obj);
             var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
-            using (_ApiClient.ApiMiddelwareClient)
+            using (_ApiClient.ApiHttpClient)
             {
-                var result = await _ApiClient.ApiMiddelwareClient.PostAsync(_ApiClient.ApiMiddelwareClient.BaseAddress + "/api/Account/Register", content);
+                var result = await _ApiClient.ApiHttpClient.PostAsync(_ApiClient.ApiHttpClient.BaseAddress + "/api/Account/Register", content);
 
                 if (result.IsSuccessStatusCode)
                 {

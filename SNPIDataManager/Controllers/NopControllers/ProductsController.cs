@@ -17,19 +17,21 @@ namespace SNPIDataManager.Controllers.NopControllers
     public class ProductsController : Controller
     {
         private readonly NopAccessHelper _NopAccessHelper;
+        private readonly NopAPIClientHelper _NopApiClientHelper;
 
         public ProductsController()
         {
             _NopAccessHelper = new NopAccessHelper();
+            _NopApiClientHelper = new NopAPIClientHelper(
+                _NopAccessHelper.AccessToken, 
+                _NopAccessHelper.ServerUrl);
         }
 
         [HttpGet]
         public async Task<ActionResult> GetProducts()
         {
-            var clientHelper = new NopAPIClientHelper(_NopAccessHelper.AccessToken, _NopAccessHelper.ServerUrl);
-
             string jsonUrl = $"/api/products?fields=id,name,images,sku";
-            object productsData = await clientHelper.Get(jsonUrl);
+            object productsData = await _NopApiClientHelper.Get(jsonUrl);
 
             var productsRootObject = JsonConvert.DeserializeObject<ProductsRootObject>(productsData.ToString());
 
