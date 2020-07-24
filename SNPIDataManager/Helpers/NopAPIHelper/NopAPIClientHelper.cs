@@ -1,22 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SNPIDataManager.Models.NopCustomerModel;
-using SNPIDataManager.Models.NopProductsModel;
-using SNPIDataManager.Wrapper;
-using SNPIHelperLibrary;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.IO;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Results;
 
 namespace SNPIDataManager.Helpers.NopAPIHelper
 {
@@ -52,17 +40,42 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             }
         }
 
-        public async Task Post(List<JObject> data, string path)
+        public async Task PostProductData(List<JObject> data, string path)
         {
             string requestUriString = string.Format("{0}{1}", _ServerUrl, path);
 
-            using (_ApiClient.ApiHttpClient)
+            //foreach (var item in data)
+            //{
+                var stringContent = new StringContent(JsonConvert.SerializeObject(data[25]), Encoding.UTF8, "application/json");
+                await _ApiClient.ApiHttpClient.PostAsync(requestUriString, stringContent);
+
+                //Console.WriteLine();
+            //}
+        }
+
+        public async Task UpdateProductData(List<JObject> data, string path, int productId)
+        {
+            string requestUriString = string.Format("{0}{1}{2}", _ServerUrl, path, productId);
+
+            var stringContent = new StringContent(JsonConvert.SerializeObject(data[0]), Encoding.UTF8, "application/json");
+            await _ApiClient.ApiHttpClient.PutAsync(requestUriString, stringContent);
+        }
+
+        public async Task<JObject> GetProductData(string path)
+        {
+            string requestUriString = string.Format("{0}{1}", _ServerUrl, path);
+
+            var result = await _ApiClient.ApiHttpClient.GetAsync(requestUriString);
+
+            if (result.IsSuccessStatusCode)
             {
-                foreach (var item in data)
-                {
-                    var stringContent = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
-                    var result = await _ApiClient.ApiHttpClient.PostAsync(requestUriString, stringContent);
-                }
+                var resultContent = await result.Content.ReadAsAsync<JObject>();
+
+                return resultContent;
+            }
+            else
+            {
+                throw new Exception(result.ReasonPhrase);
             }
         }
     }

@@ -192,6 +192,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\EDCFeed\Builder\MappingProductBuilder.cs" />
+    <Compile Include="Areas\EDCFeed\Builder\ProductAttributeBuilder.cs" />
     <Compile Include="Areas\EDCFeed\Builder\SupplierCategoryBuilder.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\EDCFeedMappingController.cs" />
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
@@ -270,7 +271,14 @@
     <Compile Include="Models\NopCustomerModel\CustomersRootObject.cs" />
     <Compile Include="Models\NopProductsModel\ProductModel.cs" />
     <Compile Include="Models\NopProductsModel\ProductsRootObject.cs" />
-    <Compile Include="Models\NopProductsModel\ProductSyncModel.cs" />
+    <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncModel.cs" />
+    <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncModelAttributeCombinations.cs" />
+    <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncModelAttributes.cs" />
+    <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncModelAttributeValues.cs" />
+    <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductUpdateBody.cs" />
+    <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductUpdateModel.cs" />
+    <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductUpdateModelAttributes.cs" />
+    <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductUpdateModelAttributeValues.cs" />
     <Compile Include="Models\PreLoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="PopulateModels\PopulateModels.cs" />
@@ -280,7 +288,7 @@
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Setup\NopAccessSetup.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Wrapper\ProductBody.cs" />
+    <Compile Include="Models\NopProductsModel\SyncModels\ProductBody.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\EDCFeed\Content\Mapping.css" />

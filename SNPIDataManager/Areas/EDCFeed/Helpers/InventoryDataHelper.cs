@@ -2,7 +2,6 @@
 using SNPIDataManager.Areas.EDCFeed.Builder;
 using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
 using SNPIDataManager.Models.NopProductsModel;
-using SNPIDataManager.Wrapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +56,17 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
         public static List<JObject> MappingProductBuilder()
         {
             var testData = _MappingProductBuilder.SelectProductsForMapping();
+
+            return testData;
+        }
+
+        /// <summary>
+        /// Build Product Models to sync with the shop.
+        /// </summary>
+        /// <returns></returns>
+        public static List<JObject> UpdateProductProperties(int productId, int attributeCount)
+        {
+            var testData = _MappingProductBuilder.UpdateProductModelList(productId, attributeCount);
 
             return testData;
         }

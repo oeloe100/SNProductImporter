@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace SNPIDataManager.Wrapper
+namespace SNPIDataManager.Models.NopProductsModel.SyncModels
 {
     public class ProductBody
     {

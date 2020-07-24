@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace SNPIDataManager.Models.NopProductsModel
+namespace SNPIDataManager.Models.NopProductsModel.SyncModels
 {
     public class ProductSyncModel
     {
@@ -26,8 +26,12 @@ namespace SNPIDataManager.Models.NopProductsModel
         public bool DisplayStockAvailability { get; set; }
         [JsonProperty("display_stock_quantity")]
         public bool DisplayStockQuantity { get; set; }
+        [JsonProperty("allow_adding_only_existing_attribute_combinations")]
+        public bool AllowAddingOnlyExistingAttributeCombinations { get; set; }
         [JsonProperty("stock_quantity")]
         public string StockQuantity { get; set; }
+        [JsonProperty("additional_shipping_charge")]
+        public decimal AdditionalShippingCharge { get; set; }
 
         [JsonProperty("meta_keywords")]
         public string MetaKeywords { get; set; }
@@ -58,5 +62,22 @@ namespace SNPIDataManager.Models.NopProductsModel
 
         [JsonProperty("published")]
         public bool Published { get; set; }
+        [JsonProperty("product_type")]
+        public string ProductType { get; set; }
+        [JsonProperty("visible_individually")]
+        public bool VisibleIndividually { get; set; }
+        [JsonProperty("allow_customer_reviews")]
+        public bool AllowCustomerReviews { get; set; }
+
+        [JsonProperty("available_start_date_time_utc")]
+        public DateTime AvailableStartDate { get; set; }
+        [JsonProperty("available_end_date_time_utc")]
+        public DateTime? AvailableEndDateTimeUtc { get; set; }
+
+        [JsonProperty("attributes")]
+        public List<ProductSyncModelAttributes> Attributes { get; set; }
+
+        [JsonProperty("product_attribute_combinations")]
+        public List<ProductSyncModelAttributeCombinations> AttributeCombinations { get; set; }
     }
 }

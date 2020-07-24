@@ -33,8 +33,25 @@ namespace SNPIDataManager.Controllers.NopControllers.ApiControllers
         {
             try
             {
-                string jsonUrl = $"/api/products";
-                await _NopApiClientHelper.Post(InventoryDataHelper.MappingProductBuilder(), jsonUrl);
+                string postJsonProductsUrl = $"/api/products";
+                string getJsonProductsUrl = $"/api/products";
+
+                await _NopApiClientHelper.PostProductData(InventoryDataHelper.MappingProductBuilder(), postJsonProductsUrl);
+                
+                var productsId = await _NopApiClientHelper.GetProductData(getJsonProductsUrl);
+
+                int productId = (int)productsId["products"][1]["id"];
+                int attributeId = (int)productsId["products"][1]["attributes"][0]["id"];
+                
+                List<int> attributeValuesIds = new List<int>();
+                foreach (var item in productsId["products"][1]["attributes"][0]["attribute_values"])
+                {
+                    attributeValuesIds.Add((int)item["id"]);
+                }
+
+                string updateJsonProductsUrl = $"/api/products/";
+                await _NopApiClientHelper.UpdateProductData(InventoryDataHelper.UpdateProductProperties(
+                    productId, attributeValuesIds.Count), updateJsonProductsUrl, productId);
 
                 return "Done!";
             }
