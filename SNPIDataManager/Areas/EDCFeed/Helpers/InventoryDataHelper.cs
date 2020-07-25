@@ -61,12 +61,12 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
         }
 
         /// <summary>
-        /// Build Product Models to sync with the shop.
+        /// Update Selected product Properties
         /// </summary>
         /// <returns></returns>
-        public static List<JObject> UpdateProductProperties(int productId, int attributeCount)
+        public static JObject UpdateProductProperties(int productId, List<int> attributeValuesId, int id, int index)
         {
-            var testData = _MappingProductBuilder.UpdateProductModelList(productId, attributeCount);
+            var testData = _MappingProductBuilder.UpdateProductModelList(productId, attributeValuesId, id, index);
 
             return testData;
         }

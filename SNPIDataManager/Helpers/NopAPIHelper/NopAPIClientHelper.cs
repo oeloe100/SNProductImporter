@@ -44,20 +44,18 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
         {
             string requestUriString = string.Format("{0}{1}", _ServerUrl, path);
 
-            //foreach (var item in data)
-            //{
-                var stringContent = new StringContent(JsonConvert.SerializeObject(data[25]), Encoding.UTF8, "application/json");
+            foreach (var item in data)
+            {
+                var stringContent = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
                 await _ApiClient.ApiHttpClient.PostAsync(requestUriString, stringContent);
-
-                //Console.WriteLine();
-            //}
+            }
         }
 
-        public async Task UpdateProductData(List<JObject> data, string path, int productId)
+        public async Task UpdateProductData(JObject data, string path, int productId)
         {
             string requestUriString = string.Format("{0}{1}{2}", _ServerUrl, path, productId);
 
-            var stringContent = new StringContent(JsonConvert.SerializeObject(data[0]), Encoding.UTF8, "application/json");
+            var stringContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
             await _ApiClient.ApiHttpClient.PutAsync(requestUriString, stringContent);
         }
 

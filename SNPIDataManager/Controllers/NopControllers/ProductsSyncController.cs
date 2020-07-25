@@ -33,27 +33,45 @@ namespace SNPIDataManager.Controllers.NopControllers.ApiControllers
         {
             try
             {
-                string postJsonProductsUrl = $"/api/products";
-                string getJsonProductsUrl = $"/api/products";
+                string NopRestAPIUrl = $"/api/products";
 
-                await _NopApiClientHelper.PostProductData(InventoryDataHelper.MappingProductBuilder(), postJsonProductsUrl);
-                
-                var productsId = await _NopApiClientHelper.GetProductData(getJsonProductsUrl);
+                await _NopApiClientHelper.PostProductData(InventoryDataHelper.MappingProductBuilder(), NopRestAPIUrl);
+                var products = await _NopApiClientHelper.GetProductData(NopRestAPIUrl);
 
-                int productId = (int)productsId["products"][1]["id"];
-                int attributeId = (int)productsId["products"][1]["attributes"][0]["id"];
-                
-                List<int> attributeValuesIds = new List<int>();
-                foreach (var item in productsId["products"][1]["attributes"][0]["attribute_values"])
+                return await UpdateSelectedProductAttributes(products);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message + ex.StackTrace;
+                return err;
+            }
+        }
+
+        private async Task<string> UpdateSelectedProductAttributes(JObject products)
+        {
+            string updateJsonProductsUrl = $"/api/products/";
+            var index = 0;
+
+            try
+            {
+                foreach (var product in products["products"])
                 {
-                    attributeValuesIds.Add((int)item["id"]);
+                    int productId = (int)product["id"];
+                    int attributeId = (int)product["attributes"][0]["id"];
+
+                    List<int> attributeValuesIds = new List<int>();
+                    foreach (var item in product["attributes"][0]["attribute_values"])
+                    {
+                        attributeValuesIds.Add((int)item["id"]);
+                    }
+
+                    await _NopApiClientHelper.UpdateProductData(InventoryDataHelper.UpdateProductProperties(
+                    productId, attributeValuesIds, attributeId, index), updateJsonProductsUrl, productId);
+
+                    index ++;
                 }
 
-                string updateJsonProductsUrl = $"/api/products/";
-                await _NopApiClientHelper.UpdateProductData(InventoryDataHelper.UpdateProductProperties(
-                    productId, attributeValuesIds.Count), updateJsonProductsUrl, productId);
-
-                return "Done!";
+                return "Done";
             }
             catch (Exception ex)
             {

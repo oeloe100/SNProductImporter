@@ -23,6 +23,8 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
         private readonly List<MappingModel> _LoadedMapping;
         private readonly string _FeedPath;
 
+        private List<XElement> _NodeList;
+
         public MappingProductBuilder(string feedPath)
         {
             _ProductAttributeBuilder = new ProductAttributeBuilder();
@@ -38,6 +40,8 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
 
             var jsonString = JsonConvert.SerializeObject(PopulateProductModelList(nodeList));
             var obj = JsonConvert.DeserializeObject<JArray>(jsonString).ToObject<List<JObject>>().ToList();
+
+            _NodeList = nodeList;
 
             return obj;
         }
@@ -86,41 +90,18 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
             return productBody;
         }
 
-        public List<JObject> UpdateProductModelList(int productId, int attributeCount)
+        public JObject UpdateProductModelList(int productId, List<int> attributeValuesId, int id, int index)
         {
-            var productBody = new List<ProductUpdateBody>();
+            var productBody = new ProductUpdateBody();
 
-            productBody.Add(new ProductUpdateBody()
+            productBody.Product = new ProductUpdateModel()
             {
-                Product = new ProductUpdateModel()
-                { 
-                    Attributes = _ProductAttributeBuilder.UpdateAttribute(productId, attributeCount)
-                }
-            });
-
-            /*
-            //for (var i = 0; i < nodeList.Count; i++)
-            //{
-            productBody.Add(new ProductBody()
-            {
-                Product = new ProductSyncModel()
-                {
-                    Attributes = _ProductAttributeBuilder.SetAttribute(null, productId),
-                }
-            });
-
-            if (productId != 0 && attrId != 0 && attrValuesId != null)
-            {
-                foreach (var attribute in productBody)
-                {
-                    attribute.Product.AttributeCombinations = _ProductAttributeBuilder.SetAttributeCombinations(null, productId, attrId, attrValuesId);
-                }
-            }
-            //}
-            */
+                Attributes = _ProductAttributeBuilder.UpdateAttribute(productId, attributeValuesId, id),
+                AttributeCombinations = _ProductAttributeBuilder.SetAttributeCombinations(_NodeList[index], productId, attributeValuesId, id),
+            };
 
             var jsonString = JsonConvert.SerializeObject(productBody);
-            var obj = JsonConvert.DeserializeObject<JArray>(jsonString).ToObject<List<JObject>>().ToList();
+            var obj = JsonConvert.DeserializeObject<JObject>(jsonString);
 
             return obj;
         }

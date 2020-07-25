@@ -60,34 +60,37 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
             return model;
         }
 
-        internal List<ProductUpdateModelAttributes> UpdateAttribute(int productId, int attributeCount)
+        internal List<ProductUpdateModelAttributes> UpdateAttribute(int productId, List<int> attributeValuesId, int id)
         {
             var attrList = new List<ProductUpdateModelAttributes>();
 
             attrList.Add(new ProductUpdateModelAttributes()
             {
-                ProductAttributeId = 8,
-                ProductAttributeName = "Size",
-                IsRequired = true,
-                AttributeControlTypeId = 1,
-                DisplayOrder = 0,
-                AttributeControlTypeName = "DropdownList",
-                AttributeValues = UpdateAttributeValues(productId, attributeCount),
+                AttributeValues = UpdateAttributeValues(productId, attributeValuesId),
+                Id = id,
             });
 
             return attrList;
         }
 
-        internal List<ProductUpdateModelAttributeValues> UpdateAttributeValues(int productId, int attributeCount)
+        internal List<ProductUpdateModelAttributeValues> UpdateAttributeValues(int productId, List<int> attributeValuesId)
         {
             var model = new List<ProductUpdateModelAttributeValues>();
-            for (var i = 0; i < attributeCount; i++)
-                model.Add(new ProductUpdateModelAttributeValues() { AssociatedProductId = productId });
+            for (var i = 0; i < attributeValuesId.Count; i++)
+            { 
+                model.Add(new ProductUpdateModelAttributeValues() 
+                { 
+                    AttributeValueTypeId = 0,
+                    AssociatedProductId = productId, 
+                    AttributeValueType = "Simple",
+                    Id = attributeValuesId[i],
+                });
+            }
 
             return model;
         }
 
-        internal List<ProductSyncModelAttributeCombinations> SetAttributeCombinations(XElement element)
+        internal List<ProductSyncModelAttributeCombinations> SetAttributeCombinations(XElement element, int productId, List<int> attributeValuesId, int id)
         {
             var model = new List<ProductSyncModelAttributeCombinations>();
 
@@ -95,6 +98,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
             {
                 model.Add(new ProductSyncModelAttributeCombinations()
                 {
+                    ProductId = productId,
                     StockQuantity = CheckElementAvailabilityByInt(
                         variant.Element("stockestimate")),
                     Sku = (string)variant.Element("subartnr"),
@@ -102,15 +106,11 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
                 });
             }
 
-            /*
-            foreach (var obj in model)
+            for (var i = 0; i < model.Count; i++)
             {
-                foreach (var id in attrValuesId)
-                {
-                    obj.AttributesXml = "<Attributes><ProductAttribute ID=\"" + attrId + "\">" +
-                    "<ProductAttributeValue><Value>" + id + "</Value></ProductAttributeValue></ProductAttribute></Attributes>";
-                }
-            }*/
+                model[i].AttributesXml = "<Attributes><ProductAttribute ID=\"" + id + "\">" +
+                "<ProductAttributeValue><Value>" + attributeValuesId[i] + "</Value></ProductAttributeValue></ProductAttribute></Attributes>";
+            }
 
             return model;
         }
