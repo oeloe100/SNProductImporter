@@ -193,6 +193,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\EDCFeed\Builder\MappingProductBuilder.cs" />
     <Compile Include="Areas\EDCFeed\Builder\ProductAttributeBuilder.cs" />
+    <Compile Include="Areas\EDCFeed\Builder\ProductImageBuilder.cs" />
     <Compile Include="Areas\EDCFeed\Builder\SupplierCategoryBuilder.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\EDCFeedMappingController.cs" />
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
@@ -275,6 +276,7 @@
     <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncModelAttributeCombinations.cs" />
     <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncModelAttributes.cs" />
     <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncModelAttributeValues.cs" />
+    <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncModelImages.cs" />
     <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductUpdateBody.cs" />
     <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductUpdateModel.cs" />
     <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductUpdateModelAttributes.cs" />

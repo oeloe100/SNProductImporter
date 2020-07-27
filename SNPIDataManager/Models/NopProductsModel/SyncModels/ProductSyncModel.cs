@@ -74,6 +74,9 @@ namespace SNPIDataManager.Models.NopProductsModel.SyncModels
         [JsonProperty("available_end_date_time_utc")]
         public DateTime? AvailableEndDateTimeUtc { get; set; }
 
+        [JsonProperty("images")]
+        public List<ProductSyncModelImages> Images { get; set; }
+
         [JsonProperty("attributes")]
         public List<ProductSyncModelAttributes> Attributes { get; set; }
 

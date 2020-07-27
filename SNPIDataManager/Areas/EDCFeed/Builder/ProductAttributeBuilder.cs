@@ -18,7 +18,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
 
             attrList.Add(new ProductSyncModelAttributes()
             {
-                ProductAttributeId = 8,
+                ProductAttributeId = 15,
                 ProductAttributeName = "Size",
                 TextPrompt = "",//(string)nodeList[i].Element("subartnr"),
                 IsRequired = false,

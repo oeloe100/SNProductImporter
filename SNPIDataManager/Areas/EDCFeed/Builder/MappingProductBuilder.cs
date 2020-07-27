@@ -19,6 +19,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
 {
     public class MappingProductBuilder : SupplierFeedHelper
     {
+        private readonly ProductImageBuilder _ProductImageBuilder;
         private readonly ProductAttributeBuilder _ProductAttributeBuilder;
         private readonly List<MappingModel> _LoadedMapping;
         private readonly string _FeedPath;
@@ -27,6 +28,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
 
         public MappingProductBuilder(string feedPath)
         {
+            _ProductImageBuilder = new ProductImageBuilder();
             _ProductAttributeBuilder = new ProductAttributeBuilder();
             _LoadedMapping = MappingProcessor.RetrieveMapping<MappingModel>().ToList();
             _FeedPath = feedPath;
@@ -80,6 +82,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
                         ProductType = "SimpleProduct",
                         VisibleIndividually = true,
                         AllowCustomerReviews = true,
+                        Images = _ProductImageBuilder.SelectImageProperties(nodeList[i]),
                         Attributes = _ProductAttributeBuilder.SetAttribute(nodeList[i]),
                     }
                 });
