@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using SNPIDataManager.Areas.EDCFeed.Builder;
+using SNPIDataManager.Areas.EDCFeed.Filter;
 using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
+using SNPIDataManager.Areas.EDCFeed.Models.ProductSpecificationModels;
 using SNPIDataManager.Models.NopProductsModel;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,8 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
         private static readonly string _FeedPath;
         private static SupplierCategoryBuilder _SupplierCategoryBuilder;
         private static MappingProductBuilder _MappingProductBuilder;
+        private static ProductSpecificationAttributeFilter _ProductSpecsAttributeFilter;
+        private static ProductSpecificationAttributeDataModel _ProductSpecAttrDataModel;
 
         static InventoryDataHelper()
         {
@@ -29,6 +33,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
             
             _SupplierCategoryBuilder = new SupplierCategoryBuilder(_Root, _FeedPath);
             _MappingProductBuilder = new MappingProductBuilder(_FeedPath);
+            _ProductSpecsAttributeFilter = new ProductSpecificationAttributeFilter(_FeedPath);
         }
 
         //For production download xml data from url below. Like
@@ -67,6 +72,18 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
         public static JObject UpdateProductProperties(int productId, List<int> attributeValuesId, int id, int index)
         {
             var testData = _MappingProductBuilder.UpdateProductModelList(productId, attributeValuesId, id, index);
+
+            return testData;
+        }
+
+
+        /// <summary>
+        /// Retrieve Product Specification Attributes And Filter (Multiples)
+        /// </summary>
+        /// <returns></returns>
+        public static IDictionary<string, List<string>> ProductSpecificationAttributesSelector()
+        {
+            var testData = _ProductSpecsAttributeFilter.FilterProductSpecificationAttributes();
 
             return testData;
         }

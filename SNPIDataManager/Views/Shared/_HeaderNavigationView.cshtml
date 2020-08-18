@@ -20,6 +20,7 @@
                     <li>@Html.ActionLink("Test Requests", "Index", "NopAuthorization", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("EDC Mapping", "Index", "EDCFeedMapping", new { area = "EDCFeed" }, null)</li>
                     <li>@Html.ActionLink("Display Mappings", "DisplayMappings", "EDCFeedMapping", new { area = "EDCFeed" }, null)</li>
+                    <li>@Html.ActionLink("PSA", "Index", "SpecificationAttributes", new { area = "EDCFeed" }, null)</li>
                 }
             </ul>
             @if (Project.CookieAuthCheck() == false)

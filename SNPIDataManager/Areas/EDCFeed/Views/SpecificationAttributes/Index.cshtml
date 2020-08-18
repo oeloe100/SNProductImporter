@@ -1,0 +1,30 @@
+﻿@model  SNPIDataManager.Areas.EDCFeed.Models.ProductSpecificationModels.ProductSpecificationAttributeDataModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+@for (var i = Model.ProductSpecAttributesWithValues.Count - 1; i >= 0; i--)
+{
+    var itemkey = Model.ProductSpecAttributesWithValues.ElementAt(i).Key;
+    var itemValue = Model.ProductSpecAttributesWithValues.ElementAt(i).Value;
+
+    <thead>
+        <tr>
+            <th scope="col">@itemkey</th>
+        </tr>
+    </thead>
+
+    for (var x = 0; x < itemValue.Count; x++)
+    {
+        <tbody>
+            <tr>
+                <td>@itemValue[x]</td>
+            </tr>
+        </tbody>
+    }
+}
+</table>

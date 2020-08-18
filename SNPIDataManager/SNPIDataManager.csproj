@@ -196,7 +196,9 @@
     <Compile Include="Areas\EDCFeed\Builder\ProductImageBuilder.cs" />
     <Compile Include="Areas\EDCFeed\Builder\SupplierCategoryBuilder.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\EDCFeedMappingController.cs" />
+    <Compile Include="Areas\EDCFeed\Controllers\SpecificationAttributesController.cs" />
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
+    <Compile Include="Areas\EDCFeed\Filter\ProductSpecificationAttributeFilter.cs" />
     <Compile Include="Areas\EDCFeed\Helpers\InventoryDataHelper.cs" />
     <Compile Include="Areas\EDCFeed\Helpers\SupplierFeedHelper.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModelList.cs" />
@@ -204,6 +206,7 @@
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\SupplierModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\ProductModels\TestModels\EDCTestProductModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoriesViewModel.cs" />
+    <Compile Include="Areas\EDCFeed\Models\ProductSpecificationModels\ProductSpecificationAttributeDataModel.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
     <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
@@ -336,6 +339,7 @@
       <Link>.editorconfig</Link>
     </Content>
     <Content Include="Areas\EDCFeed\Views\EDCFeedMapping\DisplayMappings.cshtml" />
+    <Content Include="Areas\EDCFeed\Views\SpecificationAttributes\Index.cshtml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\EDCFeed\edc-feed.js" />
     <Content Include="Scripts\EDCFeed\edc-mapping-ajax.js" />

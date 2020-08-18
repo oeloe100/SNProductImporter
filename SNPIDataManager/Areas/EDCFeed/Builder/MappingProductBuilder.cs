@@ -86,8 +86,6 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
                         Attributes = _ProductAttributeBuilder.SetAttribute(nodeList[i]),
                     }
                 });
-
-                //Console.WriteLine();
             }
 
             return productBody;
