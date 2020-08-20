@@ -25,6 +25,8 @@ namespace SNPIDataManager.TaskManager
             //Create job (FeedDownload)
             IJobDetail job = JobBuilder.Create<TestJob>().Build();
 
+            //ITrigger trigger = TriggerBuilder.Create().StartNow().Build();
+
             //Create Triggers to trigger all or certain jobs at specific time or date etc..
             ITrigger trigger = TriggerBuilder.Create()
                 .WithDailyTimeIntervalSchedule

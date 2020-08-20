@@ -20,7 +20,7 @@ namespace SNPIDataManager
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            //TaskManager.TaskManager.Start();
+            TaskManager.TaskManager.Start();
         }
     }
 }

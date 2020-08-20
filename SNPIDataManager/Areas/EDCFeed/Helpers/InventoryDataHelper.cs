@@ -21,12 +21,15 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
         private static SupplierCategoryBuilder _SupplierCategoryBuilder;
         private static MappingProductBuilder _MappingProductBuilder;
         private static ProductSpecificationAttributeFilter _ProductSpecsAttributeFilter;
-        private static ProductSpecificationAttributeDataModel _ProductSpecAttrDataModel;
 
         static InventoryDataHelper()
         {
             _EDCFeed = new XmlDocument();
-            _FeedPath = "C:/Users/sexxnation/Downloads/TEMP/eg_xml_feed_2015_nl.xml";
+
+            var currentDate = DateTime.Now;
+            var shortDate = currentDate.Date.ToShortDateString();
+
+            _FeedPath = @"C:\Users\sexxnation\source\repos\Sexxnation\Product Importer\SNProductImporter\SNPIDataManager\FeedDownloads\EDCFeed" + shortDate + ".xml";
             
             _EDCFeed.Load(_FeedPath);
             _Root = _EDCFeed.DocumentElement;
@@ -35,13 +38,6 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
             _MappingProductBuilder = new MappingProductBuilder(_FeedPath);
             _ProductSpecsAttributeFilter = new ProductSpecificationAttributeFilter(_FeedPath);
         }
-
-        //For production download xml data from url below. Like
-        //Download Limit by EDC is 4x A Day. Scedual download for once a day. Like 24:00.
-        //using (System.Net.WebClient client = new System.Net.WebClient())
-        //{
-        //    client.DownloadFile("http://api.edc.nl/b2b_feed.php?key=4500c66ct0e0w63c8r4129tc80e622rr&sort=xml&type=xml&lang=nl&version=2015", "some.xml");
-        //}
 
         /// <summary>
         /// Build Supplier Categories and return to View.
