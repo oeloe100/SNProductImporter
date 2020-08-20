@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SNPIDataManager.TaskManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,6 +19,8 @@ namespace SNPIDataManager
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            //TaskManager.TaskManager.Start();
         }
     }
 }
