@@ -1,4 +1,5 @@
-﻿using SNPIDataManager.TaskManager;
+﻿using log4net.Repository.Hierarchy;
+using SNPIDataManager.TaskManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace SNPIDataManager
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             TaskManager.TaskManager.Start();
+            log4net.Config.XmlConfigurator.Configure();
         }
     }
 }
