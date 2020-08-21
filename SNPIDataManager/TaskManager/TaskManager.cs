@@ -16,16 +16,14 @@ namespace SNPIDataManager.TaskManager
         /// </summary>
         public static async void Start()
         {
-            //LogProvider.SetCurrentLogProvider(new CustomLogProvider());
-
             //Instantiate MAIN scheduler. and run jobs as scheduled.
             IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             await scheduler.Start();
 
             //Create job (FeedDownload)
-            IJobDetail job = JobBuilder.Create<TestJob>().Build();
+            IJobDetail job = JobBuilder.Create<FeedDownloadingJob>().Build();
 
-            //ITrigger trigger = TriggerBuilder.Create().StartNow().Build();
+            //ITrigger trigger = TriggerBuilder.Create().WithIdentity("feed_download_trigger").StartNow().Build();
 
             //Create Triggers to trigger all or certain jobs at specific time or date etc..
             ITrigger trigger = TriggerBuilder.Create()

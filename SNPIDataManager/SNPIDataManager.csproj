@@ -312,7 +312,7 @@
     <Compile Include="Helpers\NopAPIHelper\NopAPIHelper.cs" />
     <Compile Include="Helpers\NopAPIHelper\NopShopCategorizationHelper.cs" />
     <Compile Include="Helpers\UserInformation.cs" />
-    <Compile Include="Jobs\TestJob.cs" />
+    <Compile Include="Jobs\FeedDownloadingJob.cs" />
     <Compile Include="Managers\NopAuthorizationManager.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -350,7 +350,6 @@
     <Compile Include="Setup\NopAccessSetup.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Models\NopProductsModel\SyncModels\ProductBody.cs" />
-    <Compile Include="TaskManager\CustomLogProvider.cs" />
     <Compile Include="TaskManager\TaskManager.cs" />
   </ItemGroup>
   <ItemGroup>

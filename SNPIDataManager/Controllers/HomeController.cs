@@ -39,9 +39,6 @@ namespace SNPIDataManager.Controllers
         [HttpPost]
         public async Task<ActionResult> Login(PreLoginModel user)
         {
-            //log4net.ILog logger = log4net.LogManager.GetLogger("FileAppender");
-            //logger.Error("Testlog: Error logging!");
-
             if (ModelState.IsValid)
             {
 
