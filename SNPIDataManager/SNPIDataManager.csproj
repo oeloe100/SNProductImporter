@@ -249,16 +249,18 @@
     <Compile Include="Areas\EDCFeed\Builder\MappingProductBuilder.cs" />
     <Compile Include="Areas\EDCFeed\Builder\ProductAttributeBuilder.cs" />
     <Compile Include="Areas\EDCFeed\Builder\ProductImageBuilder.cs" />
+    <Compile Include="Areas\EDCFeed\Builder\ScheduledProductUpdateBuilder.cs" />
     <Compile Include="Areas\EDCFeed\Builder\SupplierCategoryBuilder.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\EDCFeedMappingController.cs" />
     <Compile Include="Areas\EDCFeed\Controllers\SpecificationAttributesController.cs" />
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
     <Compile Include="Areas\EDCFeed\Filter\ProductSpecificationAttributeFilter.cs" />
-    <Compile Include="Areas\EDCFeed\Helpers\InventoryDataHelper.cs" />
+    <Compile Include="Areas\EDCFeed\Helpers\RelationsHelper.cs" />
     <Compile Include="Areas\EDCFeed\Helpers\SupplierFeedHelper.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModelList.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\SupplierModel.cs" />
+    <Compile Include="Areas\EDCFeed\Models\ProductModels\ProductUpdateModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\ProductModels\TestModels\EDCTestProductModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoriesViewModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\ProductSpecificationModels\ProductSpecificationAttributeDataModel.cs" />
@@ -313,6 +315,7 @@
     <Compile Include="Helpers\NopAPIHelper\NopShopCategorizationHelper.cs" />
     <Compile Include="Helpers\UserInformation.cs" />
     <Compile Include="Jobs\FeedDownloadingJob.cs" />
+    <Compile Include="Jobs\UpdatingProductAttributesJob.cs" />
     <Compile Include="Managers\NopAuthorizationManager.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />

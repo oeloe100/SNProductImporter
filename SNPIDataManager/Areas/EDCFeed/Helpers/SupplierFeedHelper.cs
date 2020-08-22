@@ -54,6 +54,17 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
             return productByCategoryQuery;
         }
 
+        internal IEnumerable<XElement> SelectProductNodesById(string productArtNumber, string feedPath)
+        {
+            XElement products = XElement.Load(feedPath);
+
+            var productByIdQuery = from product in products.Elements("product")
+                                   where (string)product.Element("artnr") == productArtNumber
+                                   select product;
+
+            return productByIdQuery;
+        }
+
         /********* ... *********/
 
         internal IDictionary<string, List<string>> RetrieveProductSpecificationAttributes(string feedPath)

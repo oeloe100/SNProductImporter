@@ -1,5 +1,7 @@
 ﻿using Quartz;
 using Quartz.Impl;
+using Quartz.Impl.Matchers;
+using Quartz.Listener;
 using Quartz.Logging;
 using SNPIDataManager.Jobs;
 using System;
@@ -12,29 +14,34 @@ namespace SNPIDataManager.TaskManager
     public static class TaskManager
     {
         /// <summary>
-        /// TaskManager. Executed at application start and executes configured jobs as implemented.
+        /// Scheduled jobs are added to a pipline and executed in order defined by jobchainingjoblistener.
         /// </summary>
         public static async void Start()
         {
-            //Instantiate MAIN scheduler. and run jobs as scheduled.
             IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             await scheduler.Start();
 
-            //Create job (FeedDownload)
-            IJobDetail job = JobBuilder.Create<FeedDownloadingJob>().Build();
+            JobKey feedDownloadJobKey = JobKey.Create("feedDownloadJob", "pipline");
+            JobKey updatingProductAttributesJobKey = JobKey.Create("updatingProductAttributesJob", "pipline");
 
-            //ITrigger trigger = TriggerBuilder.Create().WithIdentity("feed_download_trigger").StartNow().Build();
+            IJobDetail feedDownloadJob = JobBuilder.Create<FeedDownloadingJob>().WithIdentity(feedDownloadJobKey).Build();
+            IJobDetail updatingProductAttributesJob = JobBuilder.Create<UpdatingProductAttributesJob>().WithIdentity(updatingProductAttributesJobKey).Build();
 
-            //Create Triggers to trigger all or certain jobs at specific time or date etc..
             ITrigger trigger = TriggerBuilder.Create()
+                .WithIdentity("trigger", "pipline")
                 .WithDailyTimeIntervalSchedule
                 (s => s.WithIntervalInHours(24)
                     .OnEveryDay()
-                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(0, 0))
+                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(14, 30))
                 ).Build();
 
-            //Schedule jobs. self explanatory.
-            await scheduler.ScheduleJob(job, trigger);
+            JobChainingJobListener listener = new JobChainingJobListener("pipeline chain");
+            listener.AddJobChainLink(feedDownloadJobKey, updatingProductAttributesJobKey);
+
+            scheduler.ListenerManager.AddJobListener(listener, GroupMatcher<JobKey>.GroupEquals("pipline"));
+
+            await scheduler.ScheduleJob(feedDownloadJob, trigger);
+            await scheduler.AddJob(updatingProductAttributesJob, false, true);
         }
     }
 }

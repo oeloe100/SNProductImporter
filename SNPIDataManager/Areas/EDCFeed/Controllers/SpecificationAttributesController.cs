@@ -20,7 +20,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
         {
             _ProductSpecAttrDataModel = new ProductSpecificationAttributeDataModel()
             {
-                ProductSpecAttributesWithValues = InventoryDataHelper.ProductSpecificationAttributesSelector()
+                ProductSpecAttributesWithValues = RelationsHelper.ProductSpecificationAttributesSelector()
             };
 
             return View(_ProductSpecAttrDataModel);

@@ -35,7 +35,7 @@ namespace SNPIDataManager.Controllers.NopControllers.ApiControllers
             {
                 string NopRestAPIUrl = $"/api/products";
 
-                await _NopApiClientHelper.PostProductData(InventoryDataHelper.MappingProductBuilder(), NopRestAPIUrl);
+                await _NopApiClientHelper.PostProductData(RelationsHelper.MappingProductBuilder(), NopRestAPIUrl);
                 var products = await _NopApiClientHelper.GetProductData(NopRestAPIUrl);
 
                 return await UpdateSelectedProductAttributes(products);
@@ -65,7 +65,7 @@ namespace SNPIDataManager.Controllers.NopControllers.ApiControllers
                         attributeValuesIds.Add((int)item["id"]);
                     }
 
-                    await _NopApiClientHelper.UpdateProductData(InventoryDataHelper.UpdateProductProperties(
+                    await _NopApiClientHelper.UpdateProductData(RelationsHelper.UpdateProductProperties(
                     productId, attributeValuesIds, attributeId, index), updateJsonProductsUrl, productId);
 
                     index ++;

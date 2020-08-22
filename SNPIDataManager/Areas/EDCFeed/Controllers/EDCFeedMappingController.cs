@@ -40,7 +40,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
                 var nopCategoriesDict = await NopShopCategorizationHelper.NopCategoriesResource(
                     _NopAccessHelper.AccessToken, 
                     _NopAccessHelper.ServerUrl);
-                var edcCategoriesDict = InventoryDataHelper.CategoryBuilder();
+                var edcCategoriesDict = RelationsHelper.CategoryBuilder();
 
 
                 categoriesViewModel.NopCategoriesDict = nopCategoriesDict;

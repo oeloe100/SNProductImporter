@@ -3,18 +3,23 @@ using SNPIDataManager.Areas.EDCFeed.Builder;
 using SNPIDataManager.Areas.EDCFeed.Filter;
 using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
 using SNPIDataManager.Areas.EDCFeed.Models.ProductSpecificationModels;
+using SNPIDataManager.Helpers.NopAPIHelper;
 using SNPIDataManager.Models.NopProductsModel;
+using SNPIHelperLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI.WebControls;
 using System.Xml;
 
 namespace SNPIDataManager.Areas.EDCFeed.Helpers
 {
-    public class InventoryDataHelper
+    public class RelationsHelper
     {
+        private static readonly log4net.ILog _Logger;
+
         private static readonly XmlDocument _EDCFeed;
         private static XmlElement _Root;
         private static readonly string _FeedPath;
@@ -22,8 +27,14 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
         private static MappingProductBuilder _MappingProductBuilder;
         private static ProductSpecificationAttributeFilter _ProductSpecsAttributeFilter;
 
-        static InventoryDataHelper()
+        private static readonly NopAccessHelper _NopAccessHelper;
+        private static readonly NopAPIClientHelper _NopApiClientHelper;
+
+        private static ScheduledProductUpdateBuilder scheduledProductUpdateBuilder;
+
+        static RelationsHelper()
         {
+            _Logger = log4net.LogManager.GetLogger("FileAppender");
             _EDCFeed = new XmlDocument();
 
             var currentDate = DateTime.Now;
@@ -37,6 +48,13 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
             _SupplierCategoryBuilder = new SupplierCategoryBuilder(_Root, _FeedPath);
             _MappingProductBuilder = new MappingProductBuilder(_FeedPath);
             _ProductSpecsAttributeFilter = new ProductSpecificationAttributeFilter(_FeedPath);
+
+            _NopAccessHelper = new NopAccessHelper();
+            _NopApiClientHelper = new NopAPIClientHelper(
+                _NopAccessHelper.AccessToken, 
+                _NopAccessHelper.ServerUrl);
+
+            scheduledProductUpdateBuilder = new ScheduledProductUpdateBuilder();
         }
 
         /// <summary>
@@ -82,6 +100,23 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
             var testData = _ProductSpecsAttributeFilter.FilterProductSpecificationAttributes();
 
             return testData;
+        }
+
+        public static async Task UpdateProductAttributesScheduled()
+        {
+            string NopRestAPIUrl = $"/api/products";
+
+            var testData = await _NopApiClientHelper.GetProductData(NopRestAPIUrl);
+
+            try
+            {
+                scheduledProductUpdateBuilder.UpdateProductData(testData, _FeedPath);
+                _Logger.Info("Scheduled product update executed successfully...");
+            }
+            catch (Exception ex)
+            {
+                _Logger.Error(ex);
+            }
         }
     }
 }
