@@ -260,7 +260,6 @@
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModelList.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\SupplierModel.cs" />
-    <Compile Include="Areas\EDCFeed\Models\ProductModels\ProductUpdateModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\ProductModels\TestModels\EDCTestProductModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoriesViewModel.cs" />
     <Compile Include="Areas\EDCFeed\Models\ProductSpecificationModels\ProductSpecificationAttributeDataModel.cs" />
@@ -339,6 +338,8 @@
     <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncModelAttributes.cs" />
     <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncModelAttributeValues.cs" />
     <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncModelImages.cs" />
+    <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncUpdateBodyModel.cs" />
+    <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncUpdateModel.cs" />
     <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductUpdateBody.cs" />
     <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductUpdateModel.cs" />
     <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductUpdateModelAttributes.cs" />

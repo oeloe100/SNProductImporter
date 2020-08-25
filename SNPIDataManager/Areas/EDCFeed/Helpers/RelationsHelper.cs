@@ -54,7 +54,9 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
                 _NopAccessHelper.AccessToken, 
                 _NopAccessHelper.ServerUrl);
 
-            scheduledProductUpdateBuilder = new ScheduledProductUpdateBuilder();
+            scheduledProductUpdateBuilder = new ScheduledProductUpdateBuilder(
+                _NopAccessHelper.AccessToken,
+                _NopAccessHelper.ServerUrl);
         }
 
         /// <summary>
@@ -105,18 +107,9 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
         public static async Task UpdateProductAttributesScheduled()
         {
             string NopRestAPIUrl = $"/api/products";
-
             var testData = await _NopApiClientHelper.GetProductData(NopRestAPIUrl);
 
-            try
-            {
-                scheduledProductUpdateBuilder.UpdateProductData(testData, _FeedPath);
-                _Logger.Info("Scheduled product update executed successfully...");
-            }
-            catch (Exception ex)
-            {
-                _Logger.Error(ex);
-            }
+            await scheduledProductUpdateBuilder.UpdateProductData(testData, _FeedPath);
         }
     }
 }

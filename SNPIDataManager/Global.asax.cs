@@ -14,7 +14,7 @@ namespace SNPIDataManager
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
-        protected async void Application_Start()
+        protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
@@ -25,8 +25,7 @@ namespace SNPIDataManager
             TaskManager.TaskManager.Start();
             log4net.Config.XmlConfigurator.Configure();
 
-            //Only for testing. Remove in production
-            await RelationsHelper.UpdateProductAttributesScheduled();
+            //await RelationsHelper.UpdateProductAttributesScheduled();
         }
     }
 }

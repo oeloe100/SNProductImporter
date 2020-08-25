@@ -32,7 +32,7 @@ namespace SNPIDataManager.TaskManager
                 .WithDailyTimeIntervalSchedule
                 (s => s.WithIntervalInHours(24)
                     .OnEveryDay()
-                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(14, 30))
+                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(00, 00))
                 ).Build();
 
             JobChainingJobListener listener = new JobChainingJobListener("pipeline chain");

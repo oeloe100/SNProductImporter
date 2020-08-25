@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SNPIDataManager.Helpers.NopAPIHelper
 {
@@ -44,15 +45,18 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
         {
             string requestUriString = string.Format("{0}{1}", _ServerUrl, path);
 
-            var stringContent = new StringContent(JsonConvert.SerializeObject(data[0]), Encoding.UTF8, "application/json");
-            await _ApiClient.ApiHttpClient.PostAsync(requestUriString, stringContent);
+            foreach (var item in data)
+            { 
+                var stringContent = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
+                await _ApiClient.ApiHttpClient.PostAsync(requestUriString, stringContent);
+            }
         }
 
         public async Task UpdateProductData(JObject data, string path, int productId)
         {
             string requestUriString = string.Format("{0}{1}{2}", _ServerUrl, path, productId);
-
             var stringContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+
             await _ApiClient.ApiHttpClient.PutAsync(requestUriString, stringContent);
         }
 
