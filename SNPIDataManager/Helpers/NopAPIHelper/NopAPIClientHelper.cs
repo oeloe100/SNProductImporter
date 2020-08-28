@@ -1,7 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SNPIDataManager.Areas.EDCFeed.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,11 +14,16 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
 {
     public class NopAPIClientHelper
     {
+        private readonly log4net.ILog _Logger;
+
         private readonly ApiHttpClientHelper _ApiClient;
         private readonly string _ServerUrl;
 
+        private int index = 0;
+
         public NopAPIClientHelper(string accessToken, string serverUrl)
         {
+            _Logger = log4net.LogManager.GetLogger("FileAppender");
             _ApiClient = new ApiHttpClientHelper(accessToken);
             _ServerUrl = serverUrl;
         }
@@ -41,16 +49,57 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             }
         }
 
-        public async Task PostProductData(List<JObject> data, string path)
+        public async Task PostProductData(Dictionary<string,List<JObject>> data, string path)
         {
             string requestUriString = string.Format("{0}{1}", _ServerUrl, path);
 
             foreach (var item in data)
-            { 
-                var stringContent = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
-                await _ApiClient.ApiHttpClient.PostAsync(requestUriString, stringContent);
+            {
+                var productList = data[item.Key];
+
+                for (var i = 0; i < productList.Count; i++)
+                {
+                    var stringContent = new StringContent(JsonConvert.SerializeObject(productList[i]), Encoding.UTF8, "application/json");
+                    var responseData = await _ApiClient.ApiHttpClient.PostAsync(requestUriString, stringContent).Result.Content.ReadAsAsync<JObject>();
+                    await UpdateSelectedProductAttributes(responseData);
+                }
             }
         }
+
+        /******************* EXCEPTIONAL TASK *******************/
+
+        private async Task UpdateSelectedProductAttributes(JObject products)
+        {
+            string updateJsonProductsUrl = $"/api/products/";
+
+            try
+            {
+                foreach (var product in products["products"])
+                {
+                    int productId = (int)product["id"];
+                    int attributeId = (int)product["attributes"][0]["id"];
+
+                    List<int> attributeValuesIds = new List<int>();
+                    foreach (var item in product["attributes"][0]["attribute_values"])
+                    {
+                        attributeValuesIds.Add((int)item["id"]);
+                    }
+
+                    await UpdateProductData(RelationsHelper.UpdateProductProperties(
+                    productId, attributeValuesIds, attributeId, index), updateJsonProductsUrl, productId);
+
+                    index++;
+                }
+
+                _Logger.Debug("Successfully updated product attributes");
+            }
+            catch (Exception ex)
+            {
+                _Logger.Error(ex);
+            }
+        }
+
+        /******************************************************/
 
         public async Task UpdateProductData(JObject data, string path, int productId)
         {
@@ -79,3 +128,4 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
         }
     }
 }
+ 

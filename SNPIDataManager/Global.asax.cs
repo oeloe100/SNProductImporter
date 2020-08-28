@@ -1,9 +1,12 @@
 ﻿using log4net.Repository.Hierarchy;
 using SNPIDataManager.Areas.EDCFeed.Helpers;
+using SNPIDataManager.Helpers.NopAPIHelper;
 using SNPIDataManager.TaskManager;
+using SNPIHelperLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;

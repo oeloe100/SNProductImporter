@@ -74,11 +74,9 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
         /// Build Product Models to sync with the shop.
         /// </summary>
         /// <returns></returns>
-        public static List<JObject> MappingProductBuilder()
+        public static Dictionary<string, List<JObject>> MappingProductBuilder()
         {
-            var testData = _MappingProductBuilder.SelectProductsForMapping();
-
-            return testData;
+            return _MappingProductBuilder.SelectProductsForMappingByCategory();
         }
 
         /// <summary>
@@ -87,7 +85,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
         /// <returns></returns>
         public static JObject UpdateProductProperties(int productId, List<int> attributeValuesId, int id, int index)
         {
-            var testData = _MappingProductBuilder.UpdateProductModelList(productId, attributeValuesId, id, index);
+            var testData = _MappingProductBuilder.UpdateProductWithAttributes(productId, attributeValuesId, id, index);
 
             return testData;
         }

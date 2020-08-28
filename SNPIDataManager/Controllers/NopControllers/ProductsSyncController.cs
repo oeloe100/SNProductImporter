@@ -17,11 +17,15 @@ namespace SNPIDataManager.Controllers.NopControllers.ApiControllers
     [Authorize]
     public class ProductsSyncController : Controller
     {
+        private readonly log4net.ILog _Logger;
+
         private readonly NopAccessHelper _NopAccessHelper;
         private readonly NopAPIClientHelper _NopApiClientHelper;
 
         public ProductsSyncController()
         {
+            _Logger = log4net.LogManager.GetLogger("FileAppender");
+
             _NopAccessHelper = new NopAccessHelper();
             _NopApiClientHelper = new NopAPIClientHelper(
                 _NopAccessHelper.AccessToken,
@@ -29,54 +33,19 @@ namespace SNPIDataManager.Controllers.NopControllers.ApiControllers
         }
 
         [HttpPost]
-        public async Task<string> MapProducts()
+        public async Task MapProducts()
         {
+            string ab = $"/api/products";
+            var productsCount = await _NopApiClientHelper.GetProductData(ab);
+
             try
             {
                 string NopRestAPIUrl = $"/api/products";
-
                 await _NopApiClientHelper.PostProductData(RelationsHelper.MappingProductBuilder(), NopRestAPIUrl);
-                var products = await _NopApiClientHelper.GetProductData(NopRestAPIUrl);
-
-                return await UpdateSelectedProductAttributes(products);
             }
             catch (Exception ex)
             {
-                var err = ex.Message + ex.StackTrace;
-                return err;
-            }
-        }
-
-        private async Task<string> UpdateSelectedProductAttributes(JObject products)
-        {
-            string updateJsonProductsUrl = $"/api/products/";
-            var index = 0;
-
-            try
-            {
-                foreach (var product in products["products"])
-                {
-                    int productId = (int)product["id"];
-                    int attributeId = (int)product["attributes"][0]["id"];
-
-                    List<int> attributeValuesIds = new List<int>();
-                    foreach (var item in product["attributes"][0]["attribute_values"])
-                    {
-                        attributeValuesIds.Add((int)item["id"]);
-                    }
-
-                    await _NopApiClientHelper.UpdateProductData(RelationsHelper.UpdateProductProperties(
-                    productId, attributeValuesIds, attributeId, index), updateJsonProductsUrl, productId);
-
-                    index ++;
-                }
-
-                return "Done";
-            }
-            catch (Exception ex)
-            {
-                var err = ex.Message + ex.StackTrace;
-                return err;
+                _Logger.Error(ex);
             }
         }
     }

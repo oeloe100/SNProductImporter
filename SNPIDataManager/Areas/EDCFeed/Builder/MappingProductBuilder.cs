@@ -19,33 +19,43 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
 {
     public class MappingProductBuilder : SupplierFeedHelper
     {
+        private List<XElement> _NodeList;
         private readonly ProductImageBuilder _ProductImageBuilder;
         private readonly ProductAttributeBuilder _ProductAttributeBuilder;
         private readonly List<MappingModel> _LoadedMapping;
         private readonly string _FeedPath;
 
-        private List<XElement> _NodeList;
-
         public MappingProductBuilder(string feedPath)
         {
+            _NodeList = new List<XElement>();
             _ProductImageBuilder = new ProductImageBuilder();
             _ProductAttributeBuilder = new ProductAttributeBuilder();
             _LoadedMapping = MappingProcessor.RetrieveMapping<MappingModel>().ToList();
             _FeedPath = feedPath;
         }
 
-        public List<JObject> SelectProductsForMapping()
+        private readonly log4net.ILog _Logger = log4net.LogManager.GetLogger("FileAppender");
+
+        public Dictionary<string, List<JObject>> SelectProductsForMappingByCategory()
         {
-            var testCategory = _LoadedMapping[7];
-            var supplierCategoryId = testCategory.SupplierCategoryId;
-            var nodeList = SelectProductNodesByCategory(_FeedPath, supplierCategoryId).ToList();
+            var productCategoryCollection = new Dictionary<string, List<JObject>>();
 
-            var jsonString = JsonConvert.SerializeObject(PopulateProductModelList(nodeList));
-            var obj = JsonConvert.DeserializeObject<JArray>(jsonString).ToObject<List<JObject>>().ToList();
+            for (var i = 0; i < _LoadedMapping.Count; i++)
+            {
+                var productNodeList = SelectProductNodesByCategory(_FeedPath, _LoadedMapping[i].SupplierCategoryId).ToList();
+                var productAsJsonString = JsonConvert.SerializeObject(PopulateProductModelList(productNodeList));
+                var productListAsJobject = JsonConvert.DeserializeObject<JArray>(productAsJsonString).ToObject<List<JObject>>().ToList();
 
-            _NodeList = nodeList;
+                productCategoryCollection.Add(_LoadedMapping[i].ShopCategory, productListAsJobject);
 
-            return obj;
+                foreach (var productNode in productNodeList)
+                    _NodeList.Add(productNode);
+
+                _Logger.Debug("Collected Category: " + i + "");
+            }
+
+            _Logger.Debug("Successfully created product collection");
+            return productCategoryCollection;
         }
 
         private List<ProductBody> PopulateProductModelList(List<XElement> nodeList)
@@ -91,7 +101,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
             return productBody;
         }
 
-        public JObject UpdateProductModelList(int productId, List<int> attributeValuesId, int id, int index)
+        public JObject UpdateProductWithAttributes(int productId, List<int> attributeValuesId, int id, int index)
         {
             var productBody = new ProductUpdateBody();
 

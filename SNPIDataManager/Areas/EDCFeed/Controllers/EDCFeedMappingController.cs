@@ -1,27 +1,27 @@
 ﻿using SNPIDataLibrary.BusinessLogic;
+using SNPIDataLibrary.DataAccess;
 using SNPIDataLibrary.Models;
+using SNPIDataManager.Areas.EDCFeed.Helpers;
 using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
 using SNPIDataManager.Helpers;
 using SNPIDataManager.Helpers.NopAPIHelper;
+using SNPIDataManager.Setup;
 using SNPIHelperLibrary;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AuthorizeAttribute = System.Web.Http.AuthorizeAttribute;
-using SNPIDataLibrary.DataAccess;
-using System.Text;
-using SNPIDataManager.Setup;
-using SNPIDataManager.Areas.EDCFeed.Helpers;
 
 namespace SNPIDataManager.Areas.EDCFeed.Controllers
 {
     [Authorize]
     public class EDCFeedMappingController : Controller
     {
-        private UserInformation _UserInformation;
-        private NopAccessHelper _NopAccessHelper;
-        private NopAccessSetup _NopAccessSetup;
+        private readonly UserInformation _UserInformation;
+        private readonly NopAccessHelper _NopAccessHelper;
+        private readonly NopAccessSetup _NopAccessSetup;
 
         public EDCFeedMappingController()
         {
@@ -38,13 +38,11 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
             try
             {
                 var nopCategoriesDict = await NopShopCategorizationHelper.NopCategoriesResource(
-                    _NopAccessHelper.AccessToken, 
+                    _NopAccessHelper.AccessToken,
                     _NopAccessHelper.ServerUrl);
-                var edcCategoriesDict = RelationsHelper.CategoryBuilder();
-
 
                 categoriesViewModel.NopCategoriesDict = nopCategoriesDict;
-                categoriesViewModel.EDCCategoriesDict = edcCategoriesDict;
+                categoriesViewModel.EDCCategoriesDict = RelationsHelper.CategoryBuilder();
 
                 model.Add(categoriesViewModel);
 
@@ -53,9 +51,13 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
             catch (Exception ex)
             {
                 if (_NopAccessSetup.IsSetup())
+                {
                     return View("~/Views/Home/Index.cshtml");
+                }
                 else
+                {
                     return View(ex);
+                }
             }
         }
 
@@ -77,7 +79,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
         }
 
         [HttpGet]
-        public ActionResult DisplayMappings() 
+        public ActionResult DisplayMappings()
         {
             try
             {
@@ -95,12 +97,12 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            try 
+            try
             {
                 var data = SQLDataAccess.DeleteMapping(id, "SNPI_Mappings_db");
                 stringBuilder.AppendFormat("Deleted Row {0}", id);
                 return stringBuilder.ToString();
-            } 
+            }
             catch (Exception ex)
             {
                 return ex.Message + ex.StackTrace;
