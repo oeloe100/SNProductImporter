@@ -8,7 +8,7 @@ using System.Web;
 
 namespace SNPIDataManager.Jobs
 {
-    public class UpdatingProductAttributesJob : IJob
+    public class UpdateProductStockJob : IJob
     {
         private readonly log4net.ILog _Logger = log4net.LogManager.GetLogger("FileAppender");
 
@@ -16,12 +16,14 @@ namespace SNPIDataManager.Jobs
         {
             try
             {
-                await RelationsHelper.UpdateProductAttributesScheduled();
-                _Logger.Debug("Updating Product Attributes job executed successfully...");
+                var fullFeedUrl = new System.Uri("http://api.edc.nl/xml/eg_xml_feed_stock.xml");
+                await RelationsHelper.UpdateProductStockScheduled(fullFeedUrl);
+
+                _Logger.Debug("Updating Product stock. Job executed successfully...");
             }
             catch (Exception ex)
             {
-                _Logger.Error("error while executing testjob: ", ex);
+                _Logger.Error("Error while executing Product stock update Job: ", ex);
             }
         }
     }

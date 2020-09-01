@@ -65,6 +65,21 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
             return productByIdQuery;
         }
 
+        internal XNode SelectProductQtyNodeById(string productNumber, string feedPath)
+        {
+            XElement products = XElement.Load(feedPath);
+
+            var productByIdQuery = from product in products.Elements("product")
+                                   where (string)product.Element("productnr") == productNumber
+                                   select product;
+
+            var queryToList = productByIdQuery.ToList();
+            var listIndex = queryToList[0];
+            var qtyNode = listIndex.LastNode;
+
+            return qtyNode;
+        }
+
         /********* ... *********/
 
         internal IDictionary<string, List<string>> RetrieveProductSpecificationAttributes(string feedPath)

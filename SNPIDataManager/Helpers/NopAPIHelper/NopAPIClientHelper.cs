@@ -28,6 +28,11 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             _ServerUrl = serverUrl;
         }
 
+        /// <summary>
+        /// Get Data from NopCommerce shop
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public async Task<object> Get(string path)
         {
             string requestUriString = string.Format("{0}{1}", _ServerUrl, path);
@@ -49,6 +54,12 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             }
         }
 
+        /// <summary>
+        /// Post product(s) to NopCommerce shop.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public async Task PostProductData(Dictionary<string,List<JObject>> data, string path)
         {
             string requestUriString = string.Format("{0}{1}", _ServerUrl, path);
@@ -67,7 +78,6 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
         }
 
         /******************* EXCEPTIONAL TASK *******************/
-
         private async Task UpdateSelectedProductAttributes(JObject products)
         {
             string updateJsonProductsUrl = $"/api/products/";
@@ -98,9 +108,15 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
                 _Logger.Error(ex);
             }
         }
-
         /******************************************************/
 
+        /// <summary>
+        /// Update selected product data.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="path"></param>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         public async Task UpdateProductData(JObject data, string path, int productId)
         {
             string requestUriString = string.Format("{0}{1}{2}", _ServerUrl, path, productId);
@@ -109,6 +125,12 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             await _ApiClient.ApiHttpClient.PutAsync(requestUriString, stringContent);
         }
 
+        /// <summary>
+        /// Get products from NopCommerce recourse, using the 250 products page count pagination.
+        /// Using pagination. Default is Max. 50 products. Maximum is 250 Products.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public async Task<JObject> GetProductData(string path)
         {
             string requestUriString = string.Format("{0}{1}", _ServerUrl, path);
@@ -125,6 +147,20 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
             {
                 throw new Exception(result.ReasonPhrase);
             }
+        }
+
+        /// <summary>
+        /// Get total amount of products. Used to count amount of pages.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public async Task<JObject> GetProductCount(string path)
+        {
+            string requestUriString = string.Format("{0}{1}", _ServerUrl, path);
+
+            var result = await _ApiClient.ApiHttpClient.GetAsync(requestUriString).Result.Content.ReadAsAsync<JObject>();
+
+            return result;
         }
     }
 }

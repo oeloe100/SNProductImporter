@@ -14,9 +14,9 @@ namespace SNPIDataManager.TaskManager
     public static class TaskManager
     {
         /// <summary>
-        /// Scheduled jobs are added to a pipline and executed in order defined by jobchainingjoblistener.
+        /// Scheduled jobs are added to the pipline and executed in order defined by jobchainingjoblistener.
         /// </summary>
-        public static async void Start()
+        public static async void FullProductUpdateTask()
         {
             IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             await scheduler.Start();
@@ -25,14 +25,14 @@ namespace SNPIDataManager.TaskManager
             JobKey updatingProductAttributesJobKey = JobKey.Create("updatingProductAttributesJob", "pipline");
 
             IJobDetail feedDownloadJob = JobBuilder.Create<FeedDownloadingJob>().WithIdentity(feedDownloadJobKey).Build();
-            IJobDetail updatingProductAttributesJob = JobBuilder.Create<UpdatingProductAttributesJob>().WithIdentity(updatingProductAttributesJobKey).Build();
+            IJobDetail updatingProductAttributesJob = JobBuilder.Create<UpdatingProductPropertiesJob>().WithIdentity(updatingProductAttributesJobKey).Build();
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity("trigger", "pipline")
                 .WithDailyTimeIntervalSchedule
                 (s => s.WithIntervalInHours(24)
                     .OnEveryDay()
-                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(00, 00))
+                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(13, 18))
                 ).Build();
 
             JobChainingJobListener listener = new JobChainingJobListener("pipeline chain");
@@ -42,6 +42,37 @@ namespace SNPIDataManager.TaskManager
 
             await scheduler.ScheduleJob(feedDownloadJob, trigger);
             await scheduler.AddJob(updatingProductAttributesJob, false, true);
+        }
+
+        public static async void ProductStockUpateTask()
+        {
+            IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
+            await scheduler.Start();
+
+            //JobKey stockFeedDownloadJobKey = JobKey.Create("stockFeedDownloadJob", "stock_pipeline");
+            //JobKey updatingProductVariantStockJobKey = JobKey.Create("updatingProductVariantStockJob", "stock_pipeline");
+
+            //IJobDetail stockFeedDownloadJob = JobBuilder.Create<StockFeedDownloadingJob>().WithIdentity(stockFeedDownloadJobKey).Build();
+            //IJobDetail updatingProductVariantStockJob = JobBuilder.Create<UpdateProductStockJob>().WithIdentity(updatingProductVariantStockJobKey).Build();
+
+            IJobDetail updatingProductStockJob = JobBuilder.Create<UpdateProductStockJob>()
+                .Build();
+
+            ITrigger trigger = TriggerBuilder.Create()
+                .WithIdentity("stock_trigger", "stock_pipeline")
+                .StartNow()
+                .WithSimpleSchedule(x => x.WithIntervalInMinutes(30).RepeatForever())
+                .Build();
+
+            await scheduler.ScheduleJob(updatingProductStockJob, trigger);
+
+            //JobChainingJobListener listener = new JobChainingJobListener("stock_pipeline chain");
+            //listener.AddJobChainLink(stockFeedDownloadJobKey, updatingProductVariantStockJobKey);
+
+            //scheduler.ListenerManager.AddJobListener(listener, GroupMatcher<JobKey>.GroupEquals("stock_pipeline"));
+
+            //await scheduler.ScheduleJob(stockFeedDownloadJob, trigger);
+            //await scheduler.AddJob(updatingProductVariantStockJob, false, true);
         }
     }
 }

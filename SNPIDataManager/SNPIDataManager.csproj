@@ -256,6 +256,7 @@
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
     <Compile Include="Areas\EDCFeed\Filter\ProductSpecificationAttributeFilter.cs" />
     <Compile Include="Areas\EDCFeed\Helpers\RelationsHelper.cs" />
+    <Compile Include="Areas\EDCFeed\Helpers\ShopPagesHelper.cs" />
     <Compile Include="Areas\EDCFeed\Helpers\SupplierFeedHelper.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModelList.cs" />
     <Compile Include="Areas\EDCFeed\Models\CategoryModels\CategoryModel.cs" />
@@ -314,7 +315,9 @@
     <Compile Include="Helpers\NopAPIHelper\NopShopCategorizationHelper.cs" />
     <Compile Include="Helpers\UserInformation.cs" />
     <Compile Include="Jobs\FeedDownloadingJob.cs" />
-    <Compile Include="Jobs\UpdatingProductAttributesJob.cs" />
+    <Compile Include="Jobs\StockFeedDownloadingJob.cs" />
+    <Compile Include="Jobs\UpdateProductStockJob.cs" />
+    <Compile Include="Jobs\UpdatingProductPropertiesJob.cs" />
     <Compile Include="Managers\NopAuthorizationManager.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -447,6 +450,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\HelpPage\Views\Home\" />
     <Folder Include="FeedDownloads\" />
+    <Folder Include="StockFeedDownload\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

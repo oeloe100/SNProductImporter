@@ -1,14 +1,11 @@
-﻿using Microsoft.Ajax.Utilities;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using SNPIDataManager.Areas.EDCFeed.Helpers;
-using SNPIDataManager.Areas.EDCFeed.Models.ProductModels;
 using SNPIDataManager.Helpers.NopAPIHelper;
 using SNPIDataManager.Models.NopProductsModel.SyncModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Xml.Linq;
 
 namespace SNPIDataManager.Areas.EDCFeed.Builder
@@ -20,7 +17,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
         private string _ServerUrl { get; set; }
         private int _ProductId { get; set; }
 
-        private NopAPIClientHelper _NopApiClientHelper;
+        private readonly NopAPIClientHelper _NopApiClientHelper;
 
         public ScheduledProductUpdateBuilder(string accessToken, string serverUrl)
         {
@@ -75,6 +72,69 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
                     _Logger.Error(ex);
                 }
             }
+        }
+
+        public async Task UpdateProductStock(Uri stockFeedUri)
+        {
+            //Product index
+            var pI = 0;
+
+            //Retrieve product node from supplier feed
+            string stringStockFeed = stockFeedUri.ToString();
+            XElement stockFeedData = XElement.Load(stringStockFeed);
+            var supplierProductNodes = stockFeedData.Elements("product");
+
+            //Get amount of product pages in shop
+            double pageCount = await ShopPagesHelper.ReturnsShopPageCount();
+
+            for (var i = 1; i <= pageCount;)
+            {
+                var shopProductsByPage = await ShopPagesHelper.ReturnsProductsByPage(i);
+
+                foreach (var productsNode in shopProductsByPage)
+                {
+                    var productsListed = productsNode.Value.ToList();
+                    for (var x = 0; x < productsListed.Count; x++)
+                    {
+                        var productId = (int)productsListed[x]["id"];
+                        var productAttributeCombos = productsListed[x]["product_attribute_combinations"];
+                        
+                        foreach (var productAttributeCombo in productAttributeCombos)
+                        {
+                            var productAttributeSku = (string)productAttributeCombo["sku"];
+                            var productNodes = SelectProductQtyNodeById(productAttributeSku, stockFeedUri.ToString());
+
+                            if (productNodes != null)
+                            {
+                                var qtyNodeAsXElement = XElement.Parse(productNodes.ToString());
+                                var qty = (int)qtyNodeAsXElement;
+
+                                //Create model to and convert to Jobject. Send data in method below >>
+                                await _NopApiClientHelper.UpdateProductData(new JObject(), $"/api/products/", productId);
+                            }
+
+                            Console.WriteLine();
+                        }
+                        Console.WriteLine();
+                    }
+
+                    Console.WriteLine();
+                }
+
+                Console.WriteLine();
+            }
+
+            Console.WriteLine();
+        }
+
+        private string SupplierProductEAN(IEnumerable<XElement> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                return (string)node.Element("ean");
+            }
+
+            return null;
         }
     }
 }

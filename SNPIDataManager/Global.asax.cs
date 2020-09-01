@@ -25,8 +25,10 @@ namespace SNPIDataManager
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            TaskManager.TaskManager.Start();
             log4net.Config.XmlConfigurator.Configure();
+
+            TaskManager.TaskManager.ProductStockUpateTask();
+            TaskManager.TaskManager.FullProductUpdateTask();
 
             //await RelationsHelper.UpdateProductAttributesScheduled();
         }
