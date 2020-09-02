@@ -343,6 +343,9 @@
     <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncModelImages.cs" />
     <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncUpdateBodyModel.cs" />
     <Compile Include="Models\NopProductsModel\SyncModels\ProductSyncUpdateModel.cs" />
+    <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductStockUpdateBodyModel.cs" />
+    <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductStockUpdateModel.cs" />
+    <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductStockUpdateQtyModel.cs" />
     <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductUpdateBody.cs" />
     <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductUpdateModel.cs" />
     <Compile Include="Models\NopProductsModel\SyncUpdateModels\ProductUpdateModelAttributes.cs" />

@@ -1,11 +1,15 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SNPIDataManager.Areas.EDCFeed.Helpers;
 using SNPIDataManager.Helpers.NopAPIHelper;
 using SNPIDataManager.Models.NopProductsModel.SyncModels;
+using SNPIDataManager.Models.NopProductsModel.SyncUpdateModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 using System.Xml.Linq;
 
 namespace SNPIDataManager.Areas.EDCFeed.Builder
@@ -106,25 +110,40 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
 
                             if (productNodes != null)
                             {
+                                //Parse raw data to simple int format.
                                 var qtyNodeAsXElement = XElement.Parse(productNodes.ToString());
                                 var qty = (int)qtyNodeAsXElement;
 
-                                //Create model to and convert to Jobject. Send data in method below >>
-                                await _NopApiClientHelper.UpdateProductData(new JObject(), $"/api/products/", productId);
+                                //Create qty model first and assign to stock quantity value.
+                                ProductStockUpdateQtyModel qtyModel = new ProductStockUpdateQtyModel();
+                                qtyModel.StockQuantity = qty;
+
+                                //add every qty model to list (for products with multiple attribute combinations like clothing)
+                                var qtyModelList = new List<ProductStockUpdateQtyModel>();
+                                qtyModelList.Add(qtyModel);
+
+                                //Create model body and assign value(s). and send data to shop.
+                                ProductStockUpdateBodyModel stockBody = new ProductStockUpdateBodyModel()
+                                {
+                                    Product = new ProductStockUpdateModel()
+                                    {
+                                        ProductStockQuantity = qtyModelList
+                                    }
+                                };
+
+                                //convert model to jsonString
+                                var jsonModel = JsonConvert.SerializeObject(stockBody);
+                                //convert jsonString to jObject as final form before sending.
+                                var jObjectProductStockUpdateModel = JObject.Parse(jsonModel);
+                                
+                                //update product model qty (for variants) in shop.
+                                await _NopApiClientHelper.UpdateProductData(jObjectProductStockUpdateModel, $"/api/products/", productId);
+                                _Logger.Debug("Update Product stock of product: " + productId + "");
                             }
-
-                            Console.WriteLine();
                         }
-                        Console.WriteLine();
                     }
-
-                    Console.WriteLine();
                 }
-
-                Console.WriteLine();
             }
-
-            Console.WriteLine();
         }
 
         private string SupplierProductEAN(IEnumerable<XElement> nodes)
