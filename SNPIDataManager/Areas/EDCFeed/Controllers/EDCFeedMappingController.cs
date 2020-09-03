@@ -20,12 +20,10 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
     public class EDCFeedMappingController : Controller
     {
         private readonly UserInformation _UserInformation;
-        private readonly NopAccessHelper _NopAccessHelper;
         private readonly NopAccessSetup _NopAccessSetup;
 
         public EDCFeedMappingController()
         {
-            _NopAccessHelper = new NopAccessHelper();
             _UserInformation = new UserInformation();
             _NopAccessSetup = new NopAccessSetup();
         }
@@ -38,8 +36,8 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
             try
             {
                 var nopCategoriesDict = await NopShopCategorizationHelper.NopCategoriesResource(
-                    _NopAccessHelper.AccessToken,
-                    _NopAccessHelper.ServerUrl);
+                    NopAccessHelper.AccessToken(),
+                    NopAccessHelper.ServerURL());
 
                 categoriesViewModel.NopCategoriesDict = nopCategoriesDict;
                 categoriesViewModel.EDCCategoriesDict = RelationsHelper.CategoryBuilder();

@@ -13,15 +13,13 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
 {
     public static class ShopPagesHelper
     {
-        private static readonly NopAccessHelper _NopAccessHelper;
         private static readonly NopAPIClientHelper _NopApiClientHelper;
 
         static ShopPagesHelper()
         {
-            _NopAccessHelper = new NopAccessHelper();
             _NopApiClientHelper = new NopAPIClientHelper(
-                _NopAccessHelper.AccessToken,
-                _NopAccessHelper.ServerUrl);
+                NopAccessHelper.AccessToken(),
+                NopAccessHelper.ServerURL());
         }
 
         public static async Task<double> ReturnsShopPageCount()

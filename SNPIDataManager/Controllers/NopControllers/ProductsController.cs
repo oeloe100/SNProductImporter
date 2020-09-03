@@ -12,15 +12,13 @@ namespace SNPIDataManager.Controllers.NopControllers
     [Authorize]
     public class ProductsController : Controller
     {
-        private readonly NopAccessHelper _NopAccessHelper;
         private readonly NopAPIClientHelper _NopApiClientHelper;
 
         public ProductsController()
         {
-            _NopAccessHelper = new NopAccessHelper();
             _NopApiClientHelper = new NopAPIClientHelper(
-                _NopAccessHelper.AccessToken,
-                _NopAccessHelper.ServerUrl);
+                NopAccessHelper.AccessToken(),
+                NopAccessHelper.ServerURL());
         }
 
         [HttpGet]

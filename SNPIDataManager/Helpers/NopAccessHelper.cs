@@ -15,21 +15,23 @@ using Microsoft.Ajax.Utilities;
 
 namespace SNPIHelperLibrary
 {
-    public class NopAccessHelper
+    public static class NopAccessHelper
     {
-        public string AccessToken;
-        public string ServerUrl;
-
-        public NopAccessHelper()
+        public static string AccessToken()
         {
             var tokenDetails = TokenProcessor.LoadToken<TokenModel>();
-            var credentialDetails = CredentialsProcessor.LoadUserCredentials<ClientModel>();
 
-            AccessToken = RetrieveToken(tokenDetails);
-            ServerUrl = RetrieveServerUrl(credentialDetails);
+            return RetrieveToken(tokenDetails);
         }
 
-        private string RetrieveToken(List<TokenModel> tokenDetails)
+        public static string ServerURL()
+        {
+            var credentialDetails = CredentialsProcessor.LoadUserCredentials<ClientModel>();
+
+            return RetrieveServerUrl(credentialDetails);
+        }
+
+        private static string RetrieveToken(List<TokenModel> tokenDetails)
         {
             foreach (var token in tokenDetails)
                 return token.AccessToken;
@@ -37,7 +39,7 @@ namespace SNPIHelperLibrary
             return "No Token has been found"; 
         }
 
-        private string RetrieveServerUrl(List<ClientModel> credentialDetails)
+        private static string RetrieveServerUrl(List<ClientModel> credentialDetails)
         {
             foreach (var url in credentialDetails)
                 return url.ServerUrl;

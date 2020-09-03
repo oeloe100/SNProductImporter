@@ -20,17 +20,10 @@ namespace SNPIDataManager.Controllers.NopControllers
     [Authorize]
     public class CustomersController : Controller
     {
-        private readonly NopAccessHelper _NopAccessHelper;
-
-        public CustomersController()
-        {
-            _NopAccessHelper = new NopAccessHelper();
-        }
-
         [HttpGet]
         public async Task<ActionResult> GetCustomerInformation()
         {
-            var clientHelper = new NopAPIClientHelper(_NopAccessHelper.AccessToken, _NopAccessHelper.ServerUrl);
+            var clientHelper = new NopAPIClientHelper(NopAccessHelper.AccessToken(), NopAccessHelper.ServerURL());
 
             string jsonUrl = LocationsConfig.ReadLocations("apiCustomers") + "?fields=id,first_name,last_name";
             object customerData = await clientHelper.Get(jsonUrl);

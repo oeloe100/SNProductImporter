@@ -28,10 +28,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
         private static SupplierCategoryBuilder _SupplierCategoryBuilder;
         private static MappingProductBuilder _MappingProductBuilder;
         private static ProductSpecificationAttributeFilter _ProductSpecsAttributeFilter;
-
-        private static readonly NopAccessHelper _NopAccessHelper;
         private static readonly NopAPIClientHelper _NopApiClientHelper;
-
         private static ScheduledProductUpdateBuilder scheduledProductUpdateBuilder;
 
         static RelationsHelper()
@@ -51,14 +48,13 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
             _MappingProductBuilder = new MappingProductBuilder(_FeedPath);
             _ProductSpecsAttributeFilter = new ProductSpecificationAttributeFilter(_FeedPath);
 
-            _NopAccessHelper = new NopAccessHelper();
             _NopApiClientHelper = new NopAPIClientHelper(
-                _NopAccessHelper.AccessToken, 
-                _NopAccessHelper.ServerUrl);
+                NopAccessHelper.AccessToken(),
+                NopAccessHelper.ServerURL());
 
             scheduledProductUpdateBuilder = new ScheduledProductUpdateBuilder(
-                _NopAccessHelper.AccessToken,
-                _NopAccessHelper.ServerUrl);
+                NopAccessHelper.AccessToken(),
+                NopAccessHelper.ServerURL());
         }
 
         /// <summary>

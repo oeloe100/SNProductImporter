@@ -19,18 +19,14 @@ namespace SNPIDataManager.Controllers.NopControllers.ApiControllers
     public class ProductsSyncController : Controller
     {
         private readonly log4net.ILog _Logger;
-
-        private readonly NopAccessHelper _NopAccessHelper;
         private readonly NopAPIClientHelper _NopApiClientHelper;
 
         public ProductsSyncController()
         {
             _Logger = log4net.LogManager.GetLogger("FileAppender");
-
-            _NopAccessHelper = new NopAccessHelper();
             _NopApiClientHelper = new NopAPIClientHelper(
-                _NopAccessHelper.AccessToken,
-                _NopAccessHelper.ServerUrl);
+                NopAccessHelper.AccessToken(),
+                NopAccessHelper.ServerURL());
         }
 
         [HttpPost]

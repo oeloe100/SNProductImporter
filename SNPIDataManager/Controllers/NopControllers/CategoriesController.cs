@@ -19,17 +19,11 @@ namespace SNPIDataManager.Controllers.NopControllers
     [Authorize]
     public class CategoriesController : Controller
     {
-        private readonly NopAccessHelper _NopAccessHelper;
-
-        public CategoriesController() 
-        {
-            _NopAccessHelper = new NopAccessHelper();
-        }
 
         [HttpGet]
         public async Task<ActionResult> GetCategories()
         {
-            var clientHelper = new NopAPIClientHelper(_NopAccessHelper.AccessToken, _NopAccessHelper.ServerUrl);
+            var clientHelper = new NopAPIClientHelper(NopAccessHelper.AccessToken(), NopAccessHelper.ServerURL());
 
             string jsonUrl = LocationsConfig.ReadLocations("apiCategories");
             object categoriesData = await clientHelper.Get(jsonUrl);
