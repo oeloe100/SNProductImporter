@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SNPIDataManager.Areas.EDCFeed.Helpers;
+using SNPIDataManager.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,7 +81,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
         /******************* EXCEPTIONAL TASK *******************/
         private async Task UpdateSelectedProductAttributes(JObject products)
         {
-            string updateJsonProductsUrl = $"/api/products/";
+            //string updateJsonProductsUrl = $"/api/products/";
 
             try
             {
@@ -96,7 +97,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
                     }
 
                     await UpdateProductData(RelationsHelper.UpdateProductProperties(
-                    productId, attributeValuesIds, attributeId, index), updateJsonProductsUrl, productId);
+                    productId, attributeValuesIds, attributeId, index), LocationsConfig.ReadLocations("apiProducts"), productId);
 
                     index++;
                 }
@@ -119,7 +120,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
         /// <returns></returns>
         public async Task UpdateProductData(JObject data, string path, int productId)
         {
-            string requestUriString = string.Format("{0}{1}{2}", _ServerUrl, path, productId);
+            string requestUriString = string.Format("{0}{1}{2}", _ServerUrl, path + "/", productId);
             var stringContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
 
             await _ApiClient.ApiHttpClient.PutAsync(requestUriString, stringContent);

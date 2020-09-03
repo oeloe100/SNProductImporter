@@ -1,5 +1,6 @@
 ﻿using Quartz;
 using SNPIDataManager.Areas.EDCFeed.Helpers;
+using SNPIDataManager.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,8 @@ namespace SNPIDataManager.Jobs
         {
             try
             {
-                var fullFeedUrl = new System.Uri("http://api.edc.nl/xml/eg_xml_feed_stock.xml");
-                await RelationsHelper.UpdateProductStockScheduled(fullFeedUrl);
+                var stockFeedUrl = new System.Uri(LocationsConfig.ReadLocations("edcStockUpdateFeedUrl"));
+                 await RelationsHelper.UpdateProductStockScheduled(stockFeedUrl);
 
                 _Logger.Debug("Updating Product stock. Job executed successfully...");
             }

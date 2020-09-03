@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Threading.Tasks;
-using SNPIDataLibrary.BusinessLogic;
-using SNPIDataLibrary.Models;
+﻿using Newtonsoft.Json;
+using SNPIDataManager.Config;
 using SNPIDataManager.Helpers.NopAPIHelper;
 using SNPIDataManager.Models.NopProductsModel;
-using Newtonsoft.Json;
 using SNPIHelperLibrary;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SNPIDataManager.Controllers.NopControllers
 {
@@ -23,14 +19,14 @@ namespace SNPIDataManager.Controllers.NopControllers
         {
             _NopAccessHelper = new NopAccessHelper();
             _NopApiClientHelper = new NopAPIClientHelper(
-                _NopAccessHelper.AccessToken, 
+                _NopAccessHelper.AccessToken,
                 _NopAccessHelper.ServerUrl);
         }
 
         [HttpGet]
         public async Task<ActionResult> GetProducts()
         {
-            string jsonUrl = $"/api/products?fields=id,name,images,sku";
+            string jsonUrl = LocationsConfig.ReadLocations("apiProducts") + "?fields=id,name,images,sku";
             object productsData = await _NopApiClientHelper.Get(jsonUrl);
 
             var productsRootObject = JsonConvert.DeserializeObject<ProductsRootObject>(productsData.ToString());

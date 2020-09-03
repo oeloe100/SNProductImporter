@@ -32,7 +32,7 @@ namespace SNPIDataManager.TaskManager
                 .WithDailyTimeIntervalSchedule
                 (s => s.WithIntervalInHours(24)
                     .OnEveryDay()
-                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(13, 18))
+                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(00, 00))
                 ).Build();
 
             JobChainingJobListener listener = new JobChainingJobListener("pipeline chain");
@@ -49,12 +49,6 @@ namespace SNPIDataManager.TaskManager
             IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             await scheduler.Start();
 
-            //JobKey stockFeedDownloadJobKey = JobKey.Create("stockFeedDownloadJob", "stock_pipeline");
-            //JobKey updatingProductVariantStockJobKey = JobKey.Create("updatingProductVariantStockJob", "stock_pipeline");
-
-            //IJobDetail stockFeedDownloadJob = JobBuilder.Create<StockFeedDownloadingJob>().WithIdentity(stockFeedDownloadJobKey).Build();
-            //IJobDetail updatingProductVariantStockJob = JobBuilder.Create<UpdateProductStockJob>().WithIdentity(updatingProductVariantStockJobKey).Build();
-
             IJobDetail updatingProductStockJob = JobBuilder.Create<UpdateProductStockJob>()
                 .Build();
 
@@ -65,14 +59,6 @@ namespace SNPIDataManager.TaskManager
                 .Build();
 
             await scheduler.ScheduleJob(updatingProductStockJob, trigger);
-
-            //JobChainingJobListener listener = new JobChainingJobListener("stock_pipeline chain");
-            //listener.AddJobChainLink(stockFeedDownloadJobKey, updatingProductVariantStockJobKey);
-
-            //scheduler.ListenerManager.AddJobListener(listener, GroupMatcher<JobKey>.GroupEquals("stock_pipeline"));
-
-            //await scheduler.ScheduleJob(stockFeedDownloadJob, trigger);
-            //await scheduler.AddJob(updatingProductVariantStockJob, false, true);
         }
     }
 }

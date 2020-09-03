@@ -1,10 +1,7 @@
-﻿using Microsoft.Ajax.Utilities;
+﻿using SNPIDataManager.Config;
 using SNPIDataManager.Helpers.NopAPIHelper;
 using SNPIDataManager.Models.NopAuthorizationParametersModel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -33,7 +30,7 @@ namespace SNPIDataManager.Managers
             var stringBuilder = new StringBuilder();
             string callbackUrl = new Uri(redirectUrl).ToString();
 
-            stringBuilder.AppendFormat("{0}/oauth/authorize", _ServerUrl);
+            stringBuilder.AppendFormat("{0}" + LocationsConfig.ReadLocations("apiOauthAuthorize") + "", _ServerUrl);
             stringBuilder.AppendFormat("?client_id={0}", HttpUtility.UrlEncode(_ClientId));
             stringBuilder.AppendFormat("&redirect_uri={0}", HttpUtility.UrlEncode(callbackUrl));
             stringBuilder.Append("&response_type=code");

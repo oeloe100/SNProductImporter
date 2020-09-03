@@ -12,6 +12,7 @@ using System.Web;
 using System.Web.Mvc;
 using SNPIDataManager.Helpers;
 using SNPIHelperLibrary;
+using SNPIDataManager.Config;
 
 namespace SNPIDataManager.Controllers.NopControllers
 {
@@ -30,7 +31,7 @@ namespace SNPIDataManager.Controllers.NopControllers
         {
             var clientHelper = new NopAPIClientHelper(_NopAccessHelper.AccessToken, _NopAccessHelper.ServerUrl);
 
-            string jsonUrl = $"/api/categories";
+            string jsonUrl = LocationsConfig.ReadLocations("apiCategories");
             object categoriesData = await clientHelper.Get(jsonUrl);
 
             var categoriesRootObject = JsonConvert.DeserializeObject<CategoriesRootObject>(categoriesData.ToString());

@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SNPIDataManager.Config;
 using SNPIDataManager.Models;
 using System;
 using System.Collections.Generic;
@@ -73,7 +74,7 @@ namespace SNPIDataManager.Helpers
 
             using (_ApiClient.ApiHttpClient)
             {
-                var result = await _ApiClient.ApiHttpClient.PostAsync(_ApiClient.ApiHttpClient.BaseAddress + "/api/Account/Register", content);
+                var result = await _ApiClient.ApiHttpClient.PostAsync(_ApiClient.ApiHttpClient.BaseAddress + LocationsConfig.ReadLocations("clienApiRegister"), content);
 
                 if (result.IsSuccessStatusCode)
                 {

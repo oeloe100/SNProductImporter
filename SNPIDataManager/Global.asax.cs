@@ -27,8 +27,8 @@ namespace SNPIDataManager
 
             log4net.Config.XmlConfigurator.Configure();
 
-            TaskManager.TaskManager.ProductStockUpateTask();
-            TaskManager.TaskManager.FullProductUpdateTask();
+            //TaskManager.TaskManager.FullProductUpdateTask();
+            //TaskManager.TaskManager.ProductStockUpateTask();
 
             //await RelationsHelper.UpdateProductAttributesScheduled();
         }

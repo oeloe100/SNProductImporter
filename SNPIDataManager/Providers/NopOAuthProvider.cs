@@ -3,6 +3,7 @@ using Microsoft.Owin.Logging;
 using Microsoft.Owin.Security.Infrastructure;
 using Microsoft.Owin.Security.OAuth;
 using Microsoft.Owin.Security.OAuth.Messages;
+using SNPIDataManager.Config;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace SNPIDataManager.Providers
     {
         public override Task MatchEndpoint(OAuthMatchEndpointContext context)
         {
-            var endpointPath = new PathString("/NopAuthorize");
+            var endpointPath = new PathString(LocationsConfig.ReadLocations("apiAuthorize"));
 
             if (context.Options.TokenEndpointPath == endpointPath)
             {

@@ -1,6 +1,8 @@
-﻿using SNPIDataManager.Models.NopProductsModel.SyncModels;
+﻿using SNPIDataManager.Config;
+using SNPIDataManager.Models.NopProductsModel.SyncModels;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Xml.Linq;
@@ -13,7 +15,8 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
 
         public ProductImageBuilder()
         {
-            _ImageSource = "http://cdn.edc-internet.nl/500/";
+            //Retrieve EDC ImageSource (Url) from config.manager.
+            _ImageSource = LocationsConfig.ReadLocations("edcImageSource");
         }
 
         internal List<ProductSyncModelImages> SelectImageProperties(XElement element)

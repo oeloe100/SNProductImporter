@@ -3,6 +3,7 @@ using SNPIDataManager.Areas.EDCFeed.Builder;
 using SNPIDataManager.Areas.EDCFeed.Filter;
 using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
 using SNPIDataManager.Areas.EDCFeed.Models.ProductSpecificationModels;
+using SNPIDataManager.Config;
 using SNPIDataManager.Helpers.NopAPIHelper;
 using SNPIDataManager.Models.NopProductsModel;
 using SNPIHelperLibrary;
@@ -41,7 +42,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
             var currentDate = DateTime.Now;
             var shortDate = currentDate.Date.ToShortDateString();
 
-            _FeedPath = @"C:\Users\sexxnation\source\repos\Sexxnation\Product Importer\SNProductImporter\SNPIDataManager\FeedDownloads\EDCFeed" + shortDate + ".xml";
+            _FeedPath = LocationsConfig.ReadLocations("localhostFeedDownloadLocation") + "EDCFeed" + shortDate + ".xml";
             
             _EDCFeed.Load(_FeedPath);
             _Root = _EDCFeed.DocumentElement;
@@ -106,8 +107,8 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
         public static async Task UpdateProductPropertiesScheduled()
         {
             //First retrieve total amount of products in shop
-            string NopRestAPICountUrl = $"/api/products/count";
-            var productCountAsJson = await _NopApiClientHelper.GetProductCount(NopRestAPICountUrl);
+            //string NopRestAPICountUrl = $"/api/products/count";
+            var productCountAsJson = await _NopApiClientHelper.GetProductCount(LocationsConfig.ReadLocations("apiProductsCount"));
 
             //Total amount of products in double format. 
             //Also the maximum allow products count per page in double format.
@@ -119,9 +120,9 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
 
             for (var i = 1; i <= pageCount; i++)
             {
-                string NopRestAPIUrl = $"/api/products?page=" + i + "";
+                //string NopRestAPIUrl = $"/api/products?page=" + i + "";
 
-                var products = await _NopApiClientHelper.GetProductData(NopRestAPIUrl);
+                var products = await _NopApiClientHelper.GetProductData(LocationsConfig.ReadLocations("apiProductsPage") + i);
 
                 await scheduledProductUpdateBuilder.UpdateProductData(products, _FeedPath);
             }
@@ -130,8 +131,6 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
         public static async Task UpdateProductStockScheduled(Uri stockFeedUri)
         {
             await scheduledProductUpdateBuilder.UpdateProductStock(stockFeedUri);
-
-            throw new NotImplementedException();
         }
     }
 }

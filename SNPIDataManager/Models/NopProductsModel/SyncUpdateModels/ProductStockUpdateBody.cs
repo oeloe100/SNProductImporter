@@ -6,9 +6,9 @@ using System.Web;
 
 namespace SNPIDataManager.Models.NopProductsModel.SyncUpdateModels
 {
-    public class ProductStockUpdateQtyModel
+    public class ProductStockUpdateBody
     {
-        [JsonProperty("stock_quantity")]
-        public int? StockQuantity { get; set; }
+        [JsonProperty("product")]
+        public ProductStockUpdateModel Product { get; set; }
     }
 }

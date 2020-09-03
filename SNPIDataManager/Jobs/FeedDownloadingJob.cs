@@ -1,4 +1,5 @@
 ﻿using Quartz;
+using SNPIDataManager.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +21,17 @@ namespace SNPIDataManager.Jobs
         public async Task Execute(IJobExecutionContext context)
         {
             var webClient = new WebClient();
-            
-            var pathToDwnldFolder = @"C:\Users\sexxnation\source\repos\Sexxnation\Product Importer\SNProductImporter\SNPIDataManager\FeedDownloads";
             var fullFeedUrl = new System.Uri("http://api.edc.nl/b2b_feed.php?key=4500c66ct0e0w63c8r4129tc80e622rr&sort=xml&type=xml&lang=nl&version=2015");
 
             var currentDate = DateTime.Now;
             var simpleDate = currentDate.Date.ToShortDateString();
 
+            var test = LocationsConfig.ReadLocations("localhostFeedDownloadLocationFixed");
+
             try
             {
                 //webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
-                webClient.DownloadFile(fullFeedUrl, pathToDwnldFolder + "\\EDCFeed" + simpleDate + ".xml");
+                webClient.DownloadFile(fullFeedUrl, LocationsConfig.ReadLocations("localhostFeedDownloadLocationFixed") + "\\EDCFeed" + simpleDate + ".xml");
 
                 _Logger.Debug("(EDC) feed is successfully downloaded...");
                 await Console.Out.WriteLineAsync(".");

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using SNPIDataManager.Areas.EDCFeed.Models;
+using SNPIDataManager.Config;
 using SNPIDataManager.Models.NopCategoriesModel;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,8 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
         {
             var clientHelper = new NopAPIClientHelper(accessToken, serverUrl);
 
-            string jsonUrl = $"/api/categories";
-            object customerData = await clientHelper.Get(jsonUrl);
+            //string jsonUrl = $"/api/categories";
+            object customerData = await clientHelper.Get(LocationsConfig.ReadLocations("apiCategories"));
 
             var categoriesRootObject = JsonConvert.DeserializeObject<CategoriesRootObject>(customerData.ToString());
             var categoriesIE = categoriesRootObject.Categories.Where(categorie => !string.IsNullOrEmpty(categorie.Name));

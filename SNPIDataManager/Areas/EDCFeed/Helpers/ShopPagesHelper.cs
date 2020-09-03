@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SNPIDataManager.Config;
 using SNPIDataManager.Helpers.NopAPIHelper;
 using SNPIHelperLibrary;
 using System;
@@ -26,8 +27,8 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
         public static async Task<double> ReturnsShopPageCount()
         {
             //First retrieve total amount of products in shop
-            string NopRestAPICountUrl = $"/api/products/count";
-            var productCountAsJson = await _NopApiClientHelper.GetProductCount(NopRestAPICountUrl);
+            //string NopRestAPICountUrl = $"/api/products/count";
+            var productCountAsJson = await _NopApiClientHelper.GetProductCount(LocationsConfig.ReadLocations("apiProductsCount"));
 
             //Total amount of products in double format. 
             //Also the maximum allow products count per page in double format.
@@ -40,7 +41,8 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
 
         public static Task<JObject> ReturnsProductsByPage(double page)
         {
-            string NopRestAPIUrl = $"/api/products?page=" + page + "";
+            //string NopRestAPIUrl = $"/api/products?page=" + page + "";
+            string NopRestAPIUrl = LocationsConfig.ReadLocations("apiProductsPage") + page;
 
             return _NopApiClientHelper.GetProductData(NopRestAPIUrl);
         }

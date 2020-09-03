@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SNPIDataManager.Areas.EDCFeed.Helpers;
+using SNPIDataManager.Config;
 using SNPIDataManager.Helpers.NopAPIHelper;
 using SNPIDataManager.Models.NopProductsModel.SyncModels;
 using SNPIDataManager.Models.NopProductsModel.SyncUpdateModels;
@@ -68,7 +69,10 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
 
                     var jObjectModel = (JObject)JToken.FromObject(updateSyncBodyModel);
 
-                    await _NopApiClientHelper.UpdateProductData(jObjectModel, $"/api/products/", _ProductId);
+                    await _NopApiClientHelper.UpdateProductData(jObjectModel,
+                        LocationsConfig.ReadLocations("apiProducts"), 
+                        _ProductId);
+
                     _Logger.Debug("Updated product: " + _ProductId);
                 }
                 catch (Exception ex)
@@ -80,9 +84,6 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
 
         public async Task UpdateProductStock(Uri stockFeedUri)
         {
-            //Product index
-            var pI = 0;
-
             //Retrieve product node from supplier feed
             string stringStockFeed = stockFeedUri.ToString();
             XElement stockFeedData = XElement.Load(stringStockFeed);
@@ -100,50 +101,67 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
                     var productsListed = productsNode.Value.ToList();
                     for (var x = 0; x < productsListed.Count; x++)
                     {
-                        var productId = (int)productsListed[x]["id"];
-                        var productAttributeCombos = productsListed[x]["product_attribute_combinations"];
-                        
-                        foreach (var productAttributeCombo in productAttributeCombos)
+                        try
                         {
-                            var productAttributeSku = (string)productAttributeCombo["sku"];
-                            var productNodes = SelectProductQtyNodeById(productAttributeSku, stockFeedUri.ToString());
+                            var productId = (int)productsListed[x]["id"];
+                            var productAttributeCombos = productsListed[x]["product_attribute_combinations"];
 
-                            if (productNodes != null)
+                            ProductStockUpdateBody productUpdateBody = new ProductStockUpdateBody()
                             {
-                                //Parse raw data to simple int format.
-                                var qtyNodeAsXElement = XElement.Parse(productNodes.ToString());
-                                var qty = (int)qtyNodeAsXElement;
-
-                                //Create qty model first and assign to stock quantity value.
-                                ProductStockUpdateQtyModel qtyModel = new ProductStockUpdateQtyModel();
-                                qtyModel.StockQuantity = qty;
-
-                                //add every qty model to list (for products with multiple attribute combinations like clothing)
-                                var qtyModelList = new List<ProductStockUpdateQtyModel>();
-                                qtyModelList.Add(qtyModel);
-
-                                //Create model body and assign value(s). and send data to shop.
-                                ProductStockUpdateBodyModel stockBody = new ProductStockUpdateBodyModel()
+                                Product = new ProductStockUpdateModel()
                                 {
-                                    Product = new ProductStockUpdateModel()
-                                    {
-                                        ProductStockQuantity = qtyModelList
-                                    }
-                                };
+                                    AttributeCombinations = CreateProductAttributeCombinationsWithQtyUpdated(productAttributeCombos, stockFeedUri)
+                                }
+                            };
 
-                                //convert model to jsonString
-                                var jsonModel = JsonConvert.SerializeObject(stockBody);
-                                //convert jsonString to jObject as final form before sending.
-                                var jObjectProductStockUpdateModel = JObject.Parse(jsonModel);
-                                
-                                //update product model qty (for variants) in shop.
-                                await _NopApiClientHelper.UpdateProductData(jObjectProductStockUpdateModel, $"/api/products/", productId);
-                                _Logger.Debug("Update Product stock of product: " + productId + "");
+                            var productQtyUpdateModelAsJObject = JObject.FromObject(productUpdateBody);
+
+                            await _NopApiClientHelper.UpdateProductData(productQtyUpdateModelAsJObject,
+                                LocationsConfig.ReadLocations("apiProducts"), 
+                                productId);
+
+                            _Logger.Debug("Product with id " + productId + " stock updated");
+
+                            if (x >= productsListed.Count && i != pageCount)
+                            {
+                                i++;
                             }
+                        }
+                        catch (Exception ex)
+                        {
+                            _Logger.Error(ex);
                         }
                     }
                 }
             }
+        }
+
+        private List<ProductStockUpdateModelAttributeCombinations> CreateProductAttributeCombinationsWithQtyUpdated(JToken productAttributeCombos, Uri stockFeedUri)
+        {
+            var productAttrComboList = new List<ProductStockUpdateModelAttributeCombinations>();
+
+            foreach (var productAttributeCombo in productAttributeCombos)
+            {
+                var productAttributeSku = (string)productAttributeCombo["sku"];
+                var productNodes = SelectProductQtyNodeById(productAttributeSku, stockFeedUri.ToString());
+
+                var qtyNodeAsXElement = XElement.Parse(productNodes.ToString());
+                var qty = (int)qtyNodeAsXElement;
+
+                var productAttrComboModel = new ProductStockUpdateModelAttributeCombinations()
+                {
+                    Id = (int)productAttributeCombo["id"],
+                    ProductId = (int)productAttributeCombo["product_id"],
+                    AttributesXml = (string)productAttributeCombo["attributes_xml"],
+                    Gtin = (string)productAttributeCombo["gtin"],
+                    Sku = (string)productAttributeCombo["sku"],
+                    StockQuantity = qty
+                };
+
+                productAttrComboList.Add(productAttrComboModel);
+            }
+
+            return productAttrComboList;
         }
 
         private string SupplierProductEAN(IEnumerable<XElement> nodes)

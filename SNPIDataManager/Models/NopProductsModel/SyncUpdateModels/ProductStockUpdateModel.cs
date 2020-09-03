@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SNPIDataManager.Models.NopProductsModel.SyncModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace SNPIDataManager.Models.NopProductsModel.SyncUpdateModels
     public class ProductStockUpdateModel
     {
         [JsonProperty("product_attribute_combinations")]
-        public List<ProductStockUpdateQtyModel> ProductStockQuantity { get; set; }
+        public List<ProductStockUpdateModelAttributeCombinations> AttributeCombinations { get; set; }
     }
 }

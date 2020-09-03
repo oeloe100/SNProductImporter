@@ -11,6 +11,7 @@ using AuthorizeAttribute = System.Web.Mvc.AuthorizeAttribute;
 using HttpPostAttribute = System.Web.Mvc.HttpPostAttribute;
 using SNPIDataManager.Areas.EDCFeed.Helpers;
 using Newtonsoft.Json.Linq;
+using SNPIDataManager.Config;
 
 namespace SNPIDataManager.Controllers.NopControllers.ApiControllers
 {
@@ -35,13 +36,15 @@ namespace SNPIDataManager.Controllers.NopControllers.ApiControllers
         [HttpPost]
         public async Task MapProducts()
         {
-            string ab = $"/api/products";
-            var productsCount = await _NopApiClientHelper.GetProductData(ab);
+            //string ab = $"/api/products";
+            var productsCount = await _NopApiClientHelper.GetProductData(LocationsConfig.ReadLocations("apiProducts"));
 
             try
             {
-                string NopRestAPIUrl = $"/api/products";
-                await _NopApiClientHelper.PostProductData(RelationsHelper.MappingProductBuilder(), NopRestAPIUrl);
+                //string NopRestAPIUrl = $"/api/products";
+                await _NopApiClientHelper.PostProductData(
+                    RelationsHelper.MappingProductBuilder(), 
+                    LocationsConfig.ReadLocations("apiProducts"));
             }
             catch (Exception ex)
             {
