@@ -20,12 +20,6 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
 {
     public class RelationsHelper
     {
-        private static readonly log4net.ILog _Logger;
-
-        private static readonly XmlDocument _EDCFeed;
-        private static XmlElement _Root;
-        private static readonly string _FeedPath;
-        private static SupplierCategoryBuilder _SupplierCategoryBuilder;
         private static MappingProductBuilder _MappingProductBuilder;
         private static ProductSpecificationAttributeFilter _ProductSpecsAttributeFilter;
         private static readonly NopAPIClientHelper _NopApiClientHelper;
@@ -33,20 +27,8 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
 
         static RelationsHelper()
         {
-            _Logger = log4net.LogManager.GetLogger("FileAppender");
-            _EDCFeed = new XmlDocument();
-
-            var currentDate = DateTime.Now;
-            var shortDate = currentDate.Date.ToShortDateString();
-
-            _FeedPath = LocationsConfig.ReadLocations("localhostFeedDownloadLocation") + "EDCFeed" + shortDate + ".xml";
-            
-            _EDCFeed.Load(_FeedPath);
-            _Root = _EDCFeed.DocumentElement;
-            
-            _SupplierCategoryBuilder = new SupplierCategoryBuilder(_Root, _FeedPath);
-            _MappingProductBuilder = new MappingProductBuilder(_FeedPath);
-            _ProductSpecsAttributeFilter = new ProductSpecificationAttributeFilter(_FeedPath);
+            _MappingProductBuilder = new MappingProductBuilder(FeedPathHelper.Path());
+            _ProductSpecsAttributeFilter = new ProductSpecificationAttributeFilter(FeedPathHelper.Path());
 
             _NopApiClientHelper = new NopAPIClientHelper(
                 NopAccessHelper.AccessToken(),
@@ -55,26 +37,6 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
             scheduledProductUpdateBuilder = new ScheduledProductUpdateBuilder(
                 NopAccessHelper.AccessToken(),
                 NopAccessHelper.ServerURL());
-        }
-
-        /// <summary>
-        /// Build Supplier Categories and return to View.
-        /// </summary>
-        /// <returns></returns>
-        public static IDictionary<string, List<SupplierModel>> CategoryBuilder()
-        {
-            var items = _SupplierCategoryBuilder.RelationToView;
-
-            return items;
-        }
-
-        /// <summary>
-        /// Build Product Models to sync with the shop.
-        /// </summary>
-        /// <returns></returns>
-        public static Dictionary<string, List<JObject>> MappingProductBuilder()
-        {
-            return _MappingProductBuilder.SelectProductsForMappingByCategory();
         }
 
         /// <summary>
@@ -120,7 +82,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Helpers
 
                 var products = await _NopApiClientHelper.GetProductData(LocationsConfig.ReadLocations("apiProductsPage") + i);
 
-                await scheduledProductUpdateBuilder.UpdateProductData(products, _FeedPath);
+                await scheduledProductUpdateBuilder.UpdateProductData(products, FeedPathHelper.Path());
             }
         }
 

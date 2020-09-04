@@ -255,6 +255,7 @@
     <Compile Include="Areas\EDCFeed\Controllers\SpecificationAttributesController.cs" />
     <Compile Include="Areas\EDCFeed\EDCFeedAreaRegistration.cs" />
     <Compile Include="Areas\EDCFeed\Filter\ProductSpecificationAttributeFilter.cs" />
+    <Compile Include="Areas\EDCFeed\Helpers\FeedPathHelper.cs" />
     <Compile Include="Areas\EDCFeed\Helpers\RelationsHelper.cs" />
     <Compile Include="Areas\EDCFeed\Helpers\ShopPagesHelper.cs" />
     <Compile Include="Areas\EDCFeed\Helpers\SupplierFeedHelper.cs" />

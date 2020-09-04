@@ -1,6 +1,7 @@
 ﻿using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SNPIDataManager.Areas.EDCFeed.Builder;
 using SNPIDataManager.Areas.EDCFeed.Helpers;
 using SNPIDataManager.Config;
 using System;
@@ -16,7 +17,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
     public class NopAPIClientHelper
     {
         private readonly log4net.ILog _Logger;
-
+        private readonly MappingProductBuilder _MappingProductBuilder;
         private readonly ApiHttpClientHelper _ApiClient;
         private readonly string _ServerUrl;
 
@@ -25,6 +26,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
         public NopAPIClientHelper(string accessToken, string serverUrl)
         {
             _Logger = log4net.LogManager.GetLogger("FileAppender");
+            _MappingProductBuilder = new MappingProductBuilder(FeedPathHelper.Path());
             _ApiClient = new ApiHttpClientHelper(accessToken);
             _ServerUrl = serverUrl;
         }
@@ -81,8 +83,6 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
         /******************* EXCEPTIONAL TASK *******************/
         private async Task UpdateSelectedProductAttributes(JObject products)
         {
-            //string updateJsonProductsUrl = $"/api/products/";
-
             try
             {
                 foreach (var product in products["products"])
@@ -96,7 +96,7 @@ namespace SNPIDataManager.Helpers.NopAPIHelper
                         attributeValuesIds.Add((int)item["id"]);
                     }
 
-                    await UpdateProductData(RelationsHelper.UpdateProductProperties(
+                    await UpdateProductData(_MappingProductBuilder.UpdateProductWithAttributes(
                     productId, attributeValuesIds, attributeId, index), LocationsConfig.ReadLocations("apiProducts"), productId);
 
                     index++;

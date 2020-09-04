@@ -12,6 +12,7 @@ using HttpPostAttribute = System.Web.Mvc.HttpPostAttribute;
 using SNPIDataManager.Areas.EDCFeed.Helpers;
 using Newtonsoft.Json.Linq;
 using SNPIDataManager.Config;
+using SNPIDataManager.Areas.EDCFeed.Builder;
 
 namespace SNPIDataManager.Controllers.NopControllers.ApiControllers
 {
@@ -19,11 +20,13 @@ namespace SNPIDataManager.Controllers.NopControllers.ApiControllers
     public class ProductsSyncController : Controller
     {
         private readonly log4net.ILog _Logger;
+        private readonly MappingProductBuilder _MappingProductBuilder;
         private readonly NopAPIClientHelper _NopApiClientHelper;
 
         public ProductsSyncController()
         {
             _Logger = log4net.LogManager.GetLogger("FileAppender");
+            _MappingProductBuilder = new MappingProductBuilder(FeedPathHelper.Path());
             _NopApiClientHelper = new NopAPIClientHelper(
                 NopAccessHelper.AccessToken(),
                 NopAccessHelper.ServerURL());
@@ -32,14 +35,12 @@ namespace SNPIDataManager.Controllers.NopControllers.ApiControllers
         [HttpPost]
         public async Task MapProducts()
         {
-            //string ab = $"/api/products";
             var productsCount = await _NopApiClientHelper.GetProductData(LocationsConfig.ReadLocations("apiProducts"));
 
             try
             {
-                //string NopRestAPIUrl = $"/api/products";
                 await _NopApiClientHelper.PostProductData(
-                    RelationsHelper.MappingProductBuilder(), 
+                    _MappingProductBuilder.SelectProductsForMappingByCategory(), 
                     LocationsConfig.ReadLocations("apiProducts"));
             }
             catch (Exception ex)

@@ -48,9 +48,6 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
 
                 productCategoryCollection.Add(_LoadedMapping[i].ShopCategory, productListAsJobject);
 
-                foreach (var productNode in productNodeList)
-                    _NodeList.Add(productNode);
-
                 _Logger.Debug("Collected Category: " + i + "");
             }
 
@@ -103,8 +100,9 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
 
         public JObject UpdateProductWithAttributes(int productId, List<int> attributeValuesId, int id, int index)
         {
-            var productBody = new ProductUpdateBody();
+            AddNodesToNodelist();
 
+            var productBody = new ProductUpdateBody();
             productBody.Product = new ProductUpdateModel()
             {
                 Attributes = _ProductAttributeBuilder.UpdateAttribute(productId, attributeValuesId, id),
@@ -115,6 +113,19 @@ namespace SNPIDataManager.Areas.EDCFeed.Builder
             var obj = JsonConvert.DeserializeObject<JObject>(jsonString);
 
             return obj;
+        }
+
+        private void AddNodesToNodelist()
+        {
+            for (var i = 0; i < _LoadedMapping.Count; i++)
+            {
+                var productNodeList = SelectProductNodesByCategory(
+                    _FeedPath,
+                    _LoadedMapping[i].SupplierCategoryId).ToList();
+
+                foreach (var productNode in productNodeList)
+                    _NodeList.Add(productNode);
+            }
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using SNPIDataLibrary.BusinessLogic;
 using SNPIDataLibrary.DataAccess;
 using SNPIDataLibrary.Models;
+using SNPIDataManager.Areas.EDCFeed.Builder;
 using SNPIDataManager.Areas.EDCFeed.Helpers;
 using SNPIDataManager.Areas.EDCFeed.Models.CategoryModels;
+using SNPIDataManager.Config;
 using SNPIDataManager.Helpers;
 using SNPIDataManager.Helpers.NopAPIHelper;
 using SNPIDataManager.Setup;
@@ -12,6 +14,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Xml;
 using AuthorizeAttribute = System.Web.Http.AuthorizeAttribute;
 
 namespace SNPIDataManager.Areas.EDCFeed.Controllers
@@ -19,11 +22,23 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
     [Authorize]
     public class EDCFeedMappingController : Controller
     {
+        private readonly XmlDocument _EDCFeed;
+        private XmlElement _Root;
+        private readonly string _FeedPath;
+        private SupplierCategoryBuilder _SupplierCategoryBuilder;
+
         private readonly UserInformation _UserInformation;
         private readonly NopAccessSetup _NopAccessSetup;
 
         public EDCFeedMappingController()
         {
+            _EDCFeed = new XmlDocument();
+            _EDCFeed.Load(FeedPathHelper.Path());
+            _FeedPath = FeedPathHelper.Path();
+            _Root = _EDCFeed.DocumentElement;
+
+            _SupplierCategoryBuilder = new SupplierCategoryBuilder(_Root, _FeedPath);
+
             _UserInformation = new UserInformation();
             _NopAccessSetup = new NopAccessSetup();
         }
@@ -40,7 +55,7 @@ namespace SNPIDataManager.Areas.EDCFeed.Controllers
                     NopAccessHelper.ServerURL());
 
                 categoriesViewModel.NopCategoriesDict = nopCategoriesDict;
-                categoriesViewModel.EDCCategoriesDict = RelationsHelper.CategoryBuilder();
+                categoriesViewModel.EDCCategoriesDict = _SupplierCategoryBuilder.RelationToView;
 
                 model.Add(categoriesViewModel);
 
