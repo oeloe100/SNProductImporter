@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using InventoryManager.Builder;
+using InventoryManager.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using InventoryManager.Models;
+using System;
+using System.Diagnostics;
 
 namespace InventoryManager.Controllers
 {

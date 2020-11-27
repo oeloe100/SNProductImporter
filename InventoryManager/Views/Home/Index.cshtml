@@ -8,9 +8,35 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <div>logged in</div>
+
+    <div>
+        <h1 style="text-align:center;">Connection Credentials</h1>
+    </div>
+
+    <div class="container box">
+        <form asp-controller="NopAuthorization" asp-action="Index">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" name="Name" class="form-control" id="name" placeholder="give it some name...">
+            </div>
+            <div class="form-group">
+                <label for="key">Key</label>
+                <input type="text" name="Key" class="form-control" id="key" placeholder="ABC123...">
+            </div>
+            <div class="form-group">
+                <label for="secret">Secret</label>
+                <input type="password" name="Secret" class="form-control" id="secret" placeholder="Secret">
+            </div>
+            <div class="form-group">
+                <label for="serverUrl">Server-URL</label>
+                <input type="text" name="serverUrl" class="form-control" id="serverUrl" placeholder="ServerUrl">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            @Html.AntiForgeryToken()
+        </form>
+    </div>
 }
 else
 {
-    <div>logged out</div>
+    
 }
