@@ -19,11 +19,12 @@ namespace InventoryManager.Http.Helper
         private void InitializeClient()
         {
             HttpContextAccessor accessor = new HttpContextAccessor();
-            var scheme = accessor.HttpContext.Request.Scheme;
+            var scheme = accessor.HttpContext.Request.Scheme + "://" + accessor.HttpContext.Request.Host + "/";
 
             ApiHttpClient = new HttpClient();
             ApiHttpClient.BaseAddress = new Uri(scheme);
             ApiHttpClient.DefaultRequestHeaders.Accept.Clear();
+
             if (!string.IsNullOrEmpty(_AccessToken))
             {
                 ApiHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _AccessToken);
