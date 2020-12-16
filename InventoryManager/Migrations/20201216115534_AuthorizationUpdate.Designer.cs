@@ -4,14 +4,16 @@ using InventoryManager.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManager.Migrations
 {
     [DbContext(typeof(NopContext))]
-    partial class NopContextModelSnapshot : ModelSnapshot
+    [Migration("20201216115534_AuthorizationUpdate")]
+    partial class AuthorizationUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

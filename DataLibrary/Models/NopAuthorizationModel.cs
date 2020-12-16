@@ -9,6 +9,8 @@ namespace InventoryManager.Models.NopAccess
         public string Name { get; set; }
         public string NopKey { get; set; }
         public string NopSecret { get; set; }
+        public string ServerUrl { get; set; }
+        public string RedirectUrl { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
         public int? ExpiresIn { get; set; }
