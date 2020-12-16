@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DataLibrary.BusinessLogic;
+﻿using DataLibrary.BusinessLogic;
 using InventoryManager.Builder;
 using InventoryManager.ModelManager;
 using InventoryManager.Models;
@@ -10,19 +6,25 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using System;
+using System.Threading.Tasks;
 
 namespace InventoryManager.Controllers
 {
     public class NopAuthorizationController : Controller
     {
+        private readonly IOptions<NopAccessDataPoco> _iOptions;
         private readonly IConfiguration _configuration;
         private readonly UserManager<IdentityUser> _userManager;
-        private HttpContextAccessor _accessor;
+        private readonly HttpContextAccessor _accessor;
 
         public NopAuthorizationController(
+            IOptions<NopAccessDataPoco> iOptions,
             IConfiguration configuration, 
             UserManager<IdentityUser> userManger)
         {
+            _iOptions = iOptions;
             _configuration = configuration;
             _userManager = userManger;
             _accessor = new HttpContextAccessor();
@@ -30,9 +32,9 @@ namespace InventoryManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(ConnectionCredentialsModel model)
+        public async Task<IActionResult> Index(ConnectionCredentialsModel model)
         {
-            var user = _userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);
 
             if (ModelState.IsValid)
             {
@@ -43,8 +45,9 @@ namespace InventoryManager.Controllers
                     string scheme = _accessor.HttpContext.Request.Scheme + "://" + _accessor.HttpContext.Request.Host + "/";
                     var redirectScheme = scheme + "NopAuthorization/Callback";
 
+                    //*** Save Authorization data to DB **//
                     AuthorizationCredentialsProcessor.InsertAuthorizationCredentials(
-                        SetAuthorizationCredentialsData.SetData(user.Id.ToString(), model.Name, model.Key, model.Secret, model.ServerUrl, redirectScheme), 
+                        SetAuthorizationCredentialsData.SetData(user.Id, model.Name, model.Key, model.Secret, model.ServerUrl, redirectScheme), 
                         _configuration.GetConnectionString("DefaultConnection"));
 
                     //*** DONT SAVE ANYWHERE ***//
@@ -65,15 +68,35 @@ namespace InventoryManager.Controllers
             return BadRequest();
         }
 
-        public IActionResult Callback(string code, string state)
+        public async Task<IActionResult> Callback(string code, string state)
         {
-            Console.WriteLine();
-
-            if (state == HttpContext.Session.GetString("state"))
+            if (ModelState.IsValid && 
+                !string.IsNullOrEmpty(code) &&
+                !string.IsNullOrEmpty(state) &&
+                state == HttpContext.Session.GetString("state"))
             { 
                 try
                 {
-                    Console.WriteLine();
+                    var nopAccessData = AuthorizationCredentialsProcessor.LoadLastAccessData(
+                        _configuration.GetConnectionString("DefaultConnection"));
+                    var lastUsedData = nopAccessData[^1];
+
+                    var test = lastUsedData.NopSecret.ToString();
+
+                    var nopAuthorizationManager = new NopAuthorizationBuilder(lastUsedData.NopKey, lastUsedData.NopSecret, lastUsedData.ServerUrl);
+
+                    AuthorizationParametersModel model = new AuthorizationParametersModel
+                    {
+                        ClientId = lastUsedData.NopKey,
+                        ClientSecret = lastUsedData.NopSecret,
+                        GrantType = "authorization_code",
+                        CallbackUrl = _iOptions.Value.CallbackUrl,
+                        ServerUrl = lastUsedData.ServerUrl,
+                        Code = code
+                    };
+
+                    var response = await nopAuthorizationManager.GetAuthorizationData(model);
+
                     return Ok(200);
                 }
                 catch (Exception ex)

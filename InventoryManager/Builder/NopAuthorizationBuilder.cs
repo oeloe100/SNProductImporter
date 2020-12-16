@@ -55,10 +55,13 @@ namespace InventoryManager.Builder
             ValidateParameter("storeUrl", authorizationParemeters.ServerUrl);
             ValidateParameter("clientId", authorizationParemeters.ClientId);
             ValidateParameter("clientSecret", authorizationParemeters.ClientSecret);
-            ValidateParameter("redirectUrl", authorizationParemeters.RedirectUrl);
+            ValidateParameter("redirectUrl", authorizationParemeters.CallbackUrl);
             ValidateParameter("grantType", authorizationParemeters.GrantType);
 
-            string accessToken = await _nopAPIHelper.AuthorizeClient(authorizationParemeters.Code, authorizationParemeters.GrantType, authorizationParemeters.RedirectUrl);
+            string accessToken = await _nopAPIHelper.AuthorizeClient(
+                authorizationParemeters.Code, 
+                authorizationParemeters.GrantType, 
+                authorizationParemeters.CallbackUrl);
 
             return accessToken;
         }

@@ -1,4 +1,5 @@
 using InventoryManager.Data;
+using InventoryManager.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -38,6 +39,8 @@ namespace InventoryManager
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddSession();
+
+            services.Configure<NopAccessDataPoco>(Configuration.GetSection("NopAccessData"));
 
             services.Configure<IdentityOptions>(options =>
             {
