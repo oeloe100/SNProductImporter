@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 
@@ -47,7 +48,7 @@ namespace InventoryManager.Controllers
 
                     //*** Save Authorization data to DB **//
                     AuthorizationCredentialsProcessor.InsertAuthorizationCredentials(
-                        SetAuthorizationCredentialsData.SetData(user.Id, model.Name, model.Key, model.Secret, model.ServerUrl, redirectScheme), 
+                        SetAuthorizationCredentialsData.SetAuthData(user.Id, model.Name, model.Key, model.Secret, model.ServerUrl, redirectScheme), 
                         _configuration.GetConnectionString("DefaultConnection"));
 
                     //*** DONT SAVE ANYWHERE ***//
@@ -81,8 +82,6 @@ namespace InventoryManager.Controllers
                         _configuration.GetConnectionString("DefaultConnection"));
                     var lastUsedData = nopAccessData[^1];
 
-                    var test = lastUsedData.NopSecret.ToString();
-
                     var nopAuthorizationManager = new NopAuthorizationBuilder(lastUsedData.NopKey, lastUsedData.NopSecret, lastUsedData.ServerUrl);
 
                     AuthorizationParametersModel model = new AuthorizationParametersModel
@@ -96,6 +95,15 @@ namespace InventoryManager.Controllers
                     };
 
                     var response = await nopAuthorizationManager.GetAuthorizationData(model);
+                    JObject jRespObject = JObject.Parse(response);
+
+                    //*** Save Authorization data to DB **//
+                    AuthorizationCredentialsProcessor.EditCallbackAccessData(
+                        SetAuthorizationCredentialsData.SetCallbackData(
+                            jRespObject["access_token"].ToString(), 
+                            jRespObject["refresh_token"].ToString(), 
+                            (int)jRespObject["expires_in"]),
+                        _configuration.GetConnectionString("DefaultConnection"));
 
                     return Ok(200);
                 }

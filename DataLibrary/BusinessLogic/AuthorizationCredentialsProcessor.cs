@@ -20,5 +20,12 @@ namespace DataLibrary.BusinessLogic
 
             return SQLDataAccess.LoadData<CallbackRequestDataModel>(sql, connectionString);
         }
+
+        public static int EditCallbackAccessData(CallbackRequestDataModel model, string sqlConn)
+        {
+            var sql = @"UPDATE dbo.NopComAuthorization SET AccessToken=@AccessToken, RefreshToken=@RefreshToken, ExpiresIn=@ExpiresIn";
+
+            return SQLDataAccess.SaveData(sql, model, sqlConn);
+        }
     }
 }
