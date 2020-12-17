@@ -1,4 +1,16 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿$(document).ready(function () {
+    var currentPathName = window.location.pathname;
+    AutoLoad(currentPathName);
+});
 
-// Write your JavaScript code.
+function AutoLoad(path) {
+    if (path != null && path === "/") {
+        $.ajax({
+            type: "GET",
+            url: "/NopAuthorization/Index",
+            traditional: true
+        }).done(function (result) {
+            $(".main").html(result);
+        });
+    }
+}

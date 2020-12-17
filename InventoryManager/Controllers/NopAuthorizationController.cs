@@ -31,9 +31,33 @@ namespace InventoryManager.Controllers
             _accessor = new HttpContextAccessor();
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            try
+            {
+                var nopAccessData = AuthorizationCredentialsProcessor.LoadLastAccessData(
+                    _configuration.GetConnectionString("DefaultConnection"));
+                var lastUsedData = nopAccessData[^1];
+
+                if (lastUsedData.UserId == user.Id &&
+                    !string.IsNullOrEmpty(lastUsedData.AccessToken))
+                {
+                    return View();
+                }
+
+                return PartialView("_NopConnection");
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(ConnectionCredentialsModel model)
+        public async Task<IActionResult> Authorize(ConnectionCredentialsModel model)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -42,13 +66,13 @@ namespace InventoryManager.Controllers
                 try
                 {
                     var nopAuthorizationManager = new NopAuthorizationBuilder(model.Key, model.Secret, model.ServerUrl);
-                    
+
                     string scheme = _accessor.HttpContext.Request.Scheme + "://" + _accessor.HttpContext.Request.Host + "/";
                     var redirectScheme = scheme + "NopAuthorization/Callback";
 
                     //*** Save Authorization data to DB **//
                     AuthorizationCredentialsProcessor.InsertAuthorizationCredentials(
-                        SetAuthorizationCredentialsData.SetAuthData(user.Id, model.Name, model.Key, model.Secret, model.ServerUrl, redirectScheme), 
+                        SetAuthorizationCredentialsData.SetAuthData(user.Id, model.Name, model.Key, model.Secret, model.ServerUrl, redirectScheme),
                         _configuration.GetConnectionString("DefaultConnection"));
 
                     //*** DONT SAVE ANYWHERE ***//
