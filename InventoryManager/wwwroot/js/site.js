@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+    AddLoadingIndicator();
+
     var currentPathName = window.location.pathname;
     AutoLoad(currentPathName);
 });
@@ -10,7 +12,16 @@ function AutoLoad(path) {
             url: "/NopAuthorization/Index",
             traditional: true
         }).done(function (result) {
-            $(".main").html(result);
+            RemoveLoadingIndicator();
+            $(".main").append(result);
         });
     }
+}
+
+function AddLoadingIndicator() {
+    $(".main").append('<i class="fa fa-spinner fa-spin fa-3x">');
+}
+
+function RemoveLoadingIndicator() {
+    $(".fa-spinner").remove();
 }

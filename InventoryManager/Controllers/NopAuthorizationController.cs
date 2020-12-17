@@ -33,7 +33,12 @@ namespace InventoryManager.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                return Ok();
+            }
 
             try
             {
@@ -44,7 +49,7 @@ namespace InventoryManager.Controllers
                 if (lastUsedData.UserId == user.Id &&
                     !string.IsNullOrEmpty(lastUsedData.AccessToken))
                 {
-                    return View();
+                    return PartialView("_ImportViewManager");
                 }
 
                 return PartialView("_NopConnection");
@@ -139,5 +144,7 @@ namespace InventoryManager.Controllers
 
             return BadRequest();
         }
+
+        private Task<IdentityUser> GetCurrentUserAsync() => _userManager.GetUserAsync(User);
     }
 }
