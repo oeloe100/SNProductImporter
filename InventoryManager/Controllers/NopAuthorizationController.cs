@@ -49,7 +49,7 @@ namespace InventoryManager.Controllers
                 if (lastUsedData.UserId == user.Id &&
                     !string.IsNullOrEmpty(lastUsedData.AccessToken))
                 {
-                    return PartialView("_ImportViewManager");
+                    return PartialView("_DashboardView");
                 }
 
                 return PartialView("_NopConnection");

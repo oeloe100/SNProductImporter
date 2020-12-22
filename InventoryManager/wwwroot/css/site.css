@@ -85,3 +85,16 @@ body {
     top: 50%;
     left: 50%;
 }
+
+.btn-styling{
+    border: none;
+    padding: 5px 10px;
+}
+
+.re-connect {
+    float: right;
+}
+
+.button-box{
+    padding: 10px 0;
+}
